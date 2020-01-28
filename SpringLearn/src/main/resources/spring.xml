@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+ 		http://www.springframework.org/schema/beans
+ 		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+ 		http://www.springframework.org/schema/context
+ 		http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+
+    <context:annotation-config/>
+
+</beans>
+
+
+        <!--<?xml version="1.0" encoding="UTF-8"?>-->
+        <!--<beans xmlns="http://www.springframework.org/schema/beans"-->
+        <!--       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"-->
+        <!--       xmlns:util="http://www.springframework.org/schema/util"-->
+        <!--       xsi:schemaLocation="-->
+        <!-- 		http://www.springframework.org/schema/beans-->
+        <!-- 		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd-->
+        <!--http://www.springframework.org/schema/util-->
+        <!-- 		http://www.springframework.org/schema/util/spring-util-3.2.xsd">-->
+
+        <!--    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">-->
+        <!--        <property name="locations">-->
+        <!--            <list>-->
+        <!--                <value>classpath:client.properties</value>-->
+        <!--            </list>-->
+        <!--        </property>-->
+        <!--        <property name="ignoreResourceNotFound" value="true"/>-->
+        <!--        <property name="systemPropertiesMode">-->
+        <!--        <util:constant-->
+        <!--                static-field="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_OVERRIDE" />-->
+        <!--        </property>-->
+        <!--    </bean>-->
+
+
+        <!--    <bean id="client" class="com.epam.springstart.Client">-->
+        <!--        <constructor-arg value="${id}"/>-->
+        <!--        <constructor-arg value="${name}"/>-->
+        <!--        <property name="greating" value="${greating}"/>-->
+        <!--    </bean>-->
+
+
+        <!--    <bean id="event" class="com.epam.springstart.Event" scope="prototype">-->
+        <!--        <constructor-arg>-->
+        <!--            <bean class="java.util.Date"/>-->
+        <!--        </constructor-arg>-->
+        <!--        <constructor-arg>-->
+        <!--            <bean id="dateFormat" class="java.text.DateFormat" factory-method="getDateTimeInstance">-->
+        <!--                <constructor-arg value="1"/>-->
+        <!--                <constructor-arg value="1"/>-->
+        <!--            </bean>-->
+        <!--        </constructor-arg>-->
+        <!--    </bean>-->
+
+
+        <!--    <bean id="app" class="com.epam.springstart.App">-->
+        <!--        <constructor-arg ref="client"/>-->
+        <!--        <constructor-arg ref="fileLogger"/>-->
+        <!--        <constructor-arg>-->
+        <!--            <map>-->
+        <!--                <entry key="INFO" value-ref="eventLogger"/>-->
+        <!--                <entry key="ERROR" value-ref="combinedLogger"/>-->
+        <!--            </map>-->
+        <!--        </constructor-arg>-->
+        <!--    </bean>-->
+
+        <!--    <import resource="loggers.xml"/>-->
+
+        <!--</beans>-->
