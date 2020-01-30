@@ -19,7 +19,7 @@ public class AuthorRepository extends AbstractRepository implements AuthorInterf
     }
 
     @Override
-    public boolean delete(Integer id) {
+    public boolean delete(int id) {
         return false;
     }
 
@@ -34,7 +34,7 @@ public class AuthorRepository extends AbstractRepository implements AuthorInterf
     }
 
     @Override
-    public Author findById(Integer id) {
+    public Author findById(int id) {
         return null;
     }
 }

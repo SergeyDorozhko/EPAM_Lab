@@ -1,6 +1,7 @@
 package com.epam.lab;
 
-import com.epam.lab.model.Author;
+import com.epam.lab.dto.AbstractDTO;
+import com.epam.lab.dto.AuthorDTO;
 import com.epam.lab.service.InterfaceService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -15,12 +16,12 @@ public class App {
 
         InterfaceService service = (InterfaceService) context.getBean("authorService");
 
-        Author author = (Author) context.getBean("author");
+        AuthorDTO authorDTO = (AuthorDTO) context.getBean("authorDTO");
 
-        author.setName("dsf");
-        author.setSurname("dsfdsf");
-        author = (Author) service.create(author);
-        System.out.println(author);
+        authorDTO.setName("dsf");
+        authorDTO.setSurname("dsfdsf");
+        AbstractDTO abstractDTO = service.create(authorDTO);
+        System.out.println(abstractDTO);
 
         System.out.println("Hello World!");
     }

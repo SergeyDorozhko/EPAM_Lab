@@ -4,15 +4,15 @@ import com.epam.lab.model.Bean;
 
 import java.util.List;
 
-public interface InterfaceRepository<K, T extends Bean> {
+public interface InterfaceRepository<T extends Bean> {
 
     T create(T bean);
 
-    boolean delete(K id);
+    boolean delete(int id);
 
     T update(T bean);
 
     List<T> findAll();
 
-    T findById(K id);
+    T findById(int id);
 }

@@ -1,6 +1,8 @@
 package com.epam.lab.model;
 
-public abstract class Bean {
+import java.io.Serializable;
+
+public abstract class Bean implements Serializable {
     private int id;
 
     public int getId() {

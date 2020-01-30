@@ -1,19 +1,20 @@
 package com.epam.lab.service;
 
 
+import com.epam.lab.dto.AbstractDTO;
 import com.epam.lab.model.Bean;
 
 import java.util.List;
 
-public interface InterfaceService <K, T extends Bean> {
+public interface InterfaceService <T extends AbstractDTO> {
 
     T create(T bean);
 
-    boolean delete(K id);
+    boolean delete(int id);
 
     T update(T bean);
 
     List<T> findAll();
 
-    T findById(K id);
+    T findById(int id);
 }
