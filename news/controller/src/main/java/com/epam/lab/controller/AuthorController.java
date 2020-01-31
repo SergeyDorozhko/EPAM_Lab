@@ -1,13 +1,13 @@
 package com.epam.lab.controller;
 
-import com.epam.lab.dto.AbstractDTO;
 import com.epam.lab.dto.AuthorDTO;
-import com.epam.lab.dto.NewsDTO;
 import com.epam.lab.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/")
 public class AuthorController {
 
     private AuthorService authorService;
@@ -23,13 +23,17 @@ public class AuthorController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     @ResponseBody
-    public String welcome() {
-        return "Welcome to RestTemplate Example.";
+    public AuthorDTO welcome() {
+
+        AuthorDTO  authorDTO = new AuthorDTO();
+        authorDTO.setName("authorname");
+        authorDTO.setSurname("surname");
+        return authorDTO;
     }
 
 
 
-    @RequestMapping(value = "/author", method = RequestMethod.POST)
+    @RequestMapping(value = "/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public AuthorDTO createAuthor(@RequestBody AuthorDTO authorDTO){
 

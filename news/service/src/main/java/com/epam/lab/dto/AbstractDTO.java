@@ -3,7 +3,7 @@ package com.epam.lab.dto;
 import java.io.Serializable;
 
 public abstract class AbstractDTO implements Serializable {
-    private int id;
+    private long id;
 
     public AbstractDTO(){    }
 
@@ -11,11 +11,11 @@ public abstract class AbstractDTO implements Serializable {
         this.id = id;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 }
