@@ -1,0 +1,113 @@
+package com.epam.lab.service;
+
+import com.epam.lab.dto.Mapper.NewsMapper;
+import com.epam.lab.dto.NewsDTO;
+import com.epam.lab.model.News;
+import com.epam.lab.model.Tag;
+import com.epam.lab.repository.AuthorRepository;
+import com.epam.lab.repository.NewsRepository;
+import com.epam.lab.repository.TagRepository;
+import com.epam.lab.service.exception.ServiceException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+
+@Service
+@Transactional
+public class NewsServiceImpl implements NewsService {
+    private NewsMapper mapper;
+    private NewsRepository newsRepository;
+    private AuthorRepository authorRepository;
+    private TagRepository tagRepository;
+
+    @Autowired
+    public NewsServiceImpl(NewsMapper mapper, NewsRepository newsRepository, AuthorRepository authorRepository, TagRepository tagRepository) {
+        this.mapper = mapper;
+        this.newsRepository = newsRepository;
+        this.authorRepository = authorRepository;
+        this.tagRepository = tagRepository;
+    }
+
+    @Override
+    public NewsDTO create(NewsDTO bean) {
+        checkNews(bean);
+
+        News news = mapper.toBean(bean);
+
+        checkAndCreateAuthorIfNew(news);
+
+        newsRepository.create(news);
+
+        boolean hasTags = news.getListOfTags() != null && news.getListOfTags().size() > 0;
+        if (hasTags) {
+            for (int i = 0; i < news.getListOfTags().size(); i++) {
+                i = checkAndCreateTagIfNew(news, i);
+            }
+        }
+        newsRepository.linkAuthorWithNews(news.getAuthor().getId(), news.getId());
+
+        for (Tag tag : news.getListOfTags()) {
+            tagRepository.linkTagWithNews(tag.getId(), news.getId());
+        }
+
+        return mapper.toDTO(news);
+    }
+
+    private void checkNews(NewsDTO newsDTO) {
+        boolean isValidNews = newsDTO.getTitle() != null
+                && newsDTO.getShortText() != null
+                && newsDTO.getFullText() != null;
+        if (!isValidNews) {
+            throw new ServiceException("invalid news");
+        }
+    }
+
+    private void checkAndCreateAuthorIfNew(News news) {
+        boolean hasAuthorWithId = news.getAuthor() != null && news.getAuthor().getId() != 0;
+        boolean hasAuthorWithoutId = news.getAuthor() != null && news.getAuthor().getId() == 0;
+
+        if (hasAuthorWithId) {
+            authorRepository.findBy(news.getAuthor());
+        } else if (hasAuthorWithoutId) {
+            news.setAuthor(authorRepository.create(news.getAuthor()));
+        }
+    }
+
+    private int checkAndCreateTagIfNew(News news, int tagIndex) {
+        try {
+            if (news.getListOfTags().get(tagIndex).getId() != 0) {
+                tagRepository.findBy(news.getListOfTags().get(tagIndex));
+            } else {
+                news.getListOfTags().set(tagIndex,
+                        tagRepository.findBy(news.getListOfTags().get(tagIndex).getName()));
+            }
+        } catch (Exception ex) {
+            if (news.getListOfTags().get(tagIndex).getId() != 0) {
+                news.getListOfTags().remove(tagIndex);
+                tagIndex--;
+            } else {
+                tagRepository.create(news.getListOfTags().get(tagIndex));
+            }
+        }
+        return tagIndex;
+    }
+
+    @Override
+    public boolean delete(long id) {
+        return false;
+    }
+
+    @Override
+    public NewsDTO update(NewsDTO bean) {
+        return null;
+    }
+
+    @Override
+    public NewsDTO findById(long id) {
+        News news = newsRepository.findBy(id);
+        news.setAuthor(authorRepository.findBy(news.getAuthor().getId()));
+        news.setListOfTags(tagRepository.findBy(news));
+        return mapper.toDTO(news);
+    }
+}

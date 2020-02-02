@@ -9,10 +9,10 @@ import java.util.List;
 @Component
 public class News extends Bean {
     private String title;
-    private String short_text;
-    private String full_text;
-    private LocalDate creation_date;
-    private LocalDate modification_date;
+    private String shortText;
+    private String fullText;
+    private LocalDate creationDate;
+    private LocalDate modificationDate;
 
     private Author author;
 
@@ -31,36 +31,36 @@ public class News extends Bean {
         this.title = title;
     }
 
-    public String getShort_text() {
-        return short_text;
+    public String getShortText() {
+        return shortText;
     }
 
-    public void setShort_text(String short_text) {
-        this.short_text = short_text;
+    public void setShortText(String shortText) {
+        this.shortText = shortText;
     }
 
-    public String getFull_text() {
-        return full_text;
+    public String getFullText() {
+        return fullText;
     }
 
-    public void setFull_text(String full_text) {
-        this.full_text = full_text;
+    public void setFullText(String fullText) {
+        this.fullText = fullText;
     }
 
-    public LocalDate getCreation_date() {
-        return creation_date;
+    public LocalDate getCreationDate() {
+        return creationDate;
     }
 
-    public void setCreation_date(LocalDate creation_date) {
-        this.creation_date = creation_date;
+    public void setCreationDate(LocalDate creationDate) {
+        this.creationDate = creationDate;
     }
 
-    public LocalDate getModification_date() {
-        return modification_date;
+    public LocalDate getModificationDate() {
+        return modificationDate;
     }
 
-    public void setModification_date(LocalDate modification_date) {
-        this.modification_date = modification_date;
+    public void setModificationDate(LocalDate modificationDate) {
+        this.modificationDate = modificationDate;
     }
 
     public Author getAuthor() {
@@ -77,5 +77,9 @@ public class News extends Bean {
 
     public void addTag(Tag tag) {
         listOfTags.add(tag);
+    }
+
+    public void setListOfTags(List<Tag> listOfTags) {
+        this.listOfTags = listOfTags;
     }
 }
