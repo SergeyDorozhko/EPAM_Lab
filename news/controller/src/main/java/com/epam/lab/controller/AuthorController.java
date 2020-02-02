@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/author")
 public class AuthorController {
 
-    public static final String DON_T_DELETED_MESSAGE = "don't deleted";
-    public static final String OK_MESSAGE = "OK";
+    private static final String DON_T_DELETED_MESSAGE = "don't deleted";
+    private static final String OK_MESSAGE = "OK";
     private AuthorService authorService;
 
 
@@ -26,7 +26,7 @@ public class AuthorController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public AuthorDTO findAuthorBy(@RequestBody int id, HttpServletResponse response) {
+    public AuthorDTO findAuthorBy(@RequestBody long id, HttpServletResponse response) {
         AuthorDTO authorDTO = null;
         try {
              authorDTO = authorService.findById(id);
@@ -47,7 +47,7 @@ public class AuthorController {
 
     @RequestMapping(value = "/", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String deleteAuthor(@RequestBody int id) {
+    public String deleteAuthor(@RequestBody long id) {
         if (authorService.delete(id)) {
             return OK_MESSAGE;
         }

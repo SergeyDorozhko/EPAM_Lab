@@ -8,10 +8,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class TagMapper extends AbstractMapper<Tag, TagDTO> {
-//    @Autowired
-//    public TagMapper(Class<Tag> tag, Class<TagDTO> tagDTO, ModelMapper modelMapper) {
-//        super(tag, tagDTO, modelMapper);
-//    }
 
     @Autowired
     public TagMapper(ModelMapper modelMapper) {

@@ -9,12 +9,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthorMapper extends AbstractMapper<Author, AuthorDTO> {
 
-//    @Autowired
-//    public AuthorMapper( Class<Author> author,Class <AuthorDTO> authorDTO, ModelMapper modelMapper) {
-//        super(author, authorDTO, modelMapper);
-//    }
-
-
         @Autowired
     public AuthorMapper(ModelMapper modelMapper) {
         super(Author.class, AuthorDTO.class, modelMapper);

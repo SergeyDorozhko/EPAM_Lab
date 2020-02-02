@@ -1,26 +1,20 @@
 package com.epam.lab.service;
 
 import com.epam.lab.dto.AuthorDTO;
-import com.epam.lab.dto.Mapper.AbstractMapper;
 import com.epam.lab.dto.Mapper.AuthorMapper;
-import com.epam.lab.dto.NewsDTO;
-import com.epam.lab.model.Author;
-import com.epam.lab.repository.AuthorRepository;
+import com.epam.lab.repository.AuthorRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-
-import java.util.List;
 
 @Service("authorService")
 public class AuthorServiceImpl implements AuthorService {
 
     private AuthorMapper mapper;
 
-    private AuthorRepository repository;
+    private AuthorRepositoryImpl repository;
 
     @Autowired
-    public AuthorServiceImpl(AuthorMapper mapper, AuthorRepository repository){
+    public AuthorServiceImpl(AuthorMapper mapper, AuthorRepositoryImpl repository){
         this.mapper = mapper;
         this.repository = repository;
     }
@@ -32,7 +26,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public boolean delete(int id) {
+    public boolean delete(long id) {
         return repository.delete(id);
     }
 
@@ -43,7 +37,7 @@ public class AuthorServiceImpl implements AuthorService {
 
 
     @Override
-    public AuthorDTO findById(int id) {
+    public AuthorDTO findById(long id) {
         return mapper.toDTO(repository.findBy(id));
     }
 }
