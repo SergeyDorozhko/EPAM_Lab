@@ -12,7 +12,5 @@ public interface InterfaceRepository<T extends Bean> {
 
     T update(T bean);
 
-    List<T> findAll();
-
-    T findById(int id);
+    T findBy(int id);
 }

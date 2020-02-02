@@ -4,5 +4,5 @@ import com.epam.lab.model.Author;
 
 public interface AuthorInterfaceRepository extends InterfaceRepository<Author> {
 
-    Author findAuthor(Author author);
+    Author findBy(Author author);
 }

@@ -14,7 +14,5 @@ public interface InterfaceService <T extends AbstractDTO> {
 
     T update(T bean);
 
-    List<T> findAll();
-
     T findById(int id);
 }

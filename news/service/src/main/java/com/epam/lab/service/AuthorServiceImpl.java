@@ -33,21 +33,17 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public boolean delete(int id) {
-        return false;
+        return repository.delete(id);
     }
 
     @Override
     public AuthorDTO update(AuthorDTO bean) {
-        return null;
+        return mapper.toDTO(repository.update(mapper.toBean(bean)));
     }
 
-    @Override
-    public List<AuthorDTO> findAll() {
-        return null;
-    }
 
     @Override
     public AuthorDTO findById(int id) {
-        return null;
+        return mapper.toDTO(repository.findBy(id));
     }
 }
