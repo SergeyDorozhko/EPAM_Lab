@@ -3,8 +3,7 @@ package com.epam.lab.model;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class News extends Bean {
@@ -81,5 +80,25 @@ public class News extends Bean {
 
     public void setListOfTags(List<Tag> listOfTags) {
         this.listOfTags = listOfTags;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof News)) return false;
+        if (!super.equals(o)) return false;
+        News news = (News) o;
+        return Objects.equals(title, news.title) &&
+                Objects.equals(shortText, news.shortText) &&
+                Objects.equals(fullText, news.fullText) &&
+                Objects.equals(creationDate, news.creationDate) &&
+                Objects.equals(modificationDate, news.modificationDate) &&
+                Objects.equals(author, news.author) &&
+                Objects.equals(listOfTags, news.listOfTags);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), title, shortText, fullText, creationDate, modificationDate, author, listOfTags);
     }
 }

@@ -7,10 +7,15 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.awt.*;
+import java.lang.reflect.Method;
 
 @RestController
 @RequestMapping("/news")
 public class NewsController {
+
+    private static final String DON_T_DELETED_MESSAGE = "don't deleted";
+    private static final String OK_MESSAGE = "OK";
+
     private NewsService service;
 
     @Autowired
@@ -28,5 +33,19 @@ public class NewsController {
     @ResponseBody
     public NewsDTO createNews(@RequestBody NewsDTO newsDTO) {
         return service.create(newsDTO);
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public String deleteNews(@PathVariable long id) {
+        if(service.delete(id)){
+            return OK_MESSAGE;
+        }
+        return DON_T_DELETED_MESSAGE;
+    }
+
+    @RequestMapping(value = "/", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public NewsDTO updateNews(@RequestBody NewsDTO newsDTO) {
+        return service.update(newsDTO);
     }
 }

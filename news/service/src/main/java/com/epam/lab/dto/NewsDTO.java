@@ -3,8 +3,7 @@ package com.epam.lab.dto;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 @Component
@@ -93,5 +92,25 @@ public class NewsDTO extends AbstractDTO {
 
     public void addTag(TagDTO tag) {
         listOfTags.add(tag);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof NewsDTO)) return false;
+        if (!super.equals(o)) return false;
+        NewsDTO newsDTO = (NewsDTO) o;
+        return Objects.equals(title, newsDTO.title) &&
+                Objects.equals(shortText, newsDTO.shortText) &&
+                Objects.equals(fullText, newsDTO.fullText) &&
+                Objects.equals(creationDate, newsDTO.creationDate) &&
+                Objects.equals(modificationDate, newsDTO.modificationDate) &&
+                Objects.equals(author, newsDTO.author) &&
+                Objects.equals(listOfTags, newsDTO.listOfTags);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), title, shortText, fullText, creationDate, modificationDate, author, listOfTags);
     }
 }

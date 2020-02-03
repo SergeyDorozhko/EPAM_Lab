@@ -8,6 +8,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.util.List;
 
 @Repository
 public class NewsRepositoryImpl extends AbstractRepository implements NewsRepository {
@@ -19,6 +20,8 @@ public class NewsRepositoryImpl extends AbstractRepository implements NewsReposi
             + " LEFT JOIN news_author ON news_author.news_id = news.id WHERE news.id = ?;";
     private static final String INSERT_INTO_NEWS_AUTHOR_AUTHOR_ID_NEWS_ID
             = "INSERT INTO news_author (author_id, news_id) VALUES (?, ?);";
+    public static final String SELECT_AUTHOR_ID_FROM_NEWS_AUTHOR_WHERE_NEWS_ID = "SELECT author_id FROM news_author WHERE news_id = ?";
+    public static final String SELECT_NEWS_ID_BY_AUTHOR_ID = "SELECT news_id FROM news_author WHERE author_id = ?";
 
     @Override
     public News create(News bean) {
@@ -44,12 +47,38 @@ public class NewsRepositoryImpl extends AbstractRepository implements NewsReposi
 
     @Override
     public boolean delete(long id) {
-        return false;
+        int result = jdbcTemplate.update("DELETE FROM news WHERE id = ?", id);
+        return result == 1;
     }
 
     @Override
     public News update(News bean) {
-        return null;
+
+        jdbcTemplate.update(con -> {
+            PreparedStatement statement = con.prepareStatement("UPDATE news SET title = ? , short_text = ?, full_text = ?, modification_date = ? WHERE id = ?", Statement.RETURN_GENERATED_KEYS);
+            statement.setString(1, bean.getTitle());
+            statement.setString(2, bean.getShortText());
+            statement.setString(3, bean.getFullText());
+            statement.setDate(4, Date.valueOf(LocalDate.now()));
+            statement.setLong(5, bean.getId());
+            return statement;
+        }, keyHolder);
+        bean.setCreationDate(((Date) keyHolder.getKeys().get("creation_date")).toLocalDate());
+        bean.setModificationDate(((Date) keyHolder.getKeys().get("modification_date")).toLocalDate());
+        return bean;
+    }
+
+    @Override
+    public Long findAuthorIdByNewsId(long newsId) {
+        return jdbcTemplate.queryForObject(SELECT_AUTHOR_ID_FROM_NEWS_AUTHOR_WHERE_NEWS_ID, new Object[]{newsId},
+                Long.class);
+
+    }
+
+    @Override
+    public List<Long> findNewsIdByAuthor(long authorId) {
+        return jdbcTemplate.queryForList(SELECT_NEWS_ID_BY_AUTHOR_ID,
+                new Object[]{authorId}, Long.class);
     }
 
     @Override

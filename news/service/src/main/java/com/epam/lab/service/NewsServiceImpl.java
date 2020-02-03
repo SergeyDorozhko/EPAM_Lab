@@ -10,7 +10,10 @@ import com.epam.lab.repository.TagRepository;
 import com.epam.lab.service.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.sql.SQLException;
 
 
 @Service
@@ -45,14 +48,17 @@ public class NewsServiceImpl implements NewsService {
                 i = checkAndCreateTagIfNew(news, i);
             }
         }
-        newsRepository.linkAuthorWithNews(news.getAuthor().getId(), news.getId());
 
+        if (news.getAuthor() != null) {
+            newsRepository.linkAuthorWithNews(news.getAuthor().getId(), news.getId());
+        }
         for (Tag tag : news.getListOfTags()) {
             tagRepository.linkTagWithNews(tag.getId(), news.getId());
         }
-
         return mapper.toDTO(news);
     }
+
+
 
     private void checkNews(NewsDTO newsDTO) {
         boolean isValidNews = newsDTO.getTitle() != null
@@ -95,18 +101,63 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public boolean delete(long id) {
-        return false;
+        return newsRepository.delete(id);
     }
 
     @Override
     public NewsDTO update(NewsDTO bean) {
-        return null;
+        News news = mapper.toBean(bean);
+        if (!checkAuthorAndCreateIfNeed(news)) {
+            throw new ServiceException("Error date");
+        }
+
+        newsRepository.update(news);
+
+        boolean hasTags = news.getListOfTags() != null && news.getListOfTags().size() > 0;
+        if (hasTags) {
+            for (int i = 0; i < news.getListOfTags().size(); i++) {
+                i = checkAndCreateTagIfNew(news, i);
+            }
+            tagRepository.deleteTagNewsLinks(news.getId());
+
+            for (Tag tag : news.getListOfTags()) {
+                tagRepository.linkTagWithNews(tag.getId(), news.getId());
+            }
+        }
+
+        return mapper.toDTO(news);
     }
+
+    private boolean checkAuthorAndCreateIfNeed(News news) {
+        boolean flag = false;
+        Long authorId = null;
+        try {
+            authorId = newsRepository.findAuthorIdByNewsId(news.getId());
+        } catch (Exception ex) {
+            //TODO logger.
+            System.out.println("Add author to news (update action)");
+        }
+        if (authorId != null && news.getAuthor() != null && authorId == news.getAuthor().getId()) {
+            flag = true;
+        } else if (authorId == null && news.getAuthor() != null) {
+            authorRepository.findBy(news.getAuthor());
+            newsRepository.linkAuthorWithNews(news.getAuthor().getId(), news.getId());
+            flag = true;
+        } else if (authorId == null && news.getAuthor() == null) {
+            flag = true;
+        } else {
+            flag = false;
+        }
+        return flag;
+    }
+
 
     @Override
     public NewsDTO findById(long id) {
         News news = newsRepository.findBy(id);
-        news.setAuthor(authorRepository.findBy(news.getAuthor().getId()));
+        if (news.getAuthor() != null) {
+            news.setAuthor(authorRepository.findBy(news.getAuthor().getId()));
+        }
         news.setListOfTags(tagRepository.findBy(news));
         return mapper.toDTO(news);
     }

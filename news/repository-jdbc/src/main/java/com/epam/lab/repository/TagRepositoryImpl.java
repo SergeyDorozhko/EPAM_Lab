@@ -4,8 +4,11 @@ import com.epam.lab.model.News;
 import com.epam.lab.model.Tag;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
@@ -22,6 +25,7 @@ public class TagRepositoryImpl extends AbstractRepository implements TagReposito
     private static final String SELECT_TAGS_BY_NEWS = "SELECT id, name FROM tag"
             + " RIGHT JOIN news_tag ON news_tag.tag_id= tag.id WHERE news_tag.news_id = ?";
     private static final String INSERT_INTO_NEWS_TAG_TAG_ID_NEWS_ID_VALUES = "INSERT INTO news_tag (tag_id, news_id) VALUES (?, ?);";
+    public static final String DELETE_FROM_NEWS_TAG_WHERE_NEWS_ID = "DELETE FROM news_tag WHERE news_id = ?";
 
     @Override
     public Tag create(Tag bean) {
@@ -40,11 +44,15 @@ public class TagRepositoryImpl extends AbstractRepository implements TagReposito
     }
 
     @Override
+    public int deleteTagNewsLinks(long newsId) {
+        return jdbcTemplate.update(DELETE_FROM_NEWS_TAG_WHERE_NEWS_ID, newsId);
+    }
+
+    @Override
     public boolean delete(long id) {
         int result = this.jdbcTemplate.update(
                 DELETE_TAG_BY_ID,
                 id);
-        System.out.println(result);
         return result != 0;
     }
 

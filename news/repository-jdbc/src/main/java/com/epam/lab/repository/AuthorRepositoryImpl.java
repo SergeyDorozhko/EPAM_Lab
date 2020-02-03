@@ -36,10 +36,9 @@ public class AuthorRepositoryImpl extends AbstractRepository implements AuthorRe
 
     @Override
     public boolean delete(long id) {
-        int result = this.jdbcTemplate.update(
+        int result = jdbcTemplate.update(
                 DELETE_AUTHOR_BY_ID,
                 id);
-        System.out.println(result);
         return result != 0;
     }
 

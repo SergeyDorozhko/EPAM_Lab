@@ -2,6 +2,8 @@ package com.epam.lab.dto;
 
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 @Component
 public class AuthorDTO extends AbstractDTO{
     private String name;
@@ -31,5 +33,20 @@ public class AuthorDTO extends AbstractDTO{
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AuthorDTO)) return false;
+        if (!super.equals(o)) return false;
+        AuthorDTO authorDTO = (AuthorDTO) o;
+        return Objects.equals(name, authorDTO.name) &&
+                Objects.equals(surname, authorDTO.surname);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), name, surname);
     }
 }
