@@ -2,7 +2,7 @@ package com.epam.lab.service;
 
 import com.epam.lab.dto.AuthorDTO;
 import com.epam.lab.dto.Mapper.AuthorMapper;
-import com.epam.lab.repository.AuthorRepositoryImpl;
+import com.epam.lab.repository.AuthorRepository;
 import com.epam.lab.repository.NewsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,11 +14,11 @@ public class AuthorServiceImpl implements AuthorService {
 
     private AuthorMapper mapper;
 
-    private AuthorRepositoryImpl repository;
+    private AuthorRepository repository;
     private NewsRepository newsRepository;
 
     @Autowired
-    public AuthorServiceImpl(AuthorMapper mapper, AuthorRepositoryImpl repository, NewsRepository newsRepository) {
+    public AuthorServiceImpl(AuthorMapper mapper, AuthorRepository repository, NewsRepository newsRepository) {
         this.mapper = mapper;
         this.repository = repository;
         this.newsRepository = newsRepository;

@@ -9,10 +9,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class NewsMapper extends AbstractMapper<News, NewsDTO> {
 
-//    @Autowired
-//    public NewsMapper (Class<News> news, Class <NewsDTO> newsDTO, ModelMapper modelMapper){
-//        super(news, newsDTO, modelMapper);
-//    }
 
     @Autowired
     public NewsMapper (ModelMapper modelMapper){
