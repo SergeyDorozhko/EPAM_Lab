@@ -10,11 +10,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 public class TagServiceImplTest {
 
@@ -23,42 +23,44 @@ public class TagServiceImplTest {
 
     private TagService tagService;
     private TagDTO expextedTag;
+    private Tag tag;
 
     @Before
     public void init() {
-        MockitoAnnotations.initMocks(this);
 
         this.tagRepository = Mockito.mock(TagRepositoryImpl.class);
         this.tagMapper = new TagMapper(new ModelMapper());
         this.tagService = new TagServiceImpl(tagMapper, tagRepository);
 
-        Tag tag = new Tag();
+        tag = new Tag();
         tag.setName("TestTag");
 
         expextedTag = new TagDTO();
         expextedTag.setName("TestTag");
-        Mockito.when(tagRepository.create(any(Tag.class))).thenReturn(tag);
+        when(tagRepository.create(any(Tag.class))).thenReturn(tag);
 
-        Mockito.when(tagRepository.delete(110L)).thenReturn(true);
+        when(tagRepository.delete(110L)).thenReturn(true);
 
-        Mockito.when(tagRepository.update(any(Tag.class))).thenReturn(tag);
+        when(tagRepository.update(any(Tag.class))).thenReturn(tag);
 
     }
 
 
-    //TODO Exception
-//    @Test
-//    public void createTagPositiveTest() {
-//
-//        Mockito.when(tagRepository.findBy(any(String.class))).thenThrow(EmptyResultDataAccessException.class);
-//
-//        Assert.assertEquals(expextedTag, tagService.create(new TagDTO()));
-//        Mockito.verify(tagRepository, Mockito.times(1)).create(new Tag());
-//    }
+    @Test
+    public void createTagPositiveTest() {
+
+        when(tagRepository.findBy("TestTag")).thenThrow(EmptyResultDataAccessException.class);
+
+        TagDTO tagDTOforTest = new TagDTO();
+        tagDTOforTest.setName("TestTag");
+
+        Assert.assertEquals(expextedTag, tagService.create(tagDTOforTest));
+        verify(tagRepository, Mockito.times(1)).create(tag);
+    }
 
     @Test(expected = ServiceException.class)
     public void createTagNegotiveTest() {
-        Mockito.when(tagRepository.findBy(any(String.class))).thenReturn(new Tag());
+        when(tagRepository.findBy(any(String.class))).thenReturn(new Tag());
         tagService.create(new TagDTO());
     }
 
@@ -68,24 +70,42 @@ public class TagServiceImplTest {
         Assert.assertEquals(true, tagService.delete(110L));
         Assert.assertEquals(false, tagService.delete(11L));
 
-        Mockito.verify(tagRepository, Mockito.times(1)).delete(110L);
-        Mockito.verify(tagRepository, Mockito.times(1)).delete(11L);
+        verify(tagRepository, Mockito.times(1)).delete(110L);
+        verify(tagRepository, Mockito.times(1)).delete(11L);
 
 
     }
 
 
-    //TODO EXCEPTION
-//    @Test
-//    public void updateTagPositiveTest() {
-//        Mockito.doThrow(new EmptyResultDataAccessException(5)).when(tagRepository).findBy(any(String.class));
-//        Assert.assertEquals(expextedTag, tagService.update(new TagDTO()));
-//        Mockito.verify(tagRepository, Mockito.times(1)).create(new Tag());
-//    }
+    @Test
+    public void updateTagPositiveTest() {
+        doThrow(EmptyResultDataAccessException.class).when(tagRepository).findBy("TestTag");
+
+        TagDTO tagDTOforTest = new TagDTO();
+        tagDTOforTest.setId(1);
+        tagDTOforTest.setName("TestTag");
+
+        Assert.assertEquals(expextedTag, tagService.update(tagDTOforTest));
+        verify(tagRepository, Mockito.times(1)).update(tag);
+    }
 
     @Test(expected = ServiceException.class)
     public void updateTagNegotiveTest() {
-        Mockito.when(tagRepository.findBy(any(String.class))).thenReturn(new Tag());
+        when(tagRepository.findBy(any(String.class))).thenReturn(new Tag());
         tagService.update(new TagDTO());
+    }
+
+    @Test
+    public void findTagByIdPositiveTest(){
+        when(tagRepository.findBy(anyLong())).thenReturn(tag);
+        Assert.assertEquals(expextedTag, tagService.findById(anyLong()));
+        verify(tagRepository, times(1)).findBy(anyLong());
+    }
+
+    @Test(expected = EmptyResultDataAccessException.class)
+    public void findTagByIdNegativeTest(){
+        when(tagRepository.findBy(anyLong())).thenThrow(EmptyResultDataAccessException.class);
+        tagService.findById(anyLong());
+
     }
 }

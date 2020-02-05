@@ -16,9 +16,9 @@ public class AuthorRepositoryImpl extends AbstractRepository implements AuthorRe
             = "SELECT id, name, surname FROM author WHERE id = ? AND name = ? AND surname = ?;";
     private static final String FIND_AUTHOR_BY_ID
             = "SELECT id, name, surname FROM author WHERE id = ? ;";
-    public static final String DELETE_AUTHOR_BY_ID
+    private static final String DELETE_AUTHOR_BY_ID
             = "DELETE FROM author WHERE id = ?";
-    public static final String UPDATE_AUTHOR_NAME_SURNAME_BY_ID
+    private static final String UPDATE_AUTHOR_NAME_SURNAME_BY_ID
             = "UPDATE author SET name = ?, surname = ? WHERE id = ?;";
 
 

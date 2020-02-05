@@ -25,7 +25,7 @@ public class TagRepositoryImpl extends AbstractRepository implements TagReposito
     private static final String SELECT_TAGS_BY_NEWS = "SELECT id, name FROM tag"
             + " RIGHT JOIN news_tag ON news_tag.tag_id= tag.id WHERE news_tag.news_id = ?";
     private static final String INSERT_INTO_NEWS_TAG_TAG_ID_NEWS_ID_VALUES = "INSERT INTO news_tag (tag_id, news_id) VALUES (?, ?);";
-    public static final String DELETE_FROM_NEWS_TAG_WHERE_NEWS_ID = "DELETE FROM news_tag WHERE news_id = ?";
+    private static final String DELETE_FROM_NEWS_TAG_WHERE_NEWS_ID = "DELETE FROM news_tag WHERE news_id = ?";
 
     @Override
     public Tag create(Tag bean) {

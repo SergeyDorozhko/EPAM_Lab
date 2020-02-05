@@ -14,6 +14,10 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 @Service
@@ -52,6 +56,7 @@ public class NewsServiceImpl implements NewsService {
         if (news.getAuthor() != null) {
             newsRepository.linkAuthorWithNews(news.getAuthor().getId(), news.getId());
         }
+        makeUniqueListOfTags(news);
         for (Tag tag : news.getListOfTags()) {
             tagRepository.linkTagWithNews(tag.getId(), news.getId());
         }
@@ -99,6 +104,11 @@ public class NewsServiceImpl implements NewsService {
         return tagIndex;
     }
 
+    private void makeUniqueListOfTags(News news){
+        Set<Tag> tagList = new HashSet<>(news.getListOfTags());
+        List<Tag> list = new ArrayList<>(tagList);
+        news.setListOfTags(list);
+    }
     @Override
     public boolean delete(long id) {
         return newsRepository.delete(id);
@@ -119,7 +129,7 @@ public class NewsServiceImpl implements NewsService {
                 i = checkAndCreateTagIfNew(news, i);
             }
             tagRepository.deleteTagNewsLinks(news.getId());
-
+            makeUniqueListOfTags(news);
             for (Tag tag : news.getListOfTags()) {
                 tagRepository.linkTagWithNews(tag.getId(), news.getId());
             }

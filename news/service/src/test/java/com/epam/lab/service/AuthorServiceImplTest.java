@@ -33,7 +33,6 @@ public class AuthorServiceImplTest {
 
     @Before
     public void init() {
-        MockitoAnnotations.initMocks(this);
         newsRepository = Mockito.mock(NewsRepositoryImpl.class);
         authorRepository = Mockito.mock(AuthorRepositoryImpl.class);
         authorMapper = new AuthorMapper(new ModelMapper());
@@ -83,8 +82,8 @@ public class AuthorServiceImplTest {
 
     @Test
     public void testAuthorUpdate() {
-        AuthorDTO expectedAuthor = authorService.update(new AuthorDTO());
-        Assert.assertEquals(authorDTO, expectedAuthor);
+        AuthorDTO actualAuthor = authorService.update(new AuthorDTO());
+        Assert.assertEquals(authorDTO, actualAuthor);
         Mockito.verify(authorRepository, Mockito.times(1)).update(new Author());
 
     }

@@ -20,8 +20,8 @@ public class NewsRepositoryImpl extends AbstractRepository implements NewsReposi
             + " LEFT JOIN news_author ON news_author.news_id = news.id WHERE news.id = ?;";
     private static final String INSERT_INTO_NEWS_AUTHOR_AUTHOR_ID_NEWS_ID
             = "INSERT INTO news_author (author_id, news_id) VALUES (?, ?);";
-    public static final String SELECT_AUTHOR_ID_FROM_NEWS_AUTHOR_WHERE_NEWS_ID = "SELECT author_id FROM news_author WHERE news_id = ?";
-    public static final String SELECT_NEWS_ID_BY_AUTHOR_ID = "SELECT news_id FROM news_author WHERE author_id = ?";
+    private static final String SELECT_AUTHOR_ID_FROM_NEWS_AUTHOR_WHERE_NEWS_ID = "SELECT author_id FROM news_author WHERE news_id = ?";
+    private static final String SELECT_NEWS_ID_BY_AUTHOR_ID = "SELECT news_id FROM news_author WHERE author_id = ?";
 
     @Override
     public News create(News bean) {
