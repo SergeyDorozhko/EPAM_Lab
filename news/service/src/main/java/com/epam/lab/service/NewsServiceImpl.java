@@ -2,6 +2,7 @@ package com.epam.lab.service;
 
 import com.epam.lab.dto.Mapper.NewsMapper;
 import com.epam.lab.dto.NewsDTO;
+import com.epam.lab.dto.SearchCriteria;
 import com.epam.lab.model.News;
 import com.epam.lab.model.Tag;
 import com.epam.lab.repository.AuthorRepository;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -41,7 +43,8 @@ public class NewsServiceImpl implements NewsService {
         checkNews(bean);
 
         News news = mapper.toBean(bean);
-
+        news.setCreationDate(LocalDate.now());
+        news.setModificationDate(LocalDate.now());
         checkAndCreateAuthorIfNew(news);
 
         newsRepository.create(news);
@@ -62,7 +65,6 @@ public class NewsServiceImpl implements NewsService {
         }
         return mapper.toDTO(news);
     }
-
 
 
     private void checkNews(NewsDTO newsDTO) {
@@ -104,11 +106,12 @@ public class NewsServiceImpl implements NewsService {
         return tagIndex;
     }
 
-    private void makeUniqueListOfTags(News news){
+    private void makeUniqueListOfTags(News news) {
         Set<Tag> tagList = new HashSet<>(news.getListOfTags());
         List<Tag> list = new ArrayList<>(tagList);
         news.setListOfTags(list);
     }
+
     @Override
     public boolean delete(long id) {
         return newsRepository.delete(id);
@@ -120,7 +123,7 @@ public class NewsServiceImpl implements NewsService {
         if (!checkAuthorAndCreateIfNeed(news)) {
             throw new ServiceException("Error date");
         }
-
+        news.setModificationDate(LocalDate.now());
         newsRepository.update(news);
 
         boolean hasTags = news.getListOfTags() != null && news.getListOfTags().size() > 0;
@@ -170,5 +173,22 @@ public class NewsServiceImpl implements NewsService {
         }
         news.setListOfTags(tagRepository.findBy(news));
         return mapper.toDTO(news);
+    }
+
+    @Override
+    public long countAllNews() {
+        return newsRepository.countAllNews();
+    }
+
+    @Override
+    public List<NewsDTO> findAllNewsByQuery(SearchCriteria searchCriteria) {
+
+        List<News> newsList = newsRepository.findAllNewsAndSortByQuery(" ORDER BY modification_date, short_text;");
+        List<NewsDTO> newsDTOList = new ArrayList<>();
+        for (News news : newsList) {
+            news.setListOfTags(tagRepository.findBy(news));
+            newsDTOList.add(mapper.toDTO(news));
+        }
+        return newsDTOList;
     }
 }

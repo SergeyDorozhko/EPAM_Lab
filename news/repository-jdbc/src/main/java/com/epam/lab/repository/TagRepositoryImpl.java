@@ -1,5 +1,6 @@
 package com.epam.lab.repository;
 
+import com.epam.lab.exception.RepositoryException;
 import com.epam.lab.model.News;
 import com.epam.lab.model.Tag;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -58,7 +59,7 @@ public class TagRepositoryImpl extends AbstractRepository implements TagReposito
 
     @Override
     public Tag update(Tag bean) {
-        jdbcTemplate.update(connection -> {
+        int result = jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(UPDATE_TAG_SET_NAME_WHERE_ID,
                     Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, bean.getName());
@@ -66,8 +67,9 @@ public class TagRepositoryImpl extends AbstractRepository implements TagReposito
             return ps;
         }, keyHolder);
 
-        bean.setId((long) keyHolder.getKeys().get("id"));
-        bean.setName((String) keyHolder.getKeys().get("name"));
+        if(result == 0) {
+            throw new RepositoryException("Error tag params");
+        }
 
         return bean;
     }

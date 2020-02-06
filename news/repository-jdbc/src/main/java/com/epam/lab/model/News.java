@@ -101,4 +101,17 @@ public class News extends Bean {
     public int hashCode() {
         return Objects.hash(super.hashCode(), title, shortText, fullText, creationDate, modificationDate, author, listOfTags);
     }
+
+    @Override
+    public String toString() {
+        return "News{" +
+                "title='" + title + '\'' +
+                ", shortText='" + shortText + '\'' +
+                ", fullText='" + fullText + '\'' +
+                ", creationDate=" + creationDate +
+                ", modificationDate=" + modificationDate +
+                ", author=" + author +
+                ", listOfTags=" + listOfTags +
+                '}';
+    }
 }

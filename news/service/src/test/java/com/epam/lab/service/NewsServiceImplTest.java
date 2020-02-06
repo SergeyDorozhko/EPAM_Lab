@@ -16,6 +16,7 @@ import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +53,8 @@ public class NewsServiceImplTest {
         newsDTO.setTitle("Title");
         newsDTO.setShortText("ShortText");
         newsDTO.setFullText("FullText");
-
+        newsDTO.setCreationDate(LocalDate.now());
+        newsDTO.setModificationDate(LocalDate.now());
 
         news = new News();
         news.setTitle("Title");
@@ -78,6 +80,8 @@ public class NewsServiceImplTest {
         newsDTO.setTitle("Title");
         newsDTO.setShortText("ShortText");
         newsDTO.setFullText("FullText");
+        newsDTO.setCreationDate(LocalDate.now());
+        newsDTO.setModificationDate(LocalDate.now());
         AuthorDTO authorDTO = new AuthorDTO();
         authorDTO.setName("name");
         authorDTO.setSurname("surname");
@@ -112,6 +116,8 @@ public class NewsServiceImplTest {
         newsDTO.setTitle("Title");
         newsDTO.setShortText("ShortText");
         newsDTO.setFullText("FullText");
+        newsDTO.setCreationDate(LocalDate.now());
+        newsDTO.setModificationDate(LocalDate.now());
         AuthorDTO authorDTO = new AuthorDTO();
         authorDTO.setId(2);
         authorDTO.setName("name");
@@ -359,5 +365,12 @@ public class NewsServiceImplTest {
         verify(newsRepository, times(1)).findBy(anyLong());
         verify(authorRepository, times(0)).findBy(any(Author.class));
         verify(tagRepository, times(1)).findBy(news);
+    }
+
+    @Test
+    public void countAllNewsTest(){
+        when(newsRepository.countAllNews()).thenReturn(5L);
+        Assert.assertEquals(5, newsService.countAllNews());
+        verify(newsRepository, times(1)).countAllNews();
     }
 }

@@ -1,6 +1,7 @@
 package com.epam.lab.controller;
 
 import com.epam.lab.dto.NewsDTO;
+import com.epam.lab.dto.SearchCriteria;
 import com.epam.lab.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.awt.*;
 import java.lang.reflect.Method;
+import java.util.List;
 
 @RestController
 @RequestMapping("/news")
@@ -47,5 +49,18 @@ public class NewsController {
     @ResponseBody
     public NewsDTO updateNews(@RequestBody NewsDTO newsDTO) {
         return service.update(newsDTO);
+    }
+
+    @RequestMapping(value = "/count", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public long countNews() {
+        return service.countAllNews();
+    }
+
+
+    @RequestMapping(value = "/search", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public List<NewsDTO> SearchNews() {
+        return service.findAllNewsByQuery(new SearchCriteria());
     }
 }

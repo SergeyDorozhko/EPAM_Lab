@@ -23,10 +23,6 @@ public class NewsDTO extends AbstractDTO {
         listOfTags = new ArrayList<>();
     }
 
-    public void setListOfTags(List<TagDTO> listOfTags) {
-        this.listOfTags = listOfTags;
-    }
-
     public NewsDTO(int id, String title, String shortText, String fullText, LocalDate creationDate, LocalDate modificationDate, AuthorDTO author, List<TagDTO> listOfTags) {
         super(id);
         this.title = title;
@@ -35,6 +31,10 @@ public class NewsDTO extends AbstractDTO {
         this.creationDate = creationDate;
         this.modificationDate = modificationDate;
         this.author = author;
+        this.listOfTags = listOfTags;
+    }
+
+    public void setListOfTags(List<TagDTO> listOfTags) {
         this.listOfTags = listOfTags;
     }
 

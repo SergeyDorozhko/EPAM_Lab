@@ -1,6 +1,4 @@
-\c news_db;
-
-insert into author (id, name, surname) OVERRIDING SYSTEM VALUE values
+insert into author (id, name, surname) values
 	(1, 'Sergei', 'Crachev'),
 	(2, 'Andrew', 'Bubkov'),
 	(3, 'Igor', 'Bikov'),
@@ -21,8 +19,8 @@ insert into author (id, name, surname) OVERRIDING SYSTEM VALUE values
 	(18, 'Sahsa', 'Golikov'),
 	(19, 'Vladimir', 'Kolesnikov'),
 	(20, 'Igor', 'Mishkin');
-
-insert into tag (id, name) OVERRIDING SYSTEM VALUE values
+	
+insert into tag (id, name) values 
 	(1, 'animals'),
 	(2, 'game'),
 	(3, 'pet'),
@@ -43,8 +41,8 @@ insert into tag (id, name) OVERRIDING SYSTEM VALUE values
 	(18, 'clothes'),
 	(19, 'tv'),
 	(20, 'song');
-
-insert into news (id, title, short_text, full_text, creation_date, modification_date) OVERRIDING SYSTEM VALUE values
+	
+insert into news (id, title, short_text, full_text, creation_date, modification_date) values
 	(1, 'title 1', 'short text 1', 'full text 1', '2020-01-28', '2020-01-28'),
 	(2, 'title 2', 'short text 2', 'full text 2', '2020-01-28', '2020-01-28'),
 	(3, 'title 3', 'short text 3', 'full text 3', '2020-01-28', '2020-01-28'),
@@ -65,7 +63,7 @@ insert into news (id, title, short_text, full_text, creation_date, modification_
 	(18, 'title 18', 'short text 18', 'full text 18', '2020-01-28', '2020-01-28'),
 	(19, 'title 19', 'short text 19', 'full text 19', '2020-01-28', '2020-01-28'),
 	(20, 'title 20', 'short text 20', 'full text 20', '2020-01-28', '2020-01-28');
-
+	
 insert into news_author (news_id, author_id) values
 	(2, 3),
 	(3, 3),
@@ -73,8 +71,6 @@ insert into news_author (news_id, author_id) values
 	(5, 4),
 	(6, 4),
 	(7, 4),
-	(8, 1),
-	(9, 1),
 	(10, 2),
 	(11, 3),
 	(12, 5),
@@ -86,7 +82,7 @@ insert into news_author (news_id, author_id) values
 	(18, 11),
 	(19, 12),
 	(10, 13);
-
+	
 insert into news_tag (news_id, tag_id) values
 	(1, 4),
 	(1, 5),

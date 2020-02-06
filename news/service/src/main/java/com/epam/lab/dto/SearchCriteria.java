@@ -7,7 +7,7 @@ public class SearchCriteria {
     private String name;
     private String surname;
     private Set<String> tagsList;
-    private String orderByParameter;
+    private Set<String> orderByParameter;
     private boolean desc;
 
     public SearchCriteria() {
@@ -31,10 +31,10 @@ public class SearchCriteria {
     public void setTagsList(Set<String> tagsList) {
         this.tagsList = tagsList;
     }
-    public String getOrderByParameter() {
+    public Set<String> getOrderByParameter() {
         return orderByParameter;
     }
-    public void setOrderByParameter(String orderByParameter) {
+    public void setOrderByParameter(Set<String> orderByParameter) {
         this.orderByParameter = orderByParameter;
     }
     public boolean isAces() {
