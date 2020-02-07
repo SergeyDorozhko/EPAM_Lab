@@ -8,7 +8,7 @@ import com.epam.lab.model.Author;
 import com.epam.lab.model.News;
 import com.epam.lab.model.Tag;
 import com.epam.lab.repository.*;
-import com.epam.lab.service.exception.ServiceException;
+import com.epam.lab.exception.ServiceException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

@@ -8,13 +8,12 @@ import com.epam.lab.model.Tag;
 import com.epam.lab.repository.AuthorRepository;
 import com.epam.lab.repository.NewsRepository;
 import com.epam.lab.repository.TagRepository;
-import com.epam.lab.service.exception.ServiceException;
+import com.epam.lab.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -95,7 +94,7 @@ public class NewsServiceImpl implements NewsService {
                 news.getListOfTags().set(tagIndex,
                         tagRepository.findBy(news.getListOfTags().get(tagIndex).getName()));
             }
-        } catch (Exception ex) {
+        } catch (EmptyResultDataAccessException ex) {
             if (news.getListOfTags().get(tagIndex).getId() != 0) {
                 news.getListOfTags().remove(tagIndex);
                 tagIndex--;
@@ -146,7 +145,7 @@ public class NewsServiceImpl implements NewsService {
         Long authorId = null;
         try {
             authorId = newsRepository.findAuthorIdByNewsId(news.getId());
-        } catch (Exception ex) {
+        } catch (EmptyResultDataAccessException ex) {
             //TODO logger.
             System.out.println("Add author to news (update action)");
         }
@@ -182,13 +181,42 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public List<NewsDTO> findAllNewsByQuery(SearchCriteria searchCriteria) {
+        String query = makeQueryForSearch(searchCriteria);
 
-        List<News> newsList = newsRepository.findAllNewsAndSortByQuery(" ORDER BY modification_date, short_text;");
+        List<News> newsList = newsRepository.findAllNewsAndSortByQuery(query);
         List<NewsDTO> newsDTOList = new ArrayList<>();
         for (News news : newsList) {
             news.setListOfTags(tagRepository.findBy(news));
             newsDTOList.add(mapper.toDTO(news));
         }
         return newsDTOList;
+    }
+
+    private String makeQueryForSearch(SearchCriteria searchCriteria) {
+        StringBuilder queryBuilder = new StringBuilder("WHERE (1=1) ");
+        if (searchCriteria.getAuthorName() != null && !searchCriteria.getAuthorName().isEmpty()) {
+            queryBuilder.append(" AND (author_name = '").append(searchCriteria.getAuthorName()).append("') ");
+        }
+        if (searchCriteria.getAuthorSurname() != null && !searchCriteria.getAuthorSurname().isEmpty()) {
+            queryBuilder.append(" AND (author_surname = '").append(searchCriteria.getAuthorSurname()).append("') ");
+        }
+        Set<String> tagsList = searchCriteria.getTagsList();
+        tagsList.forEach(c -> queryBuilder.append(" AND ('").append(c).append("' = ANY(tag_names)) "));
+
+        if (!searchCriteria.getOrderByParameter().isEmpty()) {
+            queryBuilder.append(" ORDER BY ");
+            List<String> orderSet = new ArrayList<>(searchCriteria.getOrderByParameter());
+            for (int i = 0; i < orderSet.size(); i++) {
+                if (i > 0) {
+                    queryBuilder.append(", ");
+                }
+                queryBuilder.append(orderSet.get(i));
+            }
+            if (searchCriteria.isDesc()) {
+                queryBuilder.append(" DESC");
+            }
+        }
+
+        return queryBuilder.append(";").toString();
     }
 }

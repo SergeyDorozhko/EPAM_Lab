@@ -2,14 +2,11 @@ package com.epam.lab.controller;
 
 import com.epam.lab.dto.TagDTO;
 import com.epam.lab.service.TagService;
-import com.epam.lab.service.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 @RestController
 @RequestMapping("/tag")

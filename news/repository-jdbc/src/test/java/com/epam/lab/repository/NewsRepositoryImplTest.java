@@ -19,6 +19,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -151,4 +152,21 @@ public class NewsRepositoryImplTest {
     public void countAllNewsTest() {
     Assert.assertEquals(20, newsRepository.countAllNews()); //If test fail first check Fill_tables.sql
     }
+
+    @Test
+    public void findAllNewsAndSortByQuery() {
+        String query = "WHERE (1=1)  AND (author_name = 'Igor')  AND (author_surname = 'Bikov')";
+        List<News> newsList = newsRepository.findAllNewsAndSortByQuery(query);
+        Assert.assertEquals(4, newsList.size());
+
+        query = "";
+        newsList = newsRepository.findAllNewsAndSortByQuery(query);
+        Assert.assertEquals(20, newsList.size());
+
+        query = "WHERE (1=1)  AND (author_name = 'Igorghjugh D')  AND (author_surname = 'Bikov')";
+        newsList = newsRepository.findAllNewsAndSortByQuery(query);
+        Assert.assertEquals(0, newsList.size());
+    }
+
+
 }

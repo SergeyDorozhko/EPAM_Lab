@@ -3,7 +3,7 @@ package com.epam.lab.service;
 import com.epam.lab.dto.Mapper.TagMapper;
 import com.epam.lab.dto.TagDTO;
 import com.epam.lab.repository.TagRepository;
-import com.epam.lab.service.exception.ServiceException;
+import com.epam.lab.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;

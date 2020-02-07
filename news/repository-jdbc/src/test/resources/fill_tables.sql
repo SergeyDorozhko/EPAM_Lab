@@ -81,7 +81,7 @@ insert into news_author (news_id, author_id) values
 	(17, 11),
 	(18, 11),
 	(19, 12),
-	(10, 13);
+	(20, 13);
 	
 insert into news_tag (news_id, tag_id) values
 	(1, 4),

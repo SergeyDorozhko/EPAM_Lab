@@ -1,29 +1,30 @@
 package com.epam.lab.dto;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class SearchCriteria {
-    private String name;
-    private String surname;
+    private String authorName;
+    private String authorSurname;
     private Set<String> tagsList;
     private Set<String> orderByParameter;
     private boolean desc;
 
     public SearchCriteria() {
-        this.tagsList = new HashSet<>();
+        this.tagsList = new LinkedHashSet<>();
+        this.orderByParameter = new LinkedHashSet<>();
     }
-    public String getName() {
-        return name;
+    public String getAuthorName() {
+        return authorName;
     }
-    public void setName(String name) {
-        this.name = name;
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
     }
-    public String getSurname() {
-        return surname;
+    public String getAuthorSurname() {
+        return authorSurname;
     }
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setAuthorSurname(String authorSurname) {
+        this.authorSurname = authorSurname;
     }
     public Set<String> getTagsList() {
         return tagsList;
@@ -37,28 +38,12 @@ public class SearchCriteria {
     public void setOrderByParameter(Set<String> orderByParameter) {
         this.orderByParameter = orderByParameter;
     }
-    public boolean isAces() {
+
+    public boolean isDesc() {
         return desc;
     }
-    public void setAces(boolean aces) {
-        this.desc = aces;
-    }
-    public String accept() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("WHERE (1=1) ");
-        if (name != null && !name.isEmpty()) {
-            builder.append(" AND (author.name =").append(name).append(") ");
-        }
-        if (surname != null && !surname.isEmpty()) {
-            builder.append(" AND (author.surname =").append(surname).append(") ");
-        }
-        tagsList.forEach(c -> builder.append(" AND (").append(c).append(" = ANY(tag_names)) "));
-        if (orderByParameter != null && !orderByParameter.isEmpty()) {
-            builder.append(" ORDER BY ").append(orderByParameter);
-        }
-        if (desc) {
-            builder.append(" DESC");
-        }
-        return builder.append(";").toString();
+
+    public void setDesc(boolean desc) {
+        this.desc = desc;
     }
 }

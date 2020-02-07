@@ -3,13 +3,11 @@ package com.epam.lab.repository;
 import com.epam.lab.exception.RepositoryException;
 import com.epam.lab.model.Author;
 import com.epam.lab.model.News;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -22,12 +20,17 @@ public class NewsRepositoryImpl extends AbstractRepository implements NewsReposi
             + " LEFT JOIN news_author ON news_author.news_id = news.id WHERE news.id = ?;";
     private static final String INSERT_INTO_NEWS_AUTHOR_AUTHOR_ID_NEWS_ID
             = "INSERT INTO news_author (author_id, news_id) VALUES (?, ?);";
-    private static final String SELECT_AUTHOR_ID_FROM_NEWS_AUTHOR_WHERE_NEWS_ID = "SELECT author_id FROM news_author WHERE news_id = ?";
-    private static final String SELECT_NEWS_ID_BY_AUTHOR_ID = "SELECT news_id FROM news_author WHERE author_id = ?";
-    private static final String UPDATE_NEWS_BY_ID = "UPDATE news SET title = ? , short_text = ?, full_text = ?, modification_date = ? WHERE id = ?";
+    private static final String SELECT_AUTHOR_ID_FROM_NEWS_AUTHOR_WHERE_NEWS_ID
+            = "SELECT author_id FROM news_author WHERE news_id = ?";
+    private static final String SELECT_NEWS_ID_BY_AUTHOR_ID
+            = "SELECT news_id FROM news_author WHERE author_id = ?";
+    private static final String UPDATE_NEWS_BY_ID
+            = "UPDATE news SET title = ? , short_text = ?, full_text = ?, modification_date = ? WHERE id = ?";
     private static final String DELETE_FROM_NEWS_WHERE_ID = "DELETE FROM news WHERE id = ?";
     private static final String COUNT_ALL_NEWS = "SELECT COUNT(id) FROM news";
-    public static final String FIND_BY_QUERY = "SELECT id, title, short_text, full_text, creation_date, modification_date, author_id, author_name, author_surname FROM news_tags_author ";
+    private static final String FIND_BY_QUERY
+            = " SELECT id, title, short_text, full_text, creation_date, modification_date, author_id, "
+            + " author_name, author_surname FROM news_tags_author ";
 
     @Override
     public News create(News bean) {
