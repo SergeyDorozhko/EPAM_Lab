@@ -38,15 +38,20 @@ public class AuthorDTO extends AbstractDTO{
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AuthorDTO)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
+
         AuthorDTO authorDTO = (AuthorDTO) o;
-        return Objects.equals(name, authorDTO.name) &&
-                Objects.equals(surname, authorDTO.surname);
+
+        if (name != null ? !name.equals(authorDTO.name) : authorDTO.name != null) return false;
+        return surname != null ? surname.equals(authorDTO.surname) : authorDTO.surname == null;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), name, surname);
+        int result = super.hashCode();
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (surname != null ? surname.hashCode() : 0);
+        return result;
     }
 }

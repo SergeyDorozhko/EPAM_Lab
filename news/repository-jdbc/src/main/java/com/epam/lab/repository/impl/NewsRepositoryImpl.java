@@ -1,8 +1,10 @@
-package com.epam.lab.repository;
+package com.epam.lab.repository.impl;
 
 import com.epam.lab.exception.RepositoryException;
 import com.epam.lab.model.Author;
 import com.epam.lab.model.News;
+import com.epam.lab.repository.AbstractRepository;
+import com.epam.lab.repository.NewsRepository;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Date;

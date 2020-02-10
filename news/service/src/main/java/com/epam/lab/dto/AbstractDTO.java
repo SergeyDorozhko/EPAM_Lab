@@ -23,13 +23,15 @@ public abstract class AbstractDTO implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AbstractDTO)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
+
         AbstractDTO that = (AbstractDTO) o;
+
         return id == that.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return (int) (id ^ (id >>> 32));
     }
 }

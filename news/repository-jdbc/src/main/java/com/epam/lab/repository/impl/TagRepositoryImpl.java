@@ -1,8 +1,10 @@
-package com.epam.lab.repository;
+package com.epam.lab.repository.impl;
 
 import com.epam.lab.exception.RepositoryException;
 import com.epam.lab.model.News;
 import com.epam.lab.model.Tag;
+import com.epam.lab.repository.AbstractRepository;
+import com.epam.lab.repository.TagRepository;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;

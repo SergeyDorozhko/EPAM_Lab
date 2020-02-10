@@ -1,14 +1,20 @@
-package com.epam.lab.service;
+package com.epam.lab.service.impl;
 
 import com.epam.lab.dto.AuthorDTO;
 import com.epam.lab.dto.Mapper.NewsMapper;
 import com.epam.lab.dto.NewsDTO;
 import com.epam.lab.dto.TagDTO;
+import com.epam.lab.exception.ServiceException;
 import com.epam.lab.model.Author;
 import com.epam.lab.model.News;
 import com.epam.lab.model.Tag;
-import com.epam.lab.repository.*;
-import com.epam.lab.exception.ServiceException;
+import com.epam.lab.repository.AuthorRepository;
+import com.epam.lab.repository.NewsRepository;
+import com.epam.lab.repository.TagRepository;
+import com.epam.lab.repository.impl.AuthorRepositoryImpl;
+import com.epam.lab.repository.impl.NewsRepositoryImpl;
+import com.epam.lab.repository.impl.TagRepositoryImpl;
+import com.epam.lab.service.NewsService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,6 +40,8 @@ public class NewsServiceImplTest {
 
     private NewsDTO newsDTO;
     private News news;
+
+
 
     @Before
     public void init() {
@@ -314,6 +322,9 @@ public class NewsServiceImplTest {
         verify(authorRepository, times(1)).findBy(1);
         verify(tagRepository, times(1)).findBy(news);
     }
+    private void initFindNewsWithAuthorByIdTest() {
+
+    }
 
     @Test
     public void findNewsWithoutAuthorByIdTest(){
@@ -373,4 +384,7 @@ public class NewsServiceImplTest {
         Assert.assertEquals(5, newsService.countAllNews());
         verify(newsRepository, times(1)).countAllNews();
     }
+
+
+
 }

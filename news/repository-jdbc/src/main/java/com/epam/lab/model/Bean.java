@@ -6,6 +6,12 @@ import java.util.Objects;
 public abstract class Bean implements Serializable {
     private long id;
 
+    public Bean(){}
+
+    public Bean(long id) {
+        this.id = id;
+    }
+
     public long getId() {
         return id;
     }
@@ -25,5 +31,12 @@ public abstract class Bean implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Bean{" +
+                "id=" + id +
+                '}';
     }
 }

@@ -24,9 +24,9 @@ public class AuthorController {
     }
 
 
-    @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public AuthorDTO findAuthorBy(@RequestBody long id, HttpServletResponse response) {
+    public AuthorDTO findAuthorBy(@PathVariable long id, HttpServletResponse response) {
         AuthorDTO authorDTO = null;
         try {
              authorDTO = authorService.findById(id);

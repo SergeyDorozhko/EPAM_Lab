@@ -5,9 +5,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.KeyHolder;
 
 public abstract class AbstractRepository {
-    JdbcTemplate jdbcTemplate;
+    protected JdbcTemplate jdbcTemplate;
 
-    KeyHolder keyHolder;
+    protected KeyHolder keyHolder;
 
     public JdbcTemplate getJdbcTemplate() {
         return jdbcTemplate;

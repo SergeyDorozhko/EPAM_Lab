@@ -14,6 +14,15 @@ public class SearchCriteria {
         this.tagsList = new LinkedHashSet<>();
         this.orderByParameter = new LinkedHashSet<>();
     }
+
+    public SearchCriteria(String authorName, String authorSurname, Set<String> tagsList, Set<String> orderByParameter, boolean desc) {
+        this.authorName = authorName;
+        this.authorSurname = authorSurname;
+        this.tagsList = tagsList;
+        this.orderByParameter = orderByParameter;
+        this.desc = desc;
+    }
+
     public String getAuthorName() {
         return authorName;
     }

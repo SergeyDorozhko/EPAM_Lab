@@ -1,4 +1,4 @@
-package com.epam.lab.repository;
+package com.epam.lab.repository.impl;
 
 import com.epam.lab.configuration.BeanConfig;
 import com.epam.lab.configuration.DataConfig;

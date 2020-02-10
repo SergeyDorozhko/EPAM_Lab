@@ -1,6 +1,8 @@
-package com.epam.lab.repository;
+package com.epam.lab.repository.impl;
 
 import com.epam.lab.model.Author;
+import com.epam.lab.repository.AbstractRepository;
+import com.epam.lab.repository.AuthorRepository;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 

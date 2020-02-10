@@ -28,14 +28,22 @@ public class TagDTO extends AbstractDTO {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TagDTO)) return false;
-        if (!super.equals(o)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
+
         TagDTO tagDTO = (TagDTO) o;
-        return Objects.equals(name, tagDTO.name);
+
+        return name != null ? name.equals(tagDTO.name) : tagDTO.name == null;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), name);
+        return (name != null ? name.hashCode() : 0);
+    }
+
+    @Override
+    public String toString() {
+        return "TagDTO{" +
+                "name='" + name + '\'' +
+                '}';
     }
 }

@@ -9,6 +9,16 @@ public class Author extends Bean {
     private String name;
     private String surname;
 
+    public Author() {
+        super();
+    }
+
+    public Author(long id, String name, String surname) {
+        super(id);
+        this.name = name;
+        this.surname = surname;
+    }
+
     public String getName() {
         return name;
     }

@@ -1,19 +1,17 @@
-package com.epam.lab.service;
+package com.epam.lab.service.impl;
 
 import com.epam.lab.dto.AuthorDTO;
 import com.epam.lab.dto.Mapper.AuthorMapper;
 import com.epam.lab.model.Author;
 import com.epam.lab.repository.AuthorRepository;
-import com.epam.lab.repository.AuthorRepositoryImpl;
 import com.epam.lab.repository.NewsRepository;
-import com.epam.lab.repository.NewsRepositoryImpl;
+import com.epam.lab.repository.impl.AuthorRepositoryImpl;
+import com.epam.lab.repository.impl.NewsRepositoryImpl;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;

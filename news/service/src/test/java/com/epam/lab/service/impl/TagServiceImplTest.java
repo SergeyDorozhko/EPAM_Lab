@@ -1,11 +1,13 @@
-package com.epam.lab.service;
+package com.epam.lab.service.impl;
 
 import com.epam.lab.dto.Mapper.TagMapper;
 import com.epam.lab.dto.TagDTO;
 import com.epam.lab.model.Tag;
 import com.epam.lab.repository.TagRepository;
-import com.epam.lab.repository.TagRepositoryImpl;
+import com.epam.lab.repository.impl.TagRepositoryImpl;
 import com.epam.lab.exception.ServiceException;
+import com.epam.lab.service.TagService;
+import com.epam.lab.service.impl.TagServiceImpl;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

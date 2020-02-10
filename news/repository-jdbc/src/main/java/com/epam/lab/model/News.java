@@ -22,6 +22,19 @@ public class News extends Bean {
         listOfTags = new ArrayList<>();
     }
 
+
+
+    public News(long id, String title, String shortText, String fullText, LocalDate creationDate, LocalDate modificationDate, Author author, List<Tag> listOfTags) {
+        super(id);
+        this.title = title;
+        this.shortText = shortText;
+        this.fullText = fullText;
+        this.creationDate = creationDate;
+        this.modificationDate = modificationDate;
+        this.author = author;
+        this.listOfTags = listOfTags;
+    }
+
     public String getTitle() {
         return title;
     }

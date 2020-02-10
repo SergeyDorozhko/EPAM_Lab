@@ -2,7 +2,9 @@ package com.epam.lab.dto;
 
 import org.springframework.stereotype.Component;
 
+import java.text.DateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
@@ -97,20 +99,45 @@ public class NewsDTO extends AbstractDTO {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof NewsDTO)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
+
         NewsDTO newsDTO = (NewsDTO) o;
-        return Objects.equals(title, newsDTO.title) &&
-                Objects.equals(shortText, newsDTO.shortText) &&
-                Objects.equals(fullText, newsDTO.fullText) &&
-                Objects.equals(creationDate, newsDTO.creationDate) &&
-                Objects.equals(modificationDate, newsDTO.modificationDate) &&
-                Objects.equals(author, newsDTO.author) &&
-                Objects.equals(listOfTags, newsDTO.listOfTags);
+
+        if (title != null ? !title.equals(newsDTO.title) : newsDTO.title != null) return false;
+        if (shortText != null ? !shortText.equals(newsDTO.shortText) : newsDTO.shortText != null) return false;
+        if (fullText != null ? !fullText.equals(newsDTO.fullText) : newsDTO.fullText != null) return false;
+        if (creationDate != null ? !creationDate.equals(newsDTO.creationDate) : newsDTO.creationDate != null)
+            return false;
+        if (modificationDate != null ? !modificationDate.equals(newsDTO.modificationDate) : newsDTO.modificationDate != null)
+            return false;
+        if (author != null ? !author.equals(newsDTO.author) : newsDTO.author != null) return false;
+        return listOfTags != null ? listOfTags.equals(newsDTO.listOfTags) : newsDTO.listOfTags == null;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), title, shortText, fullText, creationDate, modificationDate, author, listOfTags);
+        int result = super.hashCode();
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (shortText != null ? shortText.hashCode() : 0);
+        result = 31 * result + (fullText != null ? fullText.hashCode() : 0);
+        result = 31 * result + (creationDate != null ? creationDate.hashCode() : 0);
+        result = 31 * result + (modificationDate != null ? modificationDate.hashCode() : 0);
+        result = 31 * result + (author != null ? author.hashCode() : 0);
+        result = 31 * result + (listOfTags != null ? listOfTags.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "NewsDTO{" +
+                "title='" + title + '\'' +
+                ", shortText='" + shortText + '\'' +
+                ", fullText='" + fullText + '\'' +
+                ", creationDate=" + creationDate +
+                ", modificationDate=" + modificationDate +
+                ", author=" + author +
+                ", listOfTags=" + listOfTags +
+                '}';
     }
 }
