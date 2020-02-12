@@ -1,12 +1,12 @@
 package com.epam.lab.dto;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 public abstract class AbstractDTO implements Serializable {
     private long id;
 
-    public AbstractDTO(){    }
+    public AbstractDTO() {
+    }
 
     public AbstractDTO(int id) {
         this.id = id;

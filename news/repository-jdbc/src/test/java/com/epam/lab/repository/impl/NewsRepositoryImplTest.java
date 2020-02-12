@@ -3,7 +3,6 @@ package com.epam.lab.repository.impl;
 import com.epam.lab.configuration.BeanConfig;
 import com.epam.lab.configuration.DataConfig;
 import com.epam.lab.exception.RepositoryException;
-import com.epam.lab.model.Author;
 import com.epam.lab.model.News;
 import org.junit.Assert;
 import org.junit.Before;
@@ -56,7 +55,6 @@ public class NewsRepositoryImplTest {
 
         News result = newsRepository.create(expectedNews);
         expectedNews.setId(result.getId());
-        expectedNews.setAuthor(new Author());
 
         News actual = newsRepository.findBy(result.getId());
         Assert.assertEquals(expectedNews, actual);

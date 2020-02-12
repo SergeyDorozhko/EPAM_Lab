@@ -1,14 +1,14 @@
 package com.epam.lab.service.impl;
 
 import com.epam.lab.dto.AuthorDTO;
-import com.epam.lab.dto.Mapper.AuthorMapper;
+import com.epam.lab.dto.mapper.AuthorMapper;
 import com.epam.lab.model.Author;
 import com.epam.lab.repository.AuthorRepository;
 import com.epam.lab.repository.NewsRepository;
 import com.epam.lab.repository.impl.AuthorRepositoryImpl;
 import com.epam.lab.repository.impl.NewsRepositoryImpl;
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
@@ -23,24 +23,22 @@ public class AuthorServiceImplTest {
 
     private static AuthorRepository authorRepository;
     private static NewsRepository newsRepository;
-    private static AuthorMapper authorMapper;
 
     private static AuthorServiceImpl authorService;
-    private AuthorDTO authorDTO;
-    private static Author authorTestEntity;
+    private static AuthorDTO authorDTO;
 
-    @Before
-    public void init() {
+    @BeforeClass
+    public static void init() {
         newsRepository = Mockito.mock(NewsRepositoryImpl.class);
         authorRepository = Mockito.mock(AuthorRepositoryImpl.class);
-        authorMapper = new AuthorMapper(new ModelMapper());
+        AuthorMapper authorMapper = new AuthorMapper(new ModelMapper());
         authorService = new AuthorServiceImpl(authorMapper, authorRepository, newsRepository);
 
 
         authorDTO = new AuthorDTO();
         authorDTO.setName("Test");
         authorDTO.setSurname("Test");
-        authorTestEntity = new Author();
+        Author authorTestEntity = new Author();
         authorTestEntity.setName("Test");
         authorTestEntity.setSurname("Test");
         Mockito.when(authorRepository.create(any(Author.class))).thenReturn(authorTestEntity);

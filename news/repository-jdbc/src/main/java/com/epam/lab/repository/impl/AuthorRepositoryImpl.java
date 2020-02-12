@@ -1,9 +1,11 @@
 package com.epam.lab.repository.impl;
 
+import com.epam.lab.exception.RepositoryException;
 import com.epam.lab.model.Author;
 import com.epam.lab.repository.AbstractRepository;
 import com.epam.lab.repository.AuthorRepository;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
@@ -22,18 +24,25 @@ public class AuthorRepositoryImpl extends AbstractRepository implements AuthorRe
             = "DELETE FROM author WHERE id = ?";
     private static final String UPDATE_AUTHOR_NAME_SURNAME_BY_ID
             = "UPDATE author SET name = ?, surname = ? WHERE id = ?;";
+    private static final String AUTHOR_ID = "id";
+
 
 
     @Override
     public Author create(Author bean) {
         jdbcTemplate.update(con -> {
-            PreparedStatement ps = con.prepareStatement(CREATE_QUERY, new String[]{"id"});
-            ps.setString(1, bean.getName());
-            ps.setString(2, bean.getSurname());
+            PreparedStatement ps = con.prepareStatement(CREATE_QUERY, new String[]{AUTHOR_ID});
+            int counter = 1;
+            ps.setString(counter++, bean.getName());
+            ps.setString(counter, bean.getSurname());
             return ps;
         }, keyHolder);
-        bean.setId(keyHolder.getKey().longValue());
+        setGeneratedIdToAuthor(bean, keyHolder);
         return bean;
+    }
+
+    private void setGeneratedIdToAuthor(Author author, KeyHolder keyHolder) {
+        author.setId(keyHolder.getKey().longValue());
     }
 
     @Override
@@ -41,23 +50,29 @@ public class AuthorRepositoryImpl extends AbstractRepository implements AuthorRe
         int result = jdbcTemplate.update(
                 DELETE_AUTHOR_BY_ID,
                 id);
-        return result != 0;
+        return isDeleted(result);
+    }
+
+    private boolean isDeleted(int numberOfDeletedLines) {
+        return numberOfDeletedLines != 0;
     }
 
     @Override
     public Author update(Author bean) {
-        jdbcTemplate.update(connection -> {
+        int result = jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(
                     UPDATE_AUTHOR_NAME_SURNAME_BY_ID, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, bean.getName());
-            ps.setString(2, bean.getSurname());
-            ps.setLong(3, bean.getId());
+            int counter = 1;
+            ps.setString(counter++, bean.getName());
+            ps.setString(counter++, bean.getSurname());
+            ps.setLong(counter, bean.getId());
             return ps;
         }, keyHolder);
-        bean.setId((long) keyHolder.getKeys().get("id"));
-        bean.setName((String) keyHolder.getKeys().get("name"));
-        bean.setSurname((String) keyHolder.getKeys().get("surname"));
 
+        boolean noUpdates = result == 0;
+        if (noUpdates) {
+            throw new RepositoryException("Error author id");
+        }
         return bean;
     }
 

@@ -1,4 +1,4 @@
-package com.epam.lab.dto.Mapper;
+package com.epam.lab.dto.mapper;
 
 import com.epam.lab.dto.NewsDTO;
 import com.epam.lab.model.News;
@@ -11,7 +11,7 @@ public class NewsMapper extends AbstractMapper<News, NewsDTO> {
 
 
     @Autowired
-    public NewsMapper (ModelMapper modelMapper){
+    public NewsMapper(ModelMapper modelMapper) {
         super(News.class, NewsDTO.class, modelMapper);
     }
 }

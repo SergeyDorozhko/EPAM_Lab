@@ -6,12 +6,10 @@ import com.epam.lab.model.Tag;
 import com.epam.lab.repository.AbstractRepository;
 import com.epam.lab.repository.TagRepository;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
@@ -27,23 +25,30 @@ public class TagRepositoryImpl extends AbstractRepository implements TagReposito
     private static final String SELECT_TAG_BY_ID_AND_NAME = "SELECT id, name FROM tag WHERE id = ? AND name = ?";
     private static final String SELECT_TAGS_BY_NEWS = "SELECT id, name FROM tag"
             + " RIGHT JOIN news_tag ON news_tag.tag_id= tag.id WHERE news_tag.news_id = ?";
-    private static final String INSERT_INTO_NEWS_TAG_TAG_ID_NEWS_ID_VALUES = "INSERT INTO news_tag (tag_id, news_id) VALUES (?, ?);";
+    private static final String INSERT_INTO_NEWS_TAG_TAG_ID_NEWS_ID_VALUES
+            = "INSERT INTO news_tag (tag_id, news_id) VALUES (?, ?);";
     private static final String DELETE_FROM_NEWS_TAG_WHERE_NEWS_ID = "DELETE FROM news_tag WHERE news_id = ?";
+    private static final String TAG_ID = "id";
 
     @Override
     public Tag create(Tag bean) {
         jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(INSERT_INTO_TAG, new String[]{"id"});
+            PreparedStatement ps = connection.prepareStatement(INSERT_INTO_TAG, new String[]{TAG_ID});
             ps.setString(1, bean.getName());
             return ps;
         }, keyHolder);
-        bean.setId(keyHolder.getKey().longValue());
+        setGeneratedId(bean, keyHolder);
         return bean;
+    }
+
+    private void setGeneratedId(Tag tag, KeyHolder keyHolder) {
+        tag.setId(keyHolder.getKey().longValue());
+
     }
 
     @Override
     public void linkTagWithNews(long tagId, long newsId) {
-        jdbcTemplate.update(INSERT_INTO_NEWS_TAG_TAG_ID_NEWS_ID_VALUES, new Object[]{tagId, newsId});
+        jdbcTemplate.update(INSERT_INTO_NEWS_TAG_TAG_ID_NEWS_ID_VALUES, tagId, newsId);
     }
 
     @Override
@@ -56,21 +61,28 @@ public class TagRepositoryImpl extends AbstractRepository implements TagReposito
         int result = this.jdbcTemplate.update(
                 DELETE_TAG_BY_ID,
                 id);
-        return result != 0;
+        return isDeleted(result);
     }
+
+    private boolean isDeleted(int numberOfDeletedLines) {
+        return numberOfDeletedLines != 0;
+    }
+
 
     @Override
     public Tag update(Tag bean) {
         int result = jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(UPDATE_TAG_SET_NAME_WHERE_ID,
                     Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, bean.getName());
-            ps.setLong(2, bean.getId());
+            int counter = 1;
+            ps.setString(counter++, bean.getName());
+            ps.setLong(counter, bean.getId());
             return ps;
         }, keyHolder);
 
-        if(result == 0) {
-            throw new RepositoryException("Error tag params");
+        boolean noUpdates = result == 0;
+        if (noUpdates) {
+            throw new RepositoryException("Error tag id");
         }
 
         return bean;
@@ -86,7 +98,7 @@ public class TagRepositoryImpl extends AbstractRepository implements TagReposito
     @Override
     public Tag findBy(String name) {
         return jdbcTemplate.queryForObject(SELECT_FIND_BY_NAME,
-                new Object[] {name},
+                new Object[]{name},
                 new BeanPropertyRowMapper<>(Tag.class));
     }
 

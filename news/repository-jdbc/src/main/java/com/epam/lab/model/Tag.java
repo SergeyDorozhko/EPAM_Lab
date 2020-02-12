@@ -2,8 +2,6 @@ package com.epam.lab.model;
 
 import org.springframework.stereotype.Component;
 
-import java.util.Objects;
-
 @Component
 public class Tag extends Bean {
 

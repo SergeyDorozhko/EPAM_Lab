@@ -4,16 +4,9 @@ import com.epam.lab.dto.NewsDTO;
 import com.epam.lab.dto.SearchCriteria;
 import com.epam.lab.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.awt.*;
-import java.lang.reflect.Method;
 import java.util.List;
 
 @RestController
@@ -65,7 +58,7 @@ public class NewsController {
 
     @RequestMapping(value = "/search", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<NewsDTO> SearchNews(@ModelAttribute SearchCriteria searchCriteria) {
+    public List<NewsDTO> searchNews(@ModelAttribute SearchCriteria searchCriteria) {
         return service.findAllNewsByQuery(searchCriteria);
     }
 

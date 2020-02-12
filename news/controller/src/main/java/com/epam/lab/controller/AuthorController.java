@@ -3,7 +3,6 @@ package com.epam.lab.controller;
 import com.epam.lab.dto.AuthorDTO;
 import com.epam.lab.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +28,7 @@ public class AuthorController {
     public AuthorDTO findAuthorBy(@PathVariable long id, HttpServletResponse response) {
         AuthorDTO authorDTO = null;
         try {
-             authorDTO = authorService.findById(id);
+            authorDTO = authorService.findById(id);
         } catch (Exception ex) {
             response.setStatus(204);
         }

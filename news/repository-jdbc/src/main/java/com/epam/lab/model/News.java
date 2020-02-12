@@ -24,7 +24,8 @@ public class News extends Bean {
 
 
 
-    public News(long id, String title, String shortText, String fullText, LocalDate creationDate, LocalDate modificationDate, Author author, List<Tag> listOfTags) {
+    public News(long id, String title, String shortText, String fullText, LocalDate creationDate,
+                LocalDate modificationDate, Author author, List<Tag> listOfTags) {
         super(id);
         this.title = title;
         this.shortText = shortText;
@@ -112,7 +113,9 @@ public class News extends Bean {
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), title, shortText, fullText, creationDate, modificationDate, author, listOfTags);
+        return Objects.hash(super.hashCode(),
+                title, shortText, fullText, creationDate,
+                modificationDate, author, listOfTags);
     }
 
     @Override

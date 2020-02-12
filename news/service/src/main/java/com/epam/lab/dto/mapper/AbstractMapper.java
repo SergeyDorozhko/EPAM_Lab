@@ -1,4 +1,4 @@
-package com.epam.lab.dto.Mapper;
+package com.epam.lab.dto.mapper;
 
 import com.epam.lab.dto.AbstractDTO;
 import com.epam.lab.model.Bean;
@@ -23,11 +23,11 @@ public abstract class AbstractMapper<T extends Bean, K extends AbstractDTO> impl
         this.modelMapper = modelMapper;
     }
 
-    public T toBean(AbstractDTO dto){
-        return Objects.isNull(dto) ? null: modelMapper.map(dto, beanClass);
+    public T toBean(AbstractDTO dto) {
+        return Objects.isNull(dto) ? null : modelMapper.map(dto, beanClass);
     }
 
     public K toDTO(Bean bean) {
-        return Objects.isNull(bean) ? null: modelMapper.map(bean, dtoClass);
+        return Objects.isNull(bean) ? null : modelMapper.map(bean, dtoClass);
     }
 }

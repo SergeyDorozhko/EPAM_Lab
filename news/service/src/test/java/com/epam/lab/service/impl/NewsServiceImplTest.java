@@ -1,9 +1,10 @@
 package com.epam.lab.service.impl;
 
 import com.epam.lab.dto.AuthorDTO;
-import com.epam.lab.dto.Mapper.NewsMapper;
+import com.epam.lab.dto.mapper.NewsMapper;
 import com.epam.lab.dto.NewsDTO;
 import com.epam.lab.dto.TagDTO;
+import com.epam.lab.exception.InvalidAuthorException;
 import com.epam.lab.exception.ServiceException;
 import com.epam.lab.model.Author;
 import com.epam.lab.model.News;
@@ -31,10 +32,18 @@ import static org.mockito.Mockito.*;
 
 public class NewsServiceImplTest {
 
+    private static final String NEWS_TITLE = "Title";
+    private static final String NEWS_SHORT_TEXT = "ShortText";
+    private static final String NEWS_FULL_TEXT = "FullText";
+    private static final String AUTHOR_NAME = "name";
+    private static final String AUTHOR_SURNAME = "surname";
+    private static final String TAG_NAME_ONE = "one_tag";
+    private static final String TAG_NAME_TWO = "two_tag";
+    private static final String TAG_NAME_THREE = "three";
+    private static final String TAG_NAME_FOUR = "four";
     private AuthorRepository authorRepository;
     private NewsRepository newsRepository;
     private TagRepository tagRepository;
-    private NewsMapper newsMapper;
 
     private NewsService newsService;
 
@@ -42,13 +51,12 @@ public class NewsServiceImplTest {
     private News news;
 
 
-
     @Before
     public void init() {
         authorRepository = Mockito.mock(AuthorRepositoryImpl.class);
         newsRepository = Mockito.mock(NewsRepositoryImpl.class);
         tagRepository = Mockito.mock(TagRepositoryImpl.class);
-        newsMapper = new NewsMapper(new ModelMapper());
+        NewsMapper newsMapper = new NewsMapper(new ModelMapper());
 
         newsService = new NewsServiceImpl(newsMapper, newsRepository, authorRepository, tagRepository);
 
@@ -58,126 +66,126 @@ public class NewsServiceImplTest {
     @Test
     public void createNewsWithoutAuthorWithoutTagTest() {
         newsDTO = new NewsDTO();
-        newsDTO.setTitle("Title");
-        newsDTO.setShortText("ShortText");
-        newsDTO.setFullText("FullText");
+        newsDTO.setTitle(NEWS_TITLE);
+        newsDTO.setShortText(NEWS_SHORT_TEXT);
+        newsDTO.setFullText(NEWS_FULL_TEXT);
         newsDTO.setCreationDate(LocalDate.now());
         newsDTO.setModificationDate(LocalDate.now());
 
         news = new News();
-        news.setTitle("Title");
-        news.setShortText("ShortText");
-        news.setFullText("FullText");
+        news.setTitle(NEWS_TITLE);
+        news.setShortText(NEWS_SHORT_TEXT);
+        news.setFullText(NEWS_FULL_TEXT);
 
         when(newsRepository.create(any(News.class))).thenReturn(news);
 
         Assert.assertEquals(newsDTO, newsService.create(newsDTO));
-        verify(authorRepository, times(0)).findBy(any(Author.class));
-        verify(authorRepository, times(0)).create(any(Author.class));
-        verify(newsRepository, times(1)).create(any(News.class));
-        verify(tagRepository, times(0)).findBy(anyString());
-        verify(tagRepository, times(0)).create(any(Tag.class));
-        verify(newsRepository, times(0)).linkAuthorWithNews(anyLong(), anyLong());
-        verify(tagRepository, times(0)).linkTagWithNews(anyLong(), anyLong());
+        verify(authorRepository, never()).findBy(any(Author.class));
+        verify(authorRepository, never()).create(any(Author.class));
+        verify(newsRepository).create(any(News.class));
+        verify(tagRepository, never()).findBy(anyString());
+        verify(tagRepository, never()).create(any(Tag.class));
+        verify(newsRepository, never()).linkAuthorWithNews(anyLong(), anyLong());
+        verify(tagRepository, never()).linkTagWithNews(anyLong(), anyLong());
     }
 
 
     @Test
     public void createNewsWithAuthorWithoutIdWithoutTagTest() {
         newsDTO = new NewsDTO();
-        newsDTO.setTitle("Title");
-        newsDTO.setShortText("ShortText");
-        newsDTO.setFullText("FullText");
+        newsDTO.setTitle(NEWS_TITLE);
+        newsDTO.setShortText(NEWS_SHORT_TEXT);
+        newsDTO.setFullText(NEWS_FULL_TEXT);
         newsDTO.setCreationDate(LocalDate.now());
         newsDTO.setModificationDate(LocalDate.now());
         AuthorDTO authorDTO = new AuthorDTO();
-        authorDTO.setName("name");
-        authorDTO.setSurname("surname");
+        authorDTO.setName(AUTHOR_NAME);
+        authorDTO.setSurname(AUTHOR_SURNAME);
         newsDTO.setAuthor(authorDTO);
 
         news = new News();
-        news.setTitle("Title");
-        news.setShortText("ShortText");
-        news.setFullText("FullText");
+        news.setTitle(NEWS_TITLE);
+        news.setShortText(NEWS_SHORT_TEXT);
+        news.setFullText(NEWS_FULL_TEXT);
         Author author = new Author();
-        author.setName("name");
-        author.setSurname("surname");
+        author.setName(AUTHOR_NAME);
+        author.setSurname(AUTHOR_SURNAME);
         news.setAuthor(author);
         when(newsRepository.create(any(News.class))).thenReturn(news);
         when(authorRepository.create(author)).thenReturn(author);
 
 
         Assert.assertEquals(newsDTO, newsService.create(newsDTO));
-        verify(authorRepository, times(0)).findBy(any(Author.class));
-        verify(authorRepository, times(1)).create(author);
-        verify(newsRepository, times(1)).create(any(News.class));
-        verify(tagRepository, times(0)).findBy(anyString());
-        verify(tagRepository, times(0)).findBy(new Tag());
-        verify(tagRepository, times(0)).create(any(Tag.class));
-        verify(newsRepository, times(1)).linkAuthorWithNews(anyLong(), anyLong());
-        verify(tagRepository, times(0)).linkTagWithNews(anyLong(), anyLong());
+        verify(authorRepository, never()).findBy(any(Author.class));
+        verify(authorRepository).create(author);
+        verify(newsRepository).create(any(News.class));
+        verify(tagRepository, never()).findBy(anyString());
+        verify(tagRepository, never()).findBy(new Tag());
+        verify(tagRepository, never()).create(any(Tag.class));
+        verify(newsRepository).linkAuthorWithNews(anyLong(), anyLong());
+        verify(tagRepository, never()).linkTagWithNews(anyLong(), anyLong());
     }
 
     @Test
     public void createNewsWithAuthorWithoutTagTest() {
         newsDTO = new NewsDTO();
-        newsDTO.setTitle("Title");
-        newsDTO.setShortText("ShortText");
-        newsDTO.setFullText("FullText");
+        newsDTO.setTitle(NEWS_TITLE);
+        newsDTO.setShortText(NEWS_SHORT_TEXT);
+        newsDTO.setFullText(NEWS_FULL_TEXT);
         newsDTO.setCreationDate(LocalDate.now());
         newsDTO.setModificationDate(LocalDate.now());
         AuthorDTO authorDTO = new AuthorDTO();
         authorDTO.setId(2);
-        authorDTO.setName("name");
-        authorDTO.setSurname("surname");
+        authorDTO.setName(AUTHOR_NAME);
+        authorDTO.setSurname(AUTHOR_SURNAME);
         newsDTO.setAuthor(authorDTO);
 
         news = new News();
-        news.setTitle("Title");
-        news.setShortText("ShortText");
-        news.setFullText("FullText");
+        news.setTitle(NEWS_TITLE);
+        news.setShortText(NEWS_SHORT_TEXT);
+        news.setFullText(NEWS_FULL_TEXT);
         Author author = new Author();
         author.setId(2);
-        author.setName("name");
-        author.setSurname("surname");
+        author.setName(AUTHOR_NAME);
+        author.setSurname(AUTHOR_SURNAME);
         news.setAuthor(author);
         when(newsRepository.create(any(News.class))).thenReturn(news);
         when(authorRepository.findBy(news.getAuthor())).thenReturn(author);
 
 
         Assert.assertEquals(newsDTO, newsService.create(newsDTO));
-        verify(authorRepository, times(1)).findBy(any(Author.class));
-        verify(authorRepository, times(0)).create(author);
-        verify(newsRepository, times(1)).create(any(News.class));
-        verify(tagRepository, times(0)).findBy(anyString());
-        verify(tagRepository, times(0)).findBy(new Tag());
-        verify(tagRepository, times(0)).create(any(Tag.class));
-        verify(newsRepository, times(1)).linkAuthorWithNews(anyLong(), anyLong());
-        verify(tagRepository, times(0)).linkTagWithNews(anyLong(), anyLong());
+        verify(authorRepository).findBy(any(Author.class));
+        verify(authorRepository, never()).create(author);
+        verify(newsRepository).create(any(News.class));
+        verify(tagRepository, never()).findBy(anyString());
+        verify(tagRepository, never()).findBy(new Tag());
+        verify(tagRepository, never()).create(any(Tag.class));
+        verify(newsRepository).linkAuthorWithNews(anyLong(), anyLong());
+        verify(tagRepository, never()).linkTagWithNews(anyLong(), anyLong());
     }
 
 
     @Test
     public void createNewsWithAuthorWithTagTest() {
         newsDTO = new NewsDTO();
-        newsDTO.setTitle("Title");
-        newsDTO.setShortText("ShortText");
-        newsDTO.setFullText("FullText");
+        newsDTO.setTitle(NEWS_TITLE);
+        newsDTO.setShortText(NEWS_SHORT_TEXT);
+        newsDTO.setFullText(NEWS_FULL_TEXT);
         AuthorDTO authorDTO = new AuthorDTO();
         authorDTO.setId(2);
-        authorDTO.setName("name");
-        authorDTO.setSurname("surname");
+        authorDTO.setName(AUTHOR_NAME);
+        authorDTO.setSurname(AUTHOR_SURNAME);
         newsDTO.setAuthor(authorDTO);
         TagDTO oneTagDTO = new TagDTO();
-        oneTagDTO.setName("one_tag");
+        oneTagDTO.setName(TAG_NAME_ONE);
         TagDTO twoTagDTO = new TagDTO();
         twoTagDTO.setId(2);
-        twoTagDTO.setName("two_tag");
+        twoTagDTO.setName(TAG_NAME_TWO);
         TagDTO threeTagDTO = new TagDTO();
         threeTagDTO.setId(5);
-        threeTagDTO.setName("three");
+        threeTagDTO.setName(TAG_NAME_THREE);
         TagDTO fourTagDTO = new TagDTO();
-        fourTagDTO.setName("four");
+        fourTagDTO.setName(TAG_NAME_FOUR);
         List<TagDTO> tagsDTOList = new ArrayList<>();
         tagsDTOList.add(oneTagDTO);
         tagsDTOList.add(twoTagDTO);
@@ -188,69 +196,70 @@ public class NewsServiceImplTest {
         news = new News();
         Author author = new Author();
         author.setId(2);
-        author.setName("name");
-        author.setSurname("surname");
+        author.setName(AUTHOR_NAME);
+        author.setSurname(AUTHOR_SURNAME);
         news.setAuthor(author);
         Tag oneTag = new Tag();
-        oneTag.setName("one_tag");
+        oneTag.setName(TAG_NAME_ONE);
         Tag twoTag = new Tag();
         twoTag.setId(2);
-        twoTag.setName("two_tag");
+        twoTag.setName(TAG_NAME_TWO);
         Tag threeTag = new Tag();
         threeTag.setId(5);
-        threeTag.setName("three");
+        threeTag.setName(TAG_NAME_THREE);
         Tag fourTag = new Tag();
-        fourTag.setName("four");
+        fourTag.setName(TAG_NAME_FOUR);
 
 
         when(newsRepository.create(any(News.class))).thenReturn(news);
         when(authorRepository.findBy(news.getAuthor())).thenReturn(author);
         when(tagRepository.findBy(twoTag)).thenReturn(twoTag);
         when(tagRepository.findBy(threeTag)).thenThrow(EmptyResultDataAccessException.class);
-        when(tagRepository.findBy("one_tag")).thenThrow(EmptyResultDataAccessException.class);
-        when(tagRepository.findBy("four")).thenReturn(fourTag);
+        when(tagRepository.findBy(TAG_NAME_ONE)).thenThrow(EmptyResultDataAccessException.class);
+        when(tagRepository.findBy(TAG_NAME_FOUR)).thenReturn(fourTag);
 
-        Assert.assertEquals(newsDTO.getListOfTags().size() - 1, newsService.create(newsDTO).getListOfTags().size());
-        verify(authorRepository, times(1)).findBy(any(Author.class));
-        verify(authorRepository, times(0)).create(author);
-        verify(newsRepository, times(1)).create(any(News.class));
-        verify(tagRepository, times(2)).findBy(anyString()); // 1 tag one; 2 tag four;
-        verify(tagRepository, times(1)).findBy(twoTag);//1 tag two;
-        verify(tagRepository, times(1)).findBy(threeTag);//1 tag three;
-        verify(tagRepository, times(1)).create(any(Tag.class));//1 tag one;
-        verify(newsRepository, times(1)).linkAuthorWithNews(anyLong(), anyLong());
+        Assert.assertEquals(newsDTO.getListOfTags().size() - 1L,
+                newsService.create(newsDTO).getListOfTags().size());
+        verify(authorRepository).findBy(any(Author.class));
+        verify(authorRepository, never()).create(author);
+        verify(newsRepository).create(any(News.class));
+        verify(tagRepository, times(2)).findBy(anyString()); // 1 tag one, 2 tag four
+        verify(tagRepository).findBy(twoTag);//1 tag two
+        verify(tagRepository).findBy(threeTag);//1 tag three
+        verify(tagRepository).create(any(Tag.class));//1 tag one
+        verify(newsRepository).linkAuthorWithNews(anyLong(), anyLong());
         verify(tagRepository, times(3)).linkTagWithNews(anyLong(), anyLong());
     }
 
     @Test(expected = ServiceException.class)
-    public void createNewsNegativeByContentTest(){
+    public void createNewsNegativeByContentTest() {
         newsDTO = new NewsDTO();
         newsService.create(newsDTO);
     }
 
-    @Test(expected = EmptyResultDataAccessException.class)
-    public void createNewsNegativeByAuthorTest(){
+    @Test(expected = InvalidAuthorException.class)
+    public void createNewsNegativeByAuthorTest() {
         newsDTO = new NewsDTO();
-        newsDTO.setTitle("Title");
-        newsDTO.setShortText("ShortText");
-        newsDTO.setFullText("FullText");
+        newsDTO.setTitle(NEWS_TITLE);
+        newsDTO.setShortText(NEWS_SHORT_TEXT);
+        newsDTO.setFullText(NEWS_FULL_TEXT);
         AuthorDTO authorDTO = new AuthorDTO();
         authorDTO.setId(2);
-        authorDTO.setName("name");
-        authorDTO.setSurname("surname");
+        authorDTO.setName(AUTHOR_NAME);
+        authorDTO.setSurname(AUTHOR_SURNAME);
         newsDTO.setAuthor(authorDTO);
 
         Author author = new Author();
         author.setId(2);
-        author.setName("name");
-        author.setSurname("surname");
+        author.setName(AUTHOR_NAME);
+        author.setSurname(AUTHOR_SURNAME);
         when(authorRepository.findBy(author)).thenThrow(EmptyResultDataAccessException.class);
 
         newsService.create(newsDTO);
     }
 
     @Test
-    public void deleteNewsTest(){
+    public void deleteNewsTest() {
         when(newsRepository.delete(1L)).thenReturn(true);
         when(newsRepository.delete(2L)).thenReturn(false);
 
@@ -260,30 +269,30 @@ public class NewsServiceImplTest {
 
 
     @Test
-    public void findNewsWithAuthorByIdTest(){
+    public void findNewsWithAuthorByIdTest() {
         news = new News();
-        news.setTitle("title");
-        news.setShortText("ShortText");
-        news.setFullText("FullText");
+        news.setTitle(NEWS_TITLE);
+        news.setShortText(NEWS_SHORT_TEXT);
+        news.setFullText(NEWS_FULL_TEXT);
         Author author = new Author();
         author.setId(1);
         news.setAuthor(author);
 
         Author authorFromData = new Author();
         authorFromData.setId(1);
-        authorFromData.setName("author");
-        authorFromData.setSurname("authorSurname");
+        authorFromData.setName(AUTHOR_NAME);
+        authorFromData.setSurname(AUTHOR_SURNAME);
 
         List<Tag> listTag = new ArrayList<>();
         Tag oneTag = new Tag();
         oneTag.setId(1);
-        oneTag.setName("one_tag");
+        oneTag.setName(TAG_NAME_ONE);
         Tag twoTag = new Tag();
         twoTag.setId(2);
-        twoTag.setName("two_tag");
+        twoTag.setName(TAG_NAME_TWO);
         Tag threeTag = new Tag();
         threeTag.setId(5);
-        threeTag.setName("three");
+        threeTag.setName(TAG_NAME_THREE);
         listTag.add(oneTag);
         listTag.add(twoTag);
         listTag.add(threeTag);
@@ -293,23 +302,23 @@ public class NewsServiceImplTest {
         when(tagRepository.findBy(any(News.class))).thenReturn(listTag);
 
         newsDTO = new NewsDTO();
-        newsDTO.setTitle("title");
-        newsDTO.setShortText("ShortText");
-        newsDTO.setFullText("FullText");
+        newsDTO.setTitle(NEWS_TITLE);
+        newsDTO.setShortText(NEWS_SHORT_TEXT);
+        newsDTO.setFullText(NEWS_FULL_TEXT);
         AuthorDTO authorDTO = new AuthorDTO();
         authorDTO.setId(1);
-        authorDTO.setName("author");
-        authorDTO.setSurname("authorSurname");
+        authorDTO.setName(AUTHOR_NAME);
+        authorDTO.setSurname(AUTHOR_SURNAME);
         newsDTO.setAuthor(authorDTO);
         TagDTO oneTagDTO = new TagDTO();
         oneTagDTO.setId(1);
-        oneTagDTO.setName("one_tag");
+        oneTagDTO.setName(TAG_NAME_ONE);
         TagDTO twoTagDTO = new TagDTO();
         twoTagDTO.setId(2);
-        twoTagDTO.setName("two_tag");
+        twoTagDTO.setName(TAG_NAME_TWO);
         TagDTO threeTagDTO = new TagDTO();
         threeTagDTO.setId(5);
-        threeTagDTO.setName("three");
+        threeTagDTO.setName(TAG_NAME_THREE);
         List<TagDTO> tagsDTOList = new ArrayList<>();
         tagsDTOList.add(oneTagDTO);
         tagsDTOList.add(twoTagDTO);
@@ -318,31 +327,28 @@ public class NewsServiceImplTest {
 
         Assert.assertEquals(newsDTO, newsService.findById(anyLong()));
 
-        verify(newsRepository, times(1)).findBy(anyLong());
-        verify(authorRepository, times(1)).findBy(1);
-        verify(tagRepository, times(1)).findBy(news);
-    }
-    private void initFindNewsWithAuthorByIdTest() {
-
+        verify(newsRepository).findBy(anyLong());
+        verify(authorRepository).findBy(1);
+        verify(tagRepository).findBy(news);
     }
 
     @Test
-    public void findNewsWithoutAuthorByIdTest(){
+    public void findNewsWithoutAuthorByIdTest() {
         news = new News();
-        news.setTitle("title");
-        news.setShortText("ShortText");
-        news.setFullText("FullText");
+        news.setTitle(NEWS_TITLE);
+        news.setShortText(NEWS_SHORT_TEXT);
+        news.setFullText(NEWS_FULL_TEXT);
 
         List<Tag> listTag = new ArrayList<>();
         Tag oneTag = new Tag();
         oneTag.setId(1);
-        oneTag.setName("one_tag");
+        oneTag.setName(TAG_NAME_ONE);
         Tag twoTag = new Tag();
         twoTag.setId(2);
-        twoTag.setName("two_tag");
+        twoTag.setName(TAG_NAME_TWO);
         Tag threeTag = new Tag();
         threeTag.setId(5);
-        threeTag.setName("three");
+        threeTag.setName(TAG_NAME_THREE);
         listTag.add(oneTag);
         listTag.add(twoTag);
         listTag.add(threeTag);
@@ -352,19 +358,19 @@ public class NewsServiceImplTest {
         when(tagRepository.findBy(any(News.class))).thenReturn(listTag);
 
         newsDTO = new NewsDTO();
-        newsDTO.setTitle("title");
-        newsDTO.setShortText("ShortText");
-        newsDTO.setFullText("FullText");
+        newsDTO.setTitle(NEWS_TITLE);
+        newsDTO.setShortText(NEWS_SHORT_TEXT);
+        newsDTO.setFullText(NEWS_FULL_TEXT);
 
         TagDTO oneTagDTO = new TagDTO();
         oneTagDTO.setId(1);
-        oneTagDTO.setName("one_tag");
+        oneTagDTO.setName(TAG_NAME_ONE);
         TagDTO twoTagDTO = new TagDTO();
         twoTagDTO.setId(2);
-        twoTagDTO.setName("two_tag");
+        twoTagDTO.setName(TAG_NAME_TWO);
         TagDTO threeTagDTO = new TagDTO();
         threeTagDTO.setId(5);
-        threeTagDTO.setName("three");
+        threeTagDTO.setName(TAG_NAME_THREE);
         List<TagDTO> tagsDTOList = new ArrayList<>();
         tagsDTOList.add(oneTagDTO);
         tagsDTOList.add(twoTagDTO);
@@ -373,18 +379,17 @@ public class NewsServiceImplTest {
 
         Assert.assertEquals(newsDTO, newsService.findById(anyLong()));
 
-        verify(newsRepository, times(1)).findBy(anyLong());
-        verify(authorRepository, times(0)).findBy(any(Author.class));
-        verify(tagRepository, times(1)).findBy(news);
+        verify(newsRepository).findBy(anyLong());
+        verify(authorRepository, never()).findBy(any(Author.class));
+        verify(tagRepository).findBy(news);
     }
 
     @Test
-    public void countAllNewsTest(){
+    public void countAllNewsTest() {
         when(newsRepository.countAllNews()).thenReturn(5L);
         Assert.assertEquals(5, newsService.countAllNews());
-        verify(newsRepository, times(1)).countAllNews();
+        verify(newsRepository).countAllNews();
     }
-
 
 
 }

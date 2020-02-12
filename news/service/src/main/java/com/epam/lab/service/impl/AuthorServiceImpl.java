@@ -1,7 +1,7 @@
 package com.epam.lab.service.impl;
 
 import com.epam.lab.dto.AuthorDTO;
-import com.epam.lab.dto.Mapper.AuthorMapper;
+import com.epam.lab.dto.mapper.AuthorMapper;
 import com.epam.lab.repository.AuthorRepository;
 import com.epam.lab.repository.NewsRepository;
 import com.epam.lab.service.AuthorService;
@@ -38,18 +38,26 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     /**
-     * Before delete author take id of all news of this author. If author has news delete all his news.
+     * Before delete author take authorId of all news of this author. If author has news delete all his news.
      * then delete author.
-     * @param id of author which try to delete
+     * @param authorId of author which try to delete
      * @return if author exist and was deleted return true, otherwise false.
      */
     @Override
-    public boolean delete(long id) {
-        List<Long> newsList = newsRepository.findNewsIdByAuthor(id);
-        for (Long newsId : newsList) {
+    public boolean delete(long authorId) {
+        List<Long> newsIds = takeAllNewsByAuthor(authorId);
+        deleteAllNewsOfAuthor(newsIds);
+        return repository.delete(authorId);
+    }
+
+    private List<Long> takeAllNewsByAuthor(long authorId) {
+        return newsRepository.findNewsIdByAuthor(authorId);
+    }
+
+    private void deleteAllNewsOfAuthor(List<Long> newsIds){
+        for (Long newsId : newsIds) {
             newsRepository.delete(newsId);
         }
-        return repository.delete(id);
     }
 
     @Override
@@ -59,7 +67,7 @@ public class AuthorServiceImpl implements AuthorService {
 
 
     @Override
-    public AuthorDTO findById(long id) {
-        return mapper.toDTO(repository.findBy(id));
+    public AuthorDTO findById(long authorId) {
+        return mapper.toDTO(repository.findBy(authorId));
     }
 }

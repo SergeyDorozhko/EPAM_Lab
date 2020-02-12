@@ -2,8 +2,6 @@ package com.epam.lab.dto;
 
 import org.springframework.stereotype.Component;
 
-import java.util.Objects;
-
 @Component
 public class AuthorDTO extends AbstractDTO{
     private String name;

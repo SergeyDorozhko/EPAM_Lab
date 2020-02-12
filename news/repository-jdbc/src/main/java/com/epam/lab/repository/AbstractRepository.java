@@ -12,6 +12,7 @@ public abstract class AbstractRepository {
     public JdbcTemplate getJdbcTemplate() {
         return jdbcTemplate;
     }
+
     @Autowired
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -20,6 +21,7 @@ public abstract class AbstractRepository {
     public KeyHolder getKeyHolder() {
         return keyHolder;
     }
+
     @Autowired
     public void setKeyHolder(KeyHolder keyHolder) {
         this.keyHolder = keyHolder;

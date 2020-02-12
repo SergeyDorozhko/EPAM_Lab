@@ -1,14 +1,16 @@
 package com.epam.lab.service.impl;
 
-import com.epam.lab.dto.Mapper.NewsMapper;
+import com.epam.lab.dto.mapper.NewsMapper;
 import com.epam.lab.dto.NewsDTO;
 import com.epam.lab.dto.SearchCriteria;
+import com.epam.lab.exception.InvalidAuthorException;
+import com.epam.lab.exception.InvalidNewsDataException;
+import com.epam.lab.model.Author;
 import com.epam.lab.model.News;
 import com.epam.lab.model.Tag;
 import com.epam.lab.repository.AuthorRepository;
 import com.epam.lab.repository.NewsRepository;
 import com.epam.lab.repository.TagRepository;
-import com.epam.lab.exception.ServiceException;
 import com.epam.lab.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -31,7 +33,10 @@ public class NewsServiceImpl implements NewsService {
     private TagRepository tagRepository;
 
     @Autowired
-    public NewsServiceImpl(NewsMapper mapper, NewsRepository newsRepository, AuthorRepository authorRepository, TagRepository tagRepository) {
+    public NewsServiceImpl(NewsMapper mapper,
+                           NewsRepository newsRepository,
+                           AuthorRepository authorRepository,
+                           TagRepository tagRepository) {
         this.mapper = mapper;
         this.newsRepository = newsRepository;
         this.authorRepository = authorRepository;
@@ -43,10 +48,10 @@ public class NewsServiceImpl implements NewsService {
      * to News object. Then check Author of news (if news without author all is OK, if news have an author without id
      * starting creation of new author and assign id of new author, if author has id we check does this author has the
      * same name and surname in database (if author has no matches throws runtime exception and method stopped)).
-     *
+     * <p>
      * If author data is valid setup to CreationDate and ModificationDate current date.
      * After this insert data of news to database and make link between author and news tables.
-     *
+     * <p>
      * If news hasn't tags this step skipped, otherwise start check tags:
      * 1) tad hasn't id - check is exist tag with the same name in database:
      * a)if exist insert id from database.
@@ -67,74 +72,102 @@ public class NewsServiceImpl implements NewsService {
 
         checkAndCreateAuthorIfNew(news);
 
-        news.setCreationDate(LocalDate.now());
-        news.setModificationDate(LocalDate.now());
+        setCreationDataToNews(news);
 
         newsRepository.create(news);
 
-        if (news.getAuthor() != null) {
-            newsRepository.linkAuthorWithNews(news.getAuthor().getId(), news.getId());
-        }
+        connectAuthorWithNewsInStorage(news);
 
-        boolean hasTags = news.getListOfTags() != null && news.getListOfTags().size() > 0;
-        if (hasTags) {
-            for (int i = 0; i < news.getListOfTags().size(); i++) {
-                i = checkAndCreateTagIfNew(news, i);
-            }
-        }
+        processingWithTags(news);
 
-        makeUniqueListOfTags(news);
-
-        for (Tag tag : news.getListOfTags()) {
-            tagRepository.linkTagWithNews(tag.getId(), news.getId());
-        }
         return mapper.toDTO(news);
     }
 
 
     private void checkNews(NewsDTO newsDTO) {
-        boolean isValidNews = newsDTO.getTitle() != null
-                && newsDTO.getShortText() != null
-                && newsDTO.getFullText() != null;
-        if (!isValidNews) {
-            throw new ServiceException("invalid news");
+        boolean notValidNews = newsDTO.getTitle() == null
+                || newsDTO.getShortText() == null
+                || newsDTO.getFullText() == null;
+        if (notValidNews) {
+            throw new InvalidNewsDataException();
         }
     }
 
-    private void checkAndCreateAuthorIfNew(News news) {
-        boolean hasAuthorWithId = news.getAuthor() != null && news.getAuthor().getId() != 0;
-        boolean hasAuthorWithoutId = news.getAuthor() != null && news.getAuthor().getId() == 0;
 
-        if (hasAuthorWithId) {
-            authorRepository.findBy(news.getAuthor());
-        } else if (hasAuthorWithoutId) {
-            news.setAuthor(authorRepository.create(news.getAuthor()));
+    private void checkAndCreateAuthorIfNew(News news) {
+        boolean hasAuthor = news.getAuthor() != null;
+        if (hasAuthor) {
+            boolean hasAuthorWithId = news.getAuthor().getId() != 0;
+            if (hasAuthorWithId) {
+                checkAuthor(news.getAuthor());
+            } else {
+                authorRepository.create(news.getAuthor());
+            }
+        }
+    }
+
+    private void checkAuthor(Author author) {
+        try {
+            authorRepository.findBy(author);
+        } catch (EmptyResultDataAccessException ex) {
+            throw new InvalidAuthorException();
+        }
+    }
+
+    private void setCreationDataToNews(News news) {
+        news.setCreationDate(LocalDate.now());
+        news.setModificationDate(LocalDate.now());
+    }
+
+    private void connectAuthorWithNewsInStorage(News news) {
+        if (news.getAuthor() != null) {
+            newsRepository.linkAuthorWithNews(news.getAuthor().getId(), news.getId());
+        }
+    }
+
+    private void processingWithTags(News news) {
+        boolean hasTags = news.getListOfTags() != null && !news.getListOfTags().isEmpty();
+        if (hasTags) {
+            for (int i = 0; i < news.getListOfTags().size(); i++) {
+                i = checkAndCreateTagIfNew(news, i);
+            }
+            makeUniqueListOfTags(news);
+            connectTagsWithNewsInStorage(news);
         }
     }
 
     private int checkAndCreateTagIfNew(News news, int tagIndex) {
+        Tag tag = news.getListOfTags().get(tagIndex);
+        boolean hasTagId = tag.getId() != 0;
         try {
-            if (news.getListOfTags().get(tagIndex).getId() != 0) {
-                tagRepository.findBy(news.getListOfTags().get(tagIndex));
+            if (hasTagId) {
+                tagRepository.findBy(tag);
             } else {
-                news.getListOfTags().set(tagIndex,
-                        tagRepository.findBy(news.getListOfTags().get(tagIndex).getName()));
+                tag = tagRepository.findBy(tag.getName());
             }
         } catch (EmptyResultDataAccessException ex) {
-            if (news.getListOfTags().get(tagIndex).getId() != 0) {
+            if (hasTagId) {
                 news.getListOfTags().remove(tagIndex);
-                tagIndex--;
+                return --tagIndex;
             } else {
-                tagRepository.create(news.getListOfTags().get(tagIndex));
+                tagRepository.create(tag);
             }
         }
+        news.getListOfTags().set(tagIndex, tag);
         return tagIndex;
     }
+
 
     private void makeUniqueListOfTags(News news) {
         Set<Tag> tagList = new HashSet<>(news.getListOfTags());
         List<Tag> list = new ArrayList<>(tagList);
         news.setListOfTags(list);
+    }
+
+    private void connectTagsWithNewsInStorage(News news) {
+        for (Tag tag : news.getListOfTags()) {
+            tagRepository.linkTagWithNews(tag.getId(), news.getId());
+        }
     }
 
     @Override
@@ -150,13 +183,13 @@ public class NewsServiceImpl implements NewsService {
      * 2) if news in database hasn't author and this news came with author without id, start creating new author and
      * adding this author to news.
      * 3) if news in database hasn't author and this news came with author with id, start check author and if it correct
-     *  adding this author to news otherwise throws ServiceException.
+     * adding this author to news otherwise throws ServiceException.
      * 3) if news came without author but this news in database has another author throws ServiceException.
      * 4) if news came without author and this news in database has the same author all is OK.
-     *
+     * <p>
      * If author data is valid setup to ModificationDate current date.
      * After this insert data of news to database and make link between author and news tables.
-     *
+     * <p>
      * If news hasn't tags this step skipped, otherwise drop all links between news and tags and start check tags:
      * 1) tad hasn't id - check is exist tag with the same name in database:
      * a)if exist insert id from database.
@@ -173,66 +206,79 @@ public class NewsServiceImpl implements NewsService {
     public NewsDTO update(NewsDTO bean) {
         checkNews(bean);
         News news = mapper.toBean(bean);
-        if (!checkAuthorAndCreateIfNeed(news)) {
-            throw new ServiceException("Error date");
-        }
+        checkAuthorOrAddIfNewsWithoutAuthor(news);
 
         news.setModificationDate(LocalDate.now());
         newsRepository.update(news);
 
-        boolean hasTags = news.getListOfTags() != null && news.getListOfTags().size() > 0;
-        if (hasTags) {
-            for (int i = 0; i < news.getListOfTags().size(); i++) {
-                i = checkAndCreateTagIfNew(news, i);
-            }
-            tagRepository.deleteTagNewsLinks(news.getId());
-            makeUniqueListOfTags(news);
-            for (Tag tag : news.getListOfTags()) {
-                tagRepository.linkTagWithNews(tag.getId(), news.getId());
-            }
-        }
+        deleteTagsFromThisNewsInStorage(news);
+
+        processingWithTags(news);
 
         return mapper.toDTO(news);
     }
 
-    private boolean checkAuthorAndCreateIfNeed(News news) {
-        boolean flag = false;
-        Long authorId = null;
+    private void checkAuthorOrAddIfNewsWithoutAuthor(News news) {
+        Long correctAuthorId = findAuthorOfNews(news);
+        if (newsHasAuthorInStorage(correctAuthorId)) {
+            updatingNewsHasCorrectAuthor(correctAuthorId, news);
+        } else {
+            checkAndCreateAuthorIfNew(news);
+            connectAuthorWithNewsInStorage(news);
+        }
+    }
+
+    private Long findAuthorOfNews(News news) {
         try {
-            authorId = newsRepository.findAuthorIdByNewsId(news.getId());
+            return newsRepository.findAuthorIdByNewsId(news.getId());
         } catch (EmptyResultDataAccessException ex) {
             //TODO logger.
-            System.out.println("Add author to news (update action)");
+            System.err.println("News has no author (update action)");
         }
-        if (authorId != null && news.getAuthor() != null && authorId == news.getAuthor().getId()) {
-            flag = true;
-        } else if (authorId == null && news.getAuthor() != null) {
-            authorRepository.findBy(news.getAuthor());
-            newsRepository.linkAuthorWithNews(news.getAuthor().getId(), news.getId());
-            flag = true;
-        } else if (authorId == null && news.getAuthor() == null) {
-            flag = true;
-        } else {
-            flag = false;
+        return null;
+    }
+
+    private boolean newsHasAuthorInStorage(Long correctAuthorId) {
+        return correctAuthorId != null;
+    }
+
+    private void updatingNewsHasCorrectAuthor(Long correctAuthorId, News news) {
+        boolean incorrectAuthor = news.getAuthor() == null || correctAuthorId != news.getAuthor().getId();
+        if (incorrectAuthor) {
+            throw new InvalidAuthorException();
         }
-        return flag;
+    }
+
+    private void deleteTagsFromThisNewsInStorage(News news) {
+        tagRepository.deleteTagNewsLinks(news.getId());
     }
 
 
     /**
      * This method try to find news by id,  if it is successful then take author of this news (if one is exist)
      * and find all tags of this news (if they exist). then transfer from news to NewsDTO.
+     *
      * @param id of news which need to find.
      * @return NewsDTO with all params if successful otherwise runtime exception.
      */
     @Override
     public NewsDTO findById(long id) {
         News news = newsRepository.findBy(id);
-        if (news.getAuthor() != null && news.getAuthor().getId() != 0) {
+        getAuthorOfNews(news);
+        getTagsOfNews(news);
+        return mapper.toDTO(news);
+    }
+
+    private void getAuthorOfNews(News news) {
+        boolean hasAuthor = news.getAuthor() != null && news.getAuthor().getId() != 0;
+        if (hasAuthor) {
             news.setAuthor(authorRepository.findBy(news.getAuthor().getId()));
         }
+    }
+
+    private void getTagsOfNews(News news) {
         news.setListOfTags(tagRepository.findBy(news));
-        return mapper.toDTO(news);
+
     }
 
     @Override
@@ -243,41 +289,25 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public List<NewsDTO> findAllNewsByQuery(SearchCriteria searchCriteria) {
         String query = makeQueryForSearch(searchCriteria);
-
-        List<News> newsList = newsRepository.findAllNewsAndSortByQuery(query);
-        List<NewsDTO> newsDTOList = new ArrayList<>();
-        for (News news : newsList) {
-            news.setListOfTags(tagRepository.findBy(news));
-            newsDTOList.add(mapper.toDTO(news));
-        }
-        return newsDTOList;
+        List<News> news = newsRepository.findAllNewsAndSortByQuery(query);
+        return addTagsAndTransferToDTO(news);
     }
 
     private String makeQueryForSearch(SearchCriteria searchCriteria) {
-        StringBuilder queryBuilder = new StringBuilder("WHERE (1=1) ");
-        if (searchCriteria.getAuthorName() != null && !searchCriteria.getAuthorName().isEmpty()) {
-            queryBuilder.append(" AND (author_name = '").append(searchCriteria.getAuthorName()).append("') ");
-        }
-        if (searchCriteria.getAuthorSurname() != null && !searchCriteria.getAuthorSurname().isEmpty()) {
-            queryBuilder.append(" AND (author_surname = '").append(searchCriteria.getAuthorSurname()).append("') ");
-        }
-        Set<String> tagsList = searchCriteria.getTagsList();
-        tagsList.forEach(c -> queryBuilder.append(" AND ('").append(c).append("' = ANY(tag_names)) "));
+        return new QueryBuilder()
+                .setAuthorName(searchCriteria.getAuthorName())
+                .setAuthorSurname(searchCriteria.getAuthorSurname())
+                .setTags(searchCriteria.getTagsList())
+                .setSort(searchCriteria)
+                .buildQuery();
+    }
 
-        if (!searchCriteria.getOrderByParameter().isEmpty()) {
-            queryBuilder.append(" ORDER BY ");
-            List<String> orderSet = new ArrayList<>(searchCriteria.getOrderByParameter());
-            for (int i = 0; i < orderSet.size(); i++) {
-                if (i > 0) {
-                    queryBuilder.append(", ");
-                }
-                queryBuilder.append(orderSet.get(i));
-            }
-            if (searchCriteria.isDesc()) {
-                queryBuilder.append(" DESC");
-            }
+    private List<NewsDTO> addTagsAndTransferToDTO(List<News> news) {
+        List<NewsDTO> newsDTO = new ArrayList<>();
+        for (News operatingNews : news) {
+            operatingNews.setListOfTags(tagRepository.findBy(operatingNews));
+            newsDTO.add(mapper.toDTO(operatingNews));
         }
-
-        return queryBuilder.append(";").toString();
+        return newsDTO;
     }
 }

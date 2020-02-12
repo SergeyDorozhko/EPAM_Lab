@@ -1,5 +1,6 @@
 package com.epam.lab.controller;
 
+import com.epam.lab.exception.RepositoryException;
 import com.epam.lab.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -27,10 +28,14 @@ public class ExceptionHandlerController {
     }
 
     @ExceptionHandler(ServiceException.class)
-    public void errorSaveTag(HttpServletResponse response) throws IOException {
-        response.sendError(HttpStatus.CONFLICT.value(), resourceBundle.getString("msg.saveTag"));
+    public void errorSaveTag(HttpServletResponse response, ServiceException ex) throws IOException {
+        response.sendError(HttpStatus.CONFLICT.value(), ex.getMessage());
     }
 
+    @ExceptionHandler(RepositoryException.class)
+    public void errorSaveTag(HttpServletResponse response, RepositoryException ex) throws IOException {
+        response.sendError(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+    }
 
     @ExceptionHandler(Exception.class)
     public void errorFatal(HttpServletResponse response) throws IOException {

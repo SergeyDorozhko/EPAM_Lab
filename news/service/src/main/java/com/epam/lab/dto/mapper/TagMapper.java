@@ -1,4 +1,4 @@
-package com.epam.lab.dto.Mapper;
+package com.epam.lab.dto.mapper;
 
 import com.epam.lab.dto.TagDTO;
 import com.epam.lab.model.Tag;

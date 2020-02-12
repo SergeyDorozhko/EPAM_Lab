@@ -1,13 +1,12 @@
 package com.epam.lab.service.impl;
 
-import com.epam.lab.dto.Mapper.TagMapper;
+import com.epam.lab.dto.mapper.TagMapper;
 import com.epam.lab.dto.TagDTO;
 import com.epam.lab.model.Tag;
 import com.epam.lab.repository.TagRepository;
 import com.epam.lab.repository.impl.TagRepositoryImpl;
 import com.epam.lab.exception.ServiceException;
 import com.epam.lab.service.TagService;
-import com.epam.lab.service.impl.TagServiceImpl;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,8 +19,8 @@ import static org.mockito.Mockito.*;
 
 public class TagServiceImplTest {
 
+    private static final String TEST_TAG = "TestTag";
     private TagRepository tagRepository;
-    private TagMapper tagMapper;
 
     private TagService tagService;
     private TagDTO expextedTag;
@@ -31,14 +30,14 @@ public class TagServiceImplTest {
     public void init() {
 
         this.tagRepository = Mockito.mock(TagRepositoryImpl.class);
-        this.tagMapper = new TagMapper(new ModelMapper());
+        TagMapper tagMapper = new TagMapper(new ModelMapper());
         this.tagService = new TagServiceImpl(tagMapper, tagRepository);
 
         tag = new Tag();
-        tag.setName("TestTag");
+        tag.setName(TEST_TAG);
 
         expextedTag = new TagDTO();
-        expextedTag.setName("TestTag");
+        expextedTag.setName(TEST_TAG);
         when(tagRepository.create(any(Tag.class))).thenReturn(tag);
 
         when(tagRepository.delete(110L)).thenReturn(true);
@@ -51,10 +50,10 @@ public class TagServiceImplTest {
     @Test
     public void createTagPositiveTest() {
 
-        when(tagRepository.findBy("TestTag")).thenThrow(EmptyResultDataAccessException.class);
+        when(tagRepository.findBy(TEST_TAG)).thenThrow(EmptyResultDataAccessException.class);
 
         TagDTO tagDTOforTest = new TagDTO();
-        tagDTOforTest.setName("TestTag");
+        tagDTOforTest.setName(TEST_TAG);
 
         Assert.assertEquals(expextedTag, tagService.create(tagDTOforTest));
         verify(tagRepository, Mockito.times(1)).create(tag);
@@ -81,11 +80,11 @@ public class TagServiceImplTest {
 
     @Test
     public void updateTagPositiveTest() {
-        doThrow(EmptyResultDataAccessException.class).when(tagRepository).findBy("TestTag");
+        doThrow(EmptyResultDataAccessException.class).when(tagRepository).findBy(TEST_TAG);
 
         TagDTO tagDTOforTest = new TagDTO();
         tagDTOforTest.setId(1);
-        tagDTOforTest.setName("TestTag");
+        tagDTOforTest.setName(TEST_TAG);
 
         Assert.assertEquals(expextedTag, tagService.update(tagDTOforTest));
         verify(tagRepository, Mockito.times(1)).update(tag);

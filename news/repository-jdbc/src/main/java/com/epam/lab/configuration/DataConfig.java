@@ -7,7 +7,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
 
@@ -19,15 +18,14 @@ public class DataConfig {
     @Bean
     public JdbcTemplate getJdbcTemplate() {
         return new JdbcTemplate(dataSource());
-    };
+    }
 
 
 
     @Bean
     public DataSource dataSource() {
         HikariConfig config = new HikariConfig("/datasource.properties");
-        HikariDataSource hikariDataSource = new HikariDataSource(config);
-        return hikariDataSource;
+        return new HikariDataSource(config);
     }
 
     @Bean

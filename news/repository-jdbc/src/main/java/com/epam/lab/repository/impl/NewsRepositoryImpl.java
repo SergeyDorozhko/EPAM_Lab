@@ -7,9 +7,7 @@ import com.epam.lab.repository.AbstractRepository;
 import com.epam.lab.repository.NewsRepository;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.List;
 
 @Repository
@@ -34,30 +32,45 @@ public class NewsRepositoryImpl extends AbstractRepository implements NewsReposi
             = " SELECT id, title, short_text, full_text, creation_date, modification_date, author_id, "
             + " author_name, author_surname FROM news_tags_author ";
 
+    private static final String NEWS_ID = "id";
+    private static final String NEWS_TITLE = "title";
+    private static final String NEWS_SHORT_TEXT = "short_text";
+    private static final String NEWS_FULL_TEXT = "full_text";
+    private static final String NEWS_CREATION_DATE = "creation_date";
+    private static final String NEWS_MODIFICATION_DATE = "modification_date";
+    private static final String AUTHOR_ID = "author_id";
+    private static final String NEWS_AUTHOR_NAME = "author_name";
+    private static final String NEWS_AUTHOR_SURNAME = "author_surname";
+
     @Override
     public News create(News bean) {
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(INSERT_NEW_NEWS, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, bean.getTitle());
-            ps.setString(2, bean.getShortText());
-            ps.setString(3, bean.getFullText());
-            ps.setDate(4, Date.valueOf(bean.getCreationDate()));
-            ps.setDate(5, Date.valueOf(bean.getModificationDate()));
+            int counter = 1;
+            ps.setString(counter++, bean.getTitle());
+            ps.setString(counter++, bean.getShortText());
+            ps.setString(counter++, bean.getFullText());
+            ps.setDate(counter++, Date.valueOf(bean.getCreationDate()));
+            ps.setDate(counter, Date.valueOf(bean.getModificationDate()));
             return ps;
         }, keyHolder);
-        bean.setId((long) keyHolder.getKeys().get("id"));
+        bean.setId((long) keyHolder.getKeys().get(NEWS_ID));
         return bean;
     }
 
     @Override
     public void linkAuthorWithNews(long authorId, long newsId) {
-        jdbcTemplate.update(INSERT_INTO_NEWS_AUTHOR_AUTHOR_ID_NEWS_ID, new Object[]{authorId, newsId});
+        jdbcTemplate.update(INSERT_INTO_NEWS_AUTHOR_AUTHOR_ID_NEWS_ID, authorId, newsId);
     }
 
     @Override
     public boolean delete(long id) {
         int result = jdbcTemplate.update(DELETE_FROM_NEWS_WHERE_ID, id);
-        return result == 1;
+        return isDeleted(result);
+    }
+
+    private boolean isDeleted(Integer numberOfDeletedLines) {
+        return numberOfDeletedLines != 0;
     }
 
     @Override
@@ -65,15 +78,17 @@ public class NewsRepositoryImpl extends AbstractRepository implements NewsReposi
 
         int result = jdbcTemplate.update(con -> {
             PreparedStatement statement = con.prepareStatement(UPDATE_NEWS_BY_ID, Statement.RETURN_GENERATED_KEYS);
-            statement.setString(1, bean.getTitle());
-            statement.setString(2, bean.getShortText());
-            statement.setString(3, bean.getFullText());
-            statement.setDate(4, Date.valueOf(bean.getModificationDate()));
-            statement.setLong(5, bean.getId());
+            int counter = 1;
+            statement.setString(counter++, bean.getTitle());
+            statement.setString(counter++, bean.getShortText());
+            statement.setString(counter++, bean.getFullText());
+            statement.setDate(counter++, Date.valueOf(bean.getModificationDate()));
+            statement.setLong(counter, bean.getId());
             return statement;
         }, keyHolder);
-        if (result == 0) {
-            throw new RepositoryException("Error data");
+        boolean noUpdates = result == 0;
+        if (noUpdates) {
+            throw new RepositoryException("Error news id");
         }
         return bean;
     }
@@ -95,21 +110,28 @@ public class NewsRepositoryImpl extends AbstractRepository implements NewsReposi
     public News findBy(long id) {
         return jdbcTemplate.queryForObject(SELECT_NEWS_AND_AUTHOR_ID_BY_NEWS_ID,
                 new Object[]{id},
-                (resultSet, num) -> {
-                    News news = new News();
-                    news.setId(resultSet.getLong("id"));
-                    news.setTitle(resultSet.getString("title"));
-                    news.setShortText(resultSet.getString("short_text"));
-                    news.setFullText(resultSet.getString("full_text"));
-                    news.setCreationDate(resultSet.getDate("creation_date").toLocalDate());
-                    news.setModificationDate(resultSet.getDate("modification_date").toLocalDate());
-                    Author author = new Author();
-                    author.setId(resultSet.getLong("author_id"));
-                    news.setAuthor(author);
-                    return news;
-                });
+                (resultSet, num) -> assembleNews(resultSet));
     }
 
+    private News assembleNews(ResultSet resultSet) throws SQLException {
+        News news = new News();
+        news.setId(resultSet.getLong(NEWS_ID));
+        news.setTitle(resultSet.getString(NEWS_TITLE));
+        news.setShortText(resultSet.getString(NEWS_SHORT_TEXT));
+        news.setFullText(resultSet.getString(NEWS_FULL_TEXT));
+        news.setCreationDate(resultSet.getDate(NEWS_CREATION_DATE).toLocalDate());
+        news.setModificationDate(resultSet.getDate(NEWS_MODIFICATION_DATE).toLocalDate());
+        Author author = new Author();
+        author.setId(resultSet.getLong(AUTHOR_ID));
+        if (isAuthorExist(author)) {
+            news.setAuthor(author);
+        }
+        return news;
+    }
+
+    private boolean isAuthorExist(Author author) {
+        return author != null && author.getId() != 0;
+    }
 
     @Override
     public long countAllNews() {
@@ -119,19 +141,10 @@ public class NewsRepositoryImpl extends AbstractRepository implements NewsReposi
     @Override
     public List<News> findAllNewsAndSortByQuery(String query) {
         return jdbcTemplate.query(FIND_BY_QUERY + query, (resultSet, num) -> {
-            News news = new News();
-            news.setId(resultSet.getLong("id"));
-            news.setTitle(resultSet.getString("title"));
-            news.setShortText(resultSet.getString("short_text"));
-            news.setFullText(resultSet.getString("full_text"));
-            news.setCreationDate(resultSet.getDate("creation_date").toLocalDate());
-            news.setModificationDate(resultSet.getDate("modification_date").toLocalDate());
-            Author author = new Author();
-            author.setId(resultSet.getLong("author_id"));
-            author.setName(resultSet.getString("author_name"));
-            author.setSurname(resultSet.getString("author_surname"));
-            if(author.getId() != 0) {
-                news.setAuthor(author);
+            News news = assembleNews(resultSet);
+            if (isAuthorExist(news.getAuthor())) {
+                news.getAuthor().setName(resultSet.getString(NEWS_AUTHOR_NAME));
+                news.getAuthor().setSurname(resultSet.getString(NEWS_AUTHOR_SURNAME));
             }
             return news;
         });

@@ -1,7 +1,7 @@
 package com.epam.lab.service.impl;
 
 import com.epam.lab.dto.AuthorDTO;
-import com.epam.lab.dto.Mapper.NewsMapper;
+import com.epam.lab.dto.mapper.NewsMapper;
 import com.epam.lab.dto.NewsDTO;
 import com.epam.lab.dto.SearchCriteria;
 import com.epam.lab.dto.TagDTO;
@@ -32,15 +32,22 @@ import static org.mockito.Mockito.*;
 @RunWith(Parameterized.class)
 public class SearchCriteriaTest {
 
+    private static final String AUTHOR_NAME = "authorName";
+    private static final String AUTHOR_SURNAME = "authorSurname";
+    private static final String NEWS_TITLE = "title";
+    private static final String NEWS_SHORT_TEXT = "shortText";
+    private static final String NEWS_FULL_TEXT = "fullText";
+    private static final String AUTHOR_NAME_COLUMN = "author_name";
+    private static final String EMPTY_FIELD = "";
+    private static final String TAG_NAME_NEWS = "news";
+    private static final String TAG_NAME_SPORT = "sport";
     private SearchCriteria testQuery;
     private NewsDTO expectedNews;
     private News actualNews;
 
 
-    private AuthorRepository authorRepository;
     private NewsRepository newsRepository;
     private TagRepository tagRepository;
-    private NewsMapper newsMapper;
 
     private NewsService newsService;
 
@@ -53,10 +60,10 @@ public class SearchCriteriaTest {
 
     @Before
     public void init() {
-        authorRepository = Mockito.mock(AuthorRepositoryImpl.class);
+        AuthorRepository authorRepository = Mockito.mock(AuthorRepositoryImpl.class);
         newsRepository = Mockito.mock(NewsRepositoryImpl.class);
         tagRepository = Mockito.mock(TagRepositoryImpl.class);
-        newsMapper = new NewsMapper(new ModelMapper());
+        NewsMapper newsMapper = new NewsMapper(new ModelMapper());
 
         newsService = new NewsServiceImpl(newsMapper, newsRepository, authorRepository, tagRepository);
 
@@ -67,68 +74,75 @@ public class SearchCriteriaTest {
     @Parameterized.Parameters(name = "{index}: Test with {0}, {1}, result = {2}")
     public static Collection<Object[]> dataForSearch() {
         return Arrays.asList(new Object[][]{
-                {new SearchCriteria("authorName", "authorSurname",
+                {new SearchCriteria(AUTHOR_NAME, AUTHOR_SURNAME,
                         new LinkedHashSet<String>(), new LinkedHashSet<String>(), false),
 
-                        new News(1, "title", "shortText", "fullText",
+                        new News(1, NEWS_TITLE, NEWS_SHORT_TEXT, NEWS_FULL_TEXT,
                                 LocalDate.now(), LocalDate.now(),
-                                new Author(6, "authorName", "authorSurname"), new ArrayList<Tag>()),
+                                new Author(6, AUTHOR_NAME, AUTHOR_SURNAME), new ArrayList<Tag>()),
 
-                        new NewsDTO(1, "title", "shortText", "fullText",
+                        new NewsDTO(1, NEWS_TITLE, NEWS_SHORT_TEXT, NEWS_FULL_TEXT,
                                 LocalDate.now(), LocalDate.now(),
-                                new AuthorDTO(6, "authorName", "authorSurname"), new ArrayList<TagDTO>())},
+                                new AuthorDTO(6, AUTHOR_NAME, AUTHOR_SURNAME), new ArrayList<TagDTO>())},
 
 
-                {new SearchCriteria("authorName", "",
+                {new SearchCriteria(AUTHOR_NAME, EMPTY_FIELD,
                         new LinkedHashSet<String>(), new LinkedHashSet<String>(), true),
 
-                        new News(2, "title", "shortText", "fullText",
+                        new News(2, NEWS_TITLE, NEWS_SHORT_TEXT, NEWS_FULL_TEXT,
                                 LocalDate.now(), LocalDate.now(),
-                                new Author(5, "authorName", "authorSurname"), new ArrayList<Tag>()),
+                                new Author(5, AUTHOR_NAME, AUTHOR_SURNAME), new ArrayList<Tag>()),
 
-                        new NewsDTO(2, "title", "shortText", "fullText",
+                        new NewsDTO(2, NEWS_TITLE, NEWS_SHORT_TEXT, NEWS_FULL_TEXT,
                                 LocalDate.now(), LocalDate.now(),
-                                new AuthorDTO(5, "authorName", "authorSurname"), new ArrayList<TagDTO>())},
+                                new AuthorDTO(5, AUTHOR_NAME, AUTHOR_SURNAME), new ArrayList<TagDTO>())},
 
-                {new SearchCriteria("authorName", "",
-                        new LinkedHashSet<String>(), new LinkedHashSet<String>(Arrays.asList(new String[] {"author_name"})), true),
+                {new SearchCriteria(AUTHOR_NAME, EMPTY_FIELD,
+                        new LinkedHashSet<String>(),
+                        new LinkedHashSet<String>(Arrays.asList(AUTHOR_NAME_COLUMN)),
+                        true),
 
-                        new News(2, "title", "shortText", "fullText",
+                        new News(2, NEWS_TITLE, NEWS_SHORT_TEXT, NEWS_FULL_TEXT,
                                 LocalDate.now(), LocalDate.now(),
-                                new Author(5, "authorName", "authorSurname"), new ArrayList<Tag>()),
+                                new Author(5, AUTHOR_NAME, AUTHOR_SURNAME), new ArrayList<Tag>()),
 
-                        new NewsDTO(2, "title", "shortText", "fullText",
+                        new NewsDTO(2, NEWS_TITLE, NEWS_SHORT_TEXT, NEWS_FULL_TEXT,
                                 LocalDate.now(), LocalDate.now(),
-                                new AuthorDTO(5, "authorName", "authorSurname"), new ArrayList<TagDTO>())},
+                                new AuthorDTO(5, AUTHOR_NAME, AUTHOR_SURNAME), new ArrayList<TagDTO>())},
 
-                {new SearchCriteria("authorName", "",
-                        new LinkedHashSet<String>(), new LinkedHashSet<String>(Arrays.asList(new String[] {"author_name", "title"})), true),
+                {new SearchCriteria(AUTHOR_NAME, EMPTY_FIELD,
+                        new LinkedHashSet<String>(),
+                        new LinkedHashSet<String>(Arrays.asList(AUTHOR_NAME_COLUMN, NEWS_TITLE)),
+                        true),
 
-                        new News(2, "title", "shortText", "fullText",
+                        new News(2, NEWS_TITLE, NEWS_SHORT_TEXT, NEWS_FULL_TEXT,
                                 LocalDate.now(), LocalDate.now(),
-                                new Author(5, "authorName", "authorSurname"), new ArrayList<Tag>()),
+                                new Author(5, AUTHOR_NAME, AUTHOR_SURNAME), new ArrayList<Tag>()),
 
-                        new NewsDTO(2, "title", "shortText", "fullText",
+                        new NewsDTO(2, NEWS_TITLE, NEWS_SHORT_TEXT, NEWS_FULL_TEXT,
                                 LocalDate.now(), LocalDate.now(),
-                                new AuthorDTO(5, "authorName", "authorSurname"), new ArrayList<TagDTO>())},
+                                new AuthorDTO(5, AUTHOR_NAME, AUTHOR_SURNAME), new ArrayList<TagDTO>())},
 
-                {new SearchCriteria("authorName", "",
-                        new LinkedHashSet<String>(Arrays.asList(new String[] {"news", "sport"})), new LinkedHashSet<String>(), true),
+                {new SearchCriteria(AUTHOR_NAME, EMPTY_FIELD,
+                        new LinkedHashSet<String>(Arrays.asList(TAG_NAME_NEWS, TAG_NAME_SPORT)),
+                        new LinkedHashSet<String>(),
+                        true),
 
-                        new News(3, "title", "shortText", "fullText",
+                        new News(3, NEWS_TITLE, NEWS_SHORT_TEXT, NEWS_FULL_TEXT,
                                 LocalDate.now(), LocalDate.now(),
-                                new Author(5, "authorName", "authorSurname"), new ArrayList<Tag>(Arrays.asList(new Tag[] {new Tag(1,"news"), new Tag(2,"sport")}))),
+                                new Author(5, AUTHOR_NAME, AUTHOR_SURNAME),
+                                new ArrayList<Tag>(Arrays.asList(new Tag(1, TAG_NAME_NEWS), new Tag(2, TAG_NAME_SPORT)))),
 
-                        new NewsDTO(3, "title", "shortText", "fullText",
+                        new NewsDTO(3, NEWS_TITLE, NEWS_SHORT_TEXT, NEWS_FULL_TEXT,
                                 LocalDate.now(), LocalDate.now(),
-                                new AuthorDTO(5, "authorName", "authorSurname"), new ArrayList<TagDTO>())}
+                                new AuthorDTO(5, AUTHOR_NAME, AUTHOR_SURNAME), new ArrayList<TagDTO>())}
 
         });
     }
 
     @Test
     public void findAllNewsByQueryTest() {
-        List<News> returnedList = new ArrayList<News>(Arrays.asList(actualNews));
+        List<News> returnedList = new ArrayList<>(Arrays.asList(actualNews));
         when(newsRepository.findAllNewsAndSortByQuery(any(String.class))).thenReturn(returnedList);
         when(tagRepository.findBy(any(News.class))).thenReturn(new ArrayList<Tag>());
 
