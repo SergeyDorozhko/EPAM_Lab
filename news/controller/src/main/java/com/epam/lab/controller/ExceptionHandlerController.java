@@ -39,6 +39,7 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler(Exception.class)
     public void errorFatal(HttpServletResponse response) throws IOException {
+
         response.sendError(HttpStatus.BAD_REQUEST.value(), resourceBundle.getString("msg.exception"));
     }
 

@@ -1,14 +1,11 @@
 package com.epam.lab.dto;
 
-import org.springframework.stereotype.Component;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 
-@Component
 public class NewsDTO extends AbstractDTO {
     private String title;
     private String shortText;

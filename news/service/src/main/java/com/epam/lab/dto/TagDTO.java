@@ -1,9 +1,10 @@
 package com.epam.lab.dto;
 
-import org.springframework.stereotype.Component;
+import javax.validation.constraints.Size;
 
-@Component
 public class TagDTO extends AbstractDTO {
+
+    @Size(min = 1, max = 30, message = "Size must be between 1 and 30.")
     private String name;
 
     public TagDTO() {

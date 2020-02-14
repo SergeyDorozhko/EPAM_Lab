@@ -4,7 +4,7 @@ import com.epam.lab.model.News;
 
 import java.util.List;
 
-public interface NewsRepository extends InterfaceRepository<News> {
+public interface NewsRepository extends Repository<News> {
     void linkAuthorWithNews(long authorId, long newsId);
 
     Long findAuthorIdByNewsId(long newsId);

@@ -3,7 +3,7 @@ package com.epam.lab.service;
 
 import com.epam.lab.dto.AbstractDTO;
 
-public interface InterfaceService <T extends AbstractDTO> {
+public interface Service<T extends AbstractDTO> {
 
     T create(T bean);
 

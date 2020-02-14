@@ -2,7 +2,7 @@ package com.epam.lab.repository;
 
 import com.epam.lab.model.Bean;
 
-public interface InterfaceRepository<T extends Bean> {
+public interface Repository<T extends Bean> {
 
     T create(T bean);
 

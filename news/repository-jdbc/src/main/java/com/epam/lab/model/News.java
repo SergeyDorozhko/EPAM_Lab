@@ -1,11 +1,10 @@
 package com.epam.lab.model;
 
-import org.springframework.stereotype.Component;
-
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
-@Component
 public class News extends Bean {
     private String title;
     private String shortText;

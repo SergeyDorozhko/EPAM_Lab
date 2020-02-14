@@ -52,8 +52,8 @@ public class TagRepositoryImpl extends AbstractRepository implements TagReposito
     }
 
     @Override
-    public int deleteTagNewsLinks(long newsId) {
-        return jdbcTemplate.update(DELETE_FROM_NEWS_TAG_WHERE_NEWS_ID, newsId);
+    public void deleteTagNewsLinks(long newsId) {
+        jdbcTemplate.update(DELETE_FROM_NEWS_TAG_WHERE_NEWS_ID, newsId);
     }
 
     @Override

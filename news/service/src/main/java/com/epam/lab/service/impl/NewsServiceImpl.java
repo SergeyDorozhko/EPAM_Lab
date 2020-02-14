@@ -297,7 +297,7 @@ public class NewsServiceImpl implements NewsService {
         return new QueryBuilder()
                 .setAuthorName(searchCriteria.getAuthorName())
                 .setAuthorSurname(searchCriteria.getAuthorSurname())
-                .setTags(searchCriteria.getTagsList())
+                .setTags(searchCriteria.getTags())
                 .setSort(searchCriteria)
                 .buildQuery();
     }

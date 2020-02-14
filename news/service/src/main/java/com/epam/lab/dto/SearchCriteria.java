@@ -6,23 +6,23 @@ import java.util.Set;
 public class SearchCriteria {
     private String authorName;
     private String authorSurname;
-    private Set<String> tagsList;
+    private Set<String> tags;
     private Set<String> orderByParameter;
     private boolean desc;
 
     public SearchCriteria() {
-        this.tagsList = new LinkedHashSet<>();
+        this.tags = new LinkedHashSet<>();
         this.orderByParameter = new LinkedHashSet<>();
     }
 
     public SearchCriteria(String authorName,
                           String authorSurname,
-                          Set<String> tagsList,
+                          Set<String> tags,
                           Set<String> orderByParameter,
                           boolean desc) {
         this.authorName = authorName;
         this.authorSurname = authorSurname;
-        this.tagsList = tagsList;
+        this.tags = tags;
         this.orderByParameter = orderByParameter;
         this.desc = desc;
     }
@@ -43,12 +43,12 @@ public class SearchCriteria {
         this.authorSurname = authorSurname;
     }
 
-    public Set<String> getTagsList() {
-        return tagsList;
+    public Set<String> getTags() {
+        return tags;
     }
 
-    public void setTagsList(Set<String> tagsList) {
-        this.tagsList = tagsList;
+    public void setTags(Set<String> tags) {
+        this.tags = tags;
     }
 
     public Set<String> getOrderByParameter() {
