@@ -1,8 +1,11 @@
 package com.epam.lab.dto;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.PositiveOrZero;
 import java.io.Serializable;
 
 public abstract class AbstractDTO implements Serializable {
+    @PositiveOrZero(message = "Id can't be negative")
     private long id;
 
     public AbstractDTO() {

@@ -7,8 +7,8 @@ import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 
 @RestController
 @RequestMapping("/tag")
@@ -28,18 +28,18 @@ public class TagController {
     @RequestMapping(value = "/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public TagDTO createTag(@RequestBody @Valid TagDTO tagDTO) {
+
         return tagService.create(tagDTO);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public TagDTO findTagBy(@PathVariable long id, HttpServletResponse response) {
+    public TagDTO findTagBy(@Valid @PathVariable("id") @Positive Long id) {
         TagDTO tagDTO = null;
-        try{
+        System.out.println(id);
             tagDTO = tagService.findById(id);
-        } catch (Exception ex) {
-            response.setStatus(204);
-        }
+        System.out.println(id);
+
         return tagDTO;
     }
 
