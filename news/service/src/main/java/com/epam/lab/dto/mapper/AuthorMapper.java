@@ -1,4 +1,4 @@
-package com.epam.lab.dto.Mapper;
+package com.epam.lab.dto.mapper;
 
 import com.epam.lab.dto.AuthorDTO;
 import com.epam.lab.model.Author;
@@ -8,12 +8,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AuthorMapper extends AbstractMapper<Author, AuthorDTO> {
-
-//    @Autowired
-//    public AuthorMapper( Class<Author> author,Class <AuthorDTO> authorDTO, ModelMapper modelMapper) {
-//        super(author, authorDTO, modelMapper);
-//    }
-
 
         @Autowired
     public AuthorMapper(ModelMapper modelMapper) {

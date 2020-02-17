@@ -1,43 +1,40 @@
 package com.epam.lab.dto;
 
-import com.epam.lab.model.Author;
-import com.epam.lab.model.Tag;
-import org.springframework.stereotype.Component;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
-@Component
 public class NewsDTO extends AbstractDTO {
     private String title;
-    private String short_text;
-    private String full_text;
-    private LocalDate creation_date;
-    private LocalDate modification_date;
+    private String shortText;
+    private String fullText;
+    private LocalDate creationDate;
+    private LocalDate modificationDate;
 
     private AuthorDTO author;
 
     private List<TagDTO> listOfTags;
 
-    public NewsDTO(){
+    public NewsDTO() {
         super();
         listOfTags = new ArrayList<>();
     }
 
-    public void setListOfTags(List<TagDTO> listOfTags) {
+    public NewsDTO(int id, String title, String shortText, String fullText, LocalDate creationDate, LocalDate modificationDate,
+                   AuthorDTO author, List<TagDTO> listOfTags) {
+        super(id);
+        this.title = title;
+        this.shortText = shortText;
+        this.fullText = fullText;
+        this.creationDate = creationDate;
+        this.modificationDate = modificationDate;
+        this.author = author;
         this.listOfTags = listOfTags;
     }
 
-    public NewsDTO(int id, String title, String short_text, String full_text, LocalDate creation_date, LocalDate modification_date, AuthorDTO author, List<TagDTO> listOfTags) {
-        super(id);
-        this.title = title;
-        this.short_text = short_text;
-        this.full_text = full_text;
-        this.creation_date = creation_date;
-        this.modification_date = modification_date;
-        this.author = author;
+    public void setListOfTags(List<TagDTO> listOfTags) {
         this.listOfTags = listOfTags;
     }
 
@@ -49,36 +46,36 @@ public class NewsDTO extends AbstractDTO {
         this.title = title;
     }
 
-    public String getShort_text() {
-        return short_text;
+    public String getShortText() {
+        return shortText;
     }
 
-    public void setShort_text(String short_text) {
-        this.short_text = short_text;
+    public void setShortText(String shortText) {
+        this.shortText = shortText;
     }
 
-    public String getFull_text() {
-        return full_text;
+    public String getFullText() {
+        return fullText;
     }
 
-    public void setFull_text(String full_text) {
-        this.full_text = full_text;
+    public void setFullText(String fullText) {
+        this.fullText = fullText;
     }
 
-    public LocalDate getCreation_date() {
-        return creation_date;
+    public LocalDate getCreationDate() {
+        return creationDate;
     }
 
-    public void setCreation_date(LocalDate creation_date) {
-        this.creation_date = creation_date;
+    public void setCreationDate(LocalDate creationDate) {
+        this.creationDate = creationDate;
     }
 
-    public LocalDate getModification_date() {
-        return modification_date;
+    public LocalDate getModificationDate() {
+        return modificationDate;
     }
 
-    public void setModification_date(LocalDate modification_date) {
-        this.modification_date = modification_date;
+    public void setModificationDate(LocalDate modificationDate) {
+        this.modificationDate = modificationDate;
     }
 
     public AuthorDTO getAuthor() {
@@ -95,5 +92,40 @@ public class NewsDTO extends AbstractDTO {
 
     public void addTag(TagDTO tag) {
         listOfTags.add(tag);
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        NewsDTO newsDTO = (NewsDTO) o;
+        return Objects.equals(title, newsDTO.title) &&
+                Objects.equals(shortText, newsDTO.shortText) &&
+                Objects.equals(fullText, newsDTO.fullText) &&
+                Objects.equals(creationDate, newsDTO.creationDate) &&
+                Objects.equals(modificationDate, newsDTO.modificationDate) &&
+                Objects.equals(author, newsDTO.author) &&
+                Objects.equals(listOfTags, newsDTO.listOfTags);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(),
+                title, shortText, fullText, creationDate, modificationDate, author, listOfTags);
+    }
+
+    @Override
+    public String toString() {
+        return "NewsDTO{" +
+                "title='" + title + '\'' +
+                ", shortText='" + shortText + '\'' +
+                ", fullText='" + fullText + '\'' +
+                ", creationDate=" + creationDate +
+                ", modificationDate=" + modificationDate +
+                ", author=" + author +
+                ", listOfTags=" + listOfTags +
+                '}';
     }
 }

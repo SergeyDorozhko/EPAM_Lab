@@ -1,4 +1,4 @@
-package com.epam.lab.dto.Mapper;
+package com.epam.lab.dto.mapper;
 
 import com.epam.lab.dto.NewsDTO;
 import com.epam.lab.model.News;
@@ -9,13 +9,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class NewsMapper extends AbstractMapper<News, NewsDTO> {
 
-//    @Autowired
-//    public NewsMapper (Class<News> news, Class <NewsDTO> newsDTO, ModelMapper modelMapper){
-//        super(news, newsDTO, modelMapper);
-//    }
 
     @Autowired
-    public NewsMapper (ModelMapper modelMapper){
+    public NewsMapper(ModelMapper modelMapper) {
         super(News.class, NewsDTO.class, modelMapper);
     }
 }
