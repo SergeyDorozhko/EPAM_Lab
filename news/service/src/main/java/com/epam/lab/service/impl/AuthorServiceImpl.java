@@ -7,6 +7,7 @@ import com.epam.lab.repository.NewsRepository;
 import com.epam.lab.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -31,6 +32,7 @@ public class AuthorServiceImpl implements AuthorService {
      * @param bean AuthorDTO with name and surname of author.
      * @return AuthorDTO with generated id.
      */
+    @Transactional
     @Override
     public AuthorDTO create(AuthorDTO bean) {
         return mapper.toDTO(repository.create(mapper.toBean(bean)));
@@ -43,6 +45,7 @@ public class AuthorServiceImpl implements AuthorService {
      * @param authorId of author which try to delete
      * @return if author exist and was deleted return true, otherwise false.
      */
+    @Transactional
     @Override
     public boolean delete(long authorId) {
         List<Long> newsIds = takeAllNewsByAuthor(authorId);
@@ -60,6 +63,7 @@ public class AuthorServiceImpl implements AuthorService {
         }
     }
 
+    @Transactional
     @Override
     public AuthorDTO update(AuthorDTO bean) {
         return mapper.toDTO(repository.update(mapper.toBean(bean)));

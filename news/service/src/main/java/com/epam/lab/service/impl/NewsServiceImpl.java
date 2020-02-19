@@ -126,9 +126,9 @@ public class NewsServiceImpl implements NewsService {
     }
 
     private void processingWithTags(News news) {
-        boolean hasTags = news.getListOfTags() != null && !news.getListOfTags().isEmpty();
+        boolean hasTags = news.getTags() != null && !news.getTags().isEmpty();
         if (hasTags) {
-            for (int i = 0; i < news.getListOfTags().size(); i++) {
+            for (int i = 0; i < news.getTags().size(); i++) {
                 i = checkAndCreateTagIfNew(news, i);
             }
             makeUniqueListOfTags(news);
@@ -137,7 +137,7 @@ public class NewsServiceImpl implements NewsService {
     }
 
     private int checkAndCreateTagIfNew(News news, int tagIndex) {
-        Tag tag = news.getListOfTags().get(tagIndex);
+        Tag tag = news.getTags().get(tagIndex);
         boolean hasTagId = tag.getId() != 0;
         try {
             if (hasTagId) {
@@ -147,25 +147,25 @@ public class NewsServiceImpl implements NewsService {
             }
         } catch (EmptyResultDataAccessException ex) {
             if (hasTagId) {
-                news.getListOfTags().remove(tagIndex);
+                news.getTags().remove(tagIndex);
                 return --tagIndex;
             } else {
                 tagRepository.create(tag);
             }
         }
-        news.getListOfTags().set(tagIndex, tag);
+        news.getTags().set(tagIndex, tag);
         return tagIndex;
     }
 
 
     private void makeUniqueListOfTags(News news) {
-        Set<Tag> tagList = new HashSet<>(news.getListOfTags());
+        Set<Tag> tagList = new HashSet<>(news.getTags());
         List<Tag> list = new ArrayList<>(tagList);
-        news.setListOfTags(list);
+        news.setTags(list);
     }
 
     private void connectTagsWithNewsInStorage(News news) {
-        for (Tag tag : news.getListOfTags()) {
+        for (Tag tag : news.getTags()) {
             tagRepository.linkTagWithNews(tag.getId(), news.getId());
         }
     }
@@ -277,7 +277,7 @@ public class NewsServiceImpl implements NewsService {
     }
 
     private void getTagsOfNews(News news) {
-        news.setListOfTags(tagRepository.findBy(news));
+        news.setTags(tagRepository.findBy(news));
 
     }
 
@@ -305,7 +305,7 @@ public class NewsServiceImpl implements NewsService {
     private List<NewsDTO> addTagsAndTransferToDTO(List<News> news) {
         List<NewsDTO> newsDTO = new ArrayList<>();
         for (News operatingNews : news) {
-            operatingNews.setListOfTags(tagRepository.findBy(operatingNews));
+            operatingNews.setTags(tagRepository.findBy(operatingNews));
             newsDTO.add(mapper.toDTO(operatingNews));
         }
         return newsDTO;

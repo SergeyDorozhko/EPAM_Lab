@@ -77,10 +77,10 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     }
 
 
-    @ExceptionHandler(Exception.class)
-    public void errorFatal(HttpServletResponse response, Exception ex) throws IOException {
-
-        response.sendError(HttpStatus.BAD_REQUEST.value(), resourceBundle.getString("msg.exception"));
-    }
+//    @ExceptionHandler(Exception.class)
+//    public void errorFatal(HttpServletResponse response, Exception ex) throws IOException {
+//
+//        response.sendError(HttpStatus.BAD_REQUEST.value(), resourceBundle.getString("msg.exception"));
+//    }
 
 }

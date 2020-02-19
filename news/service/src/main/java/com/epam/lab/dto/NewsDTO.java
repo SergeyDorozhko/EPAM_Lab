@@ -15,15 +15,15 @@ public class NewsDTO extends AbstractDTO {
 
     private AuthorDTO author;
 
-    private List<TagDTO> listOfTags;
+    private List<TagDTO> tags;
 
     public NewsDTO() {
         super();
-        listOfTags = new ArrayList<>();
+        tags = new ArrayList<>();
     }
 
     public NewsDTO(int id, String title, String shortText, String fullText, LocalDate creationDate, LocalDate modificationDate,
-                   AuthorDTO author, List<TagDTO> listOfTags) {
+                   AuthorDTO author, List<TagDTO> tags) {
         super(id);
         this.title = title;
         this.shortText = shortText;
@@ -31,11 +31,11 @@ public class NewsDTO extends AbstractDTO {
         this.creationDate = creationDate;
         this.modificationDate = modificationDate;
         this.author = author;
-        this.listOfTags = listOfTags;
+        this.tags = tags;
     }
 
-    public void setListOfTags(List<TagDTO> listOfTags) {
-        this.listOfTags = listOfTags;
+    public void setTags(List<TagDTO> tags) {
+        this.tags = tags;
     }
 
     public String getTitle() {
@@ -86,12 +86,12 @@ public class NewsDTO extends AbstractDTO {
         this.author = author;
     }
 
-    public List<TagDTO> getListOfTags() {
-        return listOfTags;
+    public List<TagDTO> getTags() {
+        return tags;
     }
 
     public void addTag(TagDTO tag) {
-        listOfTags.add(tag);
+        tags.add(tag);
     }
 
 
@@ -107,13 +107,13 @@ public class NewsDTO extends AbstractDTO {
                 Objects.equals(creationDate, newsDTO.creationDate) &&
                 Objects.equals(modificationDate, newsDTO.modificationDate) &&
                 Objects.equals(author, newsDTO.author) &&
-                Objects.equals(listOfTags, newsDTO.listOfTags);
+                Objects.equals(tags, newsDTO.tags);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(),
-                title, shortText, fullText, creationDate, modificationDate, author, listOfTags);
+                title, shortText, fullText, creationDate, modificationDate, author, tags);
     }
 
     @Override
@@ -125,7 +125,7 @@ public class NewsDTO extends AbstractDTO {
                 ", creationDate=" + creationDate +
                 ", modificationDate=" + modificationDate +
                 ", author=" + author +
-                ", listOfTags=" + listOfTags +
+                ", listOfTags=" + tags +
                 '}';
     }
 }

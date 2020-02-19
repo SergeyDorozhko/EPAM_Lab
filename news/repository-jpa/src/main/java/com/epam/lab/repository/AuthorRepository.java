@@ -1,4 +1,9 @@
 package com.epam.lab.repository;
 
-public interface AuthorRepository {
+
+import com.epam.lab.model.Author;
+
+public interface AuthorRepository extends Repository<Author> {
+
+    Author findBy(Author author);
 }

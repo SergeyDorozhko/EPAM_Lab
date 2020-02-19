@@ -191,7 +191,7 @@ public class NewsServiceImplTest {
         tagsDTOList.add(twoTagDTO);
         tagsDTOList.add(threeTagDTO);
         tagsDTOList.add(fourTagDTO);
-        newsDTO.setListOfTags(tagsDTOList);
+        newsDTO.setTags(tagsDTOList);
 
         news = new News();
         Author author = new Author();
@@ -218,8 +218,8 @@ public class NewsServiceImplTest {
         when(tagRepository.findBy(TAG_NAME_ONE)).thenThrow(EmptyResultDataAccessException.class);
         when(tagRepository.findBy(TAG_NAME_FOUR)).thenReturn(fourTag);
 
-        Assert.assertEquals(newsDTO.getListOfTags().size() - 1L,
-                newsService.create(newsDTO).getListOfTags().size());
+        Assert.assertEquals(newsDTO.getTags().size() - 1L,
+                newsService.create(newsDTO).getTags().size());
         verify(authorRepository).findBy(any(Author.class));
         verify(authorRepository, never()).create(author);
         verify(newsRepository).create(any(News.class));
@@ -323,7 +323,7 @@ public class NewsServiceImplTest {
         tagsDTOList.add(oneTagDTO);
         tagsDTOList.add(twoTagDTO);
         tagsDTOList.add(threeTagDTO);
-        newsDTO.setListOfTags(tagsDTOList);
+        newsDTO.setTags(tagsDTOList);
 
         Assert.assertEquals(newsDTO, newsService.findById(anyLong()));
 
@@ -375,7 +375,7 @@ public class NewsServiceImplTest {
         tagsDTOList.add(oneTagDTO);
         tagsDTOList.add(twoTagDTO);
         tagsDTOList.add(threeTagDTO);
-        newsDTO.setListOfTags(tagsDTOList);
+        newsDTO.setTags(tagsDTOList);
 
         Assert.assertEquals(newsDTO, newsService.findById(anyLong()));
 
