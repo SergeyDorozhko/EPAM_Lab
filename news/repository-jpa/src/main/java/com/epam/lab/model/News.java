@@ -29,7 +29,7 @@ public class News extends Bean {
 
     @ManyToMany
     @JoinTable(
-            name = "news_tag",
+           name = "news_tag",
             joinColumns = @JoinColumn(name = "news_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id")
     )

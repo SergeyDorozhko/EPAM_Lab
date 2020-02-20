@@ -6,6 +6,7 @@ import com.epam.lab.model.News;
 import com.epam.lab.model.Tag;
 import com.epam.lab.repository.TagRepository;
 import org.springframework.stereotype.Repository;
+import sun.security.krb5.internal.TGSRep;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -30,14 +31,28 @@ public class TagRepositoryImpl implements TagRepository {
         try {
             tag = entityManager.createQuery(criteriaQuery).getSingleResult();
         } catch (NoResultException ex) {
-            throw new RepositoryException("Tag didn't find.");
+            throw new TagNotFoundException();
         }
         return tag;
     }
 
     @Override
     public Tag findBy(Tag tag) {
-        return null;
+        System.out.println("tag with id" + tag);
+
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Tag> criteriaQuery = criteriaBuilder.createQuery(Tag.class);
+        Root<Tag> root = criteriaQuery.from(Tag.class);
+        criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("id"), tag.getId()), criteriaBuilder.equal(root.get("name"), tag.getName()));
+
+        Tag foundTag = null;
+        try {
+            foundTag = entityManager.createQuery(criteriaQuery).getSingleResult();
+        } catch (NoResultException ex) {
+            throw new TagNotFoundException();
+        }
+
+        return foundTag;
     }
 
     @Override

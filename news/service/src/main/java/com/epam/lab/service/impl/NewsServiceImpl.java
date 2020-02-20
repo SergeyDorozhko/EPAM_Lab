@@ -5,6 +5,7 @@ import com.epam.lab.dto.NewsDTO;
 import com.epam.lab.dto.SearchCriteria;
 import com.epam.lab.exception.InvalidAuthorException;
 import com.epam.lab.exception.InvalidNewsDataException;
+import com.epam.lab.exception.RepositoryException;
 import com.epam.lab.model.Author;
 import com.epam.lab.model.News;
 import com.epam.lab.model.Tag;
@@ -70,15 +71,17 @@ public class NewsServiceImpl implements NewsService {
 
         News news = mapper.toBean(bean);
 
+
         checkAndCreateAuthorIfNew(news);
 
         setCreationDataToNews(news);
+
+        processingWithTags(news);
 
         newsRepository.create(news);
 
         connectAuthorWithNewsInStorage(news);
 
-        processingWithTags(news);
 
         return mapper.toDTO(news);
     }
@@ -145,7 +148,8 @@ public class NewsServiceImpl implements NewsService {
             } else {
                 tag = tagRepository.findBy(tag.getName());
             }
-        } catch (EmptyResultDataAccessException ex) {
+        } catch (EmptyResultDataAccessException | RepositoryException ex) {
+            //TODO REPOSITORY exception
             if (hasTagId) {
                 news.getTags().remove(tagIndex);
                 return --tagIndex;
@@ -202,6 +206,7 @@ public class NewsServiceImpl implements NewsService {
      * @param bean NewsDTO with title, short_text and full_text, it can have or not author and list of tags.
      * @return NewsDTO with all generated data.
      */
+    @Transactional
     @Override
     public NewsDTO update(NewsDTO bean) {
         checkNews(bean);
@@ -209,11 +214,11 @@ public class NewsServiceImpl implements NewsService {
         checkAuthorOrAddIfNewsWithoutAuthor(news);
 
         news.setModificationDate(LocalDate.now());
+        processingWithTags(news);
         newsRepository.update(news);
 
         deleteTagsFromThisNewsInStorage(news);
 
-        processingWithTags(news);
 
         return mapper.toDTO(news);
     }
@@ -231,7 +236,7 @@ public class NewsServiceImpl implements NewsService {
     private Long findAuthorOfNews(News news) {
         try {
             return newsRepository.findAuthorIdByNewsId(news.getId());
-        } catch (EmptyResultDataAccessException ex) {
+        } catch (EmptyResultDataAccessException|RepositoryException ex) {
             //TODO logger.
             System.err.println("News has no author (update action)");
         }
