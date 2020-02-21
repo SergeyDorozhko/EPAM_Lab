@@ -4,7 +4,6 @@ import com.epam.lab.exception.AuthorNotFoundException;
 import com.epam.lab.exception.NewsWithoutAuthorException;
 import com.epam.lab.model.Author;
 import com.epam.lab.model.News;
-import com.epam.lab.model.Tag;
 import com.epam.lab.repository.NewsRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,7 +11,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.*;
-import javax.persistence.metamodel.EntityType;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -58,7 +56,12 @@ public class NewsRepositoryImpl implements NewsRepository {
 
     @Override
     public long countAllNews() {
-        return 0;
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+        Root<News> root = criteriaQuery.from(News.class);
+
+        criteriaQuery.select(criteriaBuilder.count(root.get("id")));
+        return entityManager.createQuery(criteriaQuery).getSingleResult();
     }
 
     @Override
@@ -90,7 +93,7 @@ public class NewsRepositoryImpl implements NewsRepository {
     @Override
     public News update(News bean) {
 
-   //     return thirdVariant(bean);
+        //     return thirdVariant(bean);
 
         return mainVariant(bean);
 
@@ -134,8 +137,7 @@ public class NewsRepositoryImpl implements NewsRepository {
 //        for (Tag tag : bean.getTags()) {
 //            criteriaUpdate.set(root.get("tags"), tag);
 //        }
-
-         criteriaUpdate.set(root.get("tags"), bean.getTags().toArray());
+            criteriaUpdate.set(root.get("tags"), bean.getTags());
 
 
         int result = entityManager.createQuery(criteriaUpdate).executeUpdate();
