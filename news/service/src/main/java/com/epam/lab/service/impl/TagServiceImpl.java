@@ -1,7 +1,7 @@
 package com.epam.lab.service.impl;
 
-import com.epam.lab.dto.mapper.TagMapper;
 import com.epam.lab.dto.TagDTO;
+import com.epam.lab.dto.mapper.TagMapper;
 import com.epam.lab.exception.DuplicateTagException;
 import com.epam.lab.exception.RepositoryException;
 import com.epam.lab.repository.TagRepository;
@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.NoResultException;
 
 @Service
 public class TagServiceImpl implements TagService {

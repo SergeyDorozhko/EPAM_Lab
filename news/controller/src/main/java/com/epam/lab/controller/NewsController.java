@@ -1,7 +1,7 @@
 package com.epam.lab.controller;
 
 import com.epam.lab.dto.NewsDTO;
-import com.epam.lab.dto.SearchCriteria;
+import com.epam.lab.dto.SearchCriteriaDTO;
 import com.epam.lab.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -58,8 +58,8 @@ public class NewsController {
 
     @RequestMapping(value = "/search", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<NewsDTO> searchNews(@ModelAttribute SearchCriteria searchCriteria) {
-        return service.findAllNewsByQuery(searchCriteria);
+    public List<NewsDTO> searchNews(@ModelAttribute SearchCriteriaDTO searchCriteriaDTO) {
+        return service.findAllNewsByQuery(searchCriteriaDTO);
     }
 
 }

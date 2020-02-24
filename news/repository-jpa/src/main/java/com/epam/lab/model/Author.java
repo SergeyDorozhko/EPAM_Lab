@@ -2,10 +2,11 @@ package com.epam.lab.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-public class Author extends Bean {
+public class Author extends Bean implements Serializable {
     @Column(length = 30)
     private String name;
     @Column(length = 30)

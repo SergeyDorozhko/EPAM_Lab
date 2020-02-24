@@ -3,23 +3,23 @@ package com.epam.lab.dto;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-public class SearchCriteria {
+public class SearchCriteriaDTO extends AuthorDTO {
     private String authorName;
     private String authorSurname;
     private Set<String> tags;
     private Set<String> orderByParameter;
     private boolean desc;
 
-    public SearchCriteria() {
+    public SearchCriteriaDTO() {
         this.tags = new LinkedHashSet<>();
         this.orderByParameter = new LinkedHashSet<>();
     }
 
-    public SearchCriteria(String authorName,
-                          String authorSurname,
-                          Set<String> tags,
-                          Set<String> orderByParameter,
-                          boolean desc) {
+    public SearchCriteriaDTO(String authorName,
+                             String authorSurname,
+                             Set<String> tags,
+                             Set<String> orderByParameter,
+                             boolean desc) {
         this.authorName = authorName;
         this.authorSurname = authorSurname;
         this.tags = tags;

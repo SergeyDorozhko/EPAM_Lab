@@ -3,6 +3,7 @@ package com.epam.lab.repository.impl;
 import com.epam.lab.exception.RepositoryException;
 import com.epam.lab.model.Author;
 import com.epam.lab.model.News;
+import com.epam.lab.model.SearchCriteria;
 import com.epam.lab.repository.AbstractRepository;
 import com.epam.lab.repository.NewsRepository;
 import org.springframework.stereotype.Repository;
@@ -139,7 +140,8 @@ public class NewsRepositoryImpl extends AbstractRepository implements NewsReposi
     }
 
     @Override
-    public List<News> findAllNewsAndSortByQuery(String query) {
+    public List<News> findAllNewsAndSortByQuery(SearchCriteria searchCriteria) {
+        String query = makeQueryForSearch(searchCriteria);
         return jdbcTemplate.query(FIND_BY_QUERY + query, (resultSet, num) -> {
             News news = assembleNews(resultSet);
             if (isAuthorExist(news.getAuthor())) {
@@ -148,5 +150,14 @@ public class NewsRepositoryImpl extends AbstractRepository implements NewsReposi
             }
             return news;
         });
+    }
+
+    private String makeQueryForSearch(SearchCriteria searchCriteria) {
+        return new QueryBuilder()
+                .setAuthorName(searchCriteria.getAuthorName())
+                .setAuthorSurname(searchCriteria.getAuthorSurname())
+                .setTags(searchCriteria.getTags())
+                .setSort(searchCriteria)
+                .buildQuery();
     }
 }

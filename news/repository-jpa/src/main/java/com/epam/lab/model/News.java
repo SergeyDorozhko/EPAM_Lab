@@ -1,20 +1,21 @@
 package com.epam.lab.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
-public class News extends Bean {
+public class News extends Bean implements Serializable {
     @Column(length = 30)
     private String title;
     @Column(name = "short_text",length = 100)
     private String shortText;
     @Column(name = "full_text",length = 2000)
     private String fullText;
-    @Column(name = "creation_date")
+    @Column(name = "creation_date", updatable = false)
     private LocalDate creationDate;
     @Column(name = "modification_date")
     private LocalDate modificationDate;

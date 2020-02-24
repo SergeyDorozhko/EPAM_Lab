@@ -2,12 +2,14 @@ package com.epam.lab.service.impl;
 
 import com.epam.lab.dto.mapper.NewsMapper;
 import com.epam.lab.dto.NewsDTO;
-import com.epam.lab.dto.SearchCriteria;
+import com.epam.lab.dto.SearchCriteriaDTO;
+import com.epam.lab.dto.mapper.SearchCriteriaMapper;
 import com.epam.lab.exception.InvalidAuthorException;
 import com.epam.lab.exception.InvalidNewsDataException;
 import com.epam.lab.exception.RepositoryException;
 import com.epam.lab.model.Author;
 import com.epam.lab.model.News;
+import com.epam.lab.model.SearchCriteria;
 import com.epam.lab.model.Tag;
 import com.epam.lab.repository.AuthorRepository;
 import com.epam.lab.repository.NewsRepository;
@@ -29,16 +31,20 @@ import java.util.Set;
 @Transactional
 public class NewsServiceImpl implements NewsService {
     private NewsMapper mapper;
+    private SearchCriteriaMapper criteriaMapper;
+
     private NewsRepository newsRepository;
     private AuthorRepository authorRepository;
     private TagRepository tagRepository;
 
     @Autowired
     public NewsServiceImpl(NewsMapper mapper,
+                           SearchCriteriaMapper criteriaMapper,
                            NewsRepository newsRepository,
                            AuthorRepository authorRepository,
                            TagRepository tagRepository) {
         this.mapper = mapper;
+        this.criteriaMapper = criteriaMapper;
         this.newsRepository = newsRepository;
         this.authorRepository = authorRepository;
         this.tagRepository = tagRepository;
@@ -292,20 +298,13 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public List<NewsDTO> findAllNewsByQuery(SearchCriteria searchCriteria) {
-        String query = makeQueryForSearch(searchCriteria);
-        List<News> news = newsRepository.findAllNewsAndSortByQuery(query);
+    public List<NewsDTO> findAllNewsByQuery(SearchCriteriaDTO searchCriteriaDTO) {
+        SearchCriteria searchCriteria = criteriaMapper.toBean(searchCriteriaDTO);
+        List<News> news = newsRepository.findAllNewsAndSortByQuery(searchCriteria);
         return addTagsAndTransferToDTO(news);
     }
 
-    private String makeQueryForSearch(SearchCriteria searchCriteria) {
-        return new QueryBuilder()
-                .setAuthorName(searchCriteria.getAuthorName())
-                .setAuthorSurname(searchCriteria.getAuthorSurname())
-                .setTags(searchCriteria.getTags())
-                .setSort(searchCriteria)
-                .buildQuery();
-    }
+
 
     private List<NewsDTO> addTagsAndTransferToDTO(List<News> news) {
         List<NewsDTO> newsDTO = new ArrayList<>();

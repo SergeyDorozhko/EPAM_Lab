@@ -1,5 +1,7 @@
 package com.epam.lab.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +12,9 @@ public class NewsDTO extends AbstractDTO {
     private String title;
     private String shortText;
     private String fullText;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate creationDate;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate modificationDate;
 
     private AuthorDTO author;

@@ -1,6 +1,6 @@
-package com.epam.lab.service.impl;
+package com.epam.lab.repository.impl;
 
-import com.epam.lab.dto.SearchCriteria;
+import com.epam.lab.model.SearchCriteria;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ final class QueryBuilder {
     private static final String AUTHOR_NAME_COLUMN = " AND (author_name = '";
     private static final String AUTHOR_SURNAME_COLUMN = " AND (author_surname = '";
     private static final String CLOSE_BRACKETS = "') ";
-    private static final String OPEN_BRACKETS = " AND ('";
+    private static final String AND_OPEN_BRACKETS = " AND ('";
     private static final String TAG_NAMES_COLUMN = "' = ANY(tag_names)) ";
     private static final String ORDER_BY = " ORDER BY ";
     private static final String COMMA_SEPARATOR = ", ";
@@ -43,7 +43,7 @@ final class QueryBuilder {
     }
 
     QueryBuilder setTags(Set<String> tags) {
-        tags.forEach(c -> query.append(OPEN_BRACKETS).append(c).append(TAG_NAMES_COLUMN));
+        tags.forEach(c -> query.append(AND_OPEN_BRACKETS).append(c).append(TAG_NAMES_COLUMN));
         return this;
     }
 
