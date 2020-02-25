@@ -4,6 +4,7 @@ import com.epam.lab.dto.AuthorDTO;
 import com.epam.lab.dto.mapper.NewsMapper;
 import com.epam.lab.dto.NewsDTO;
 import com.epam.lab.dto.TagDTO;
+import com.epam.lab.dto.mapper.SearchCriteriaMapper;
 import com.epam.lab.exception.InvalidAuthorException;
 import com.epam.lab.exception.ServiceException;
 import com.epam.lab.model.Author;
@@ -58,7 +59,7 @@ public class NewsServiceImplTest {
         tagRepository = Mockito.mock(TagRepositoryImpl.class);
         NewsMapper newsMapper = new NewsMapper(new ModelMapper());
 
-        newsService = new NewsServiceImpl(newsMapper, newsRepository, authorRepository, tagRepository);
+        newsService = new NewsServiceImpl(newsMapper,new SearchCriteriaMapper(new ModelMapper()), newsRepository, authorRepository, tagRepository);
 
 
     }

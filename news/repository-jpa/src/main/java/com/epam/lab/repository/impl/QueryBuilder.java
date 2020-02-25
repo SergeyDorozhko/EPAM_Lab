@@ -3,7 +3,6 @@ package com.epam.lab.repository.impl;
 
 import com.epam.lab.exception.ErrorOrderByException;
 import com.epam.lab.model.*;
-import jdk.internal.reflect.ConstantPool;
 
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
@@ -59,24 +58,18 @@ final class QueryBuilder {
     }
 
     private void searchByTags(Set<String> tags) {
-        for (String tag : tags) {
 
-            Subquery<String> subquery = criteriaQuery.subquery(String.class);
+
+            Subquery<Long> subquery = criteriaQuery.subquery(Long.class);
             Root<News> subRoot = subquery.from(News.class);
-            Join<Tag, News> subTags = subRoot.join(News_.TAGS);
+            Join<Tag, News> subTags = subRoot.join(News_.TAGS, JoinType.LEFT);
+        for (String tag : tags) {
+            subquery.select(subRoot.get(News_.ID));
+            subquery.where(criteriaBuilder.equal(subTags.get(Tag_.NAME), tag));
 
-            subquery.select(subTags.get(Tag_.NAME));
-            subquery.where(criteriaBuilder.equal(subRoot.get(News_.TAGS), subTags.get(Tag_.ID)));
 
-            predicates.add(criteriaBuilder.equal(criteriaBuilder.any(subquery), tag));
+            predicates.add(criteriaBuilder.equal(newsRoot.get(News_.ID), criteriaBuilder.any(subquery)));
         }
-
-
-//        Path<String> tagPath = newsTagJoin.get(Tag_.NAME);
-//        for (String tag : tags) {
-//            predicates.add(criteriaBuilder.equal(tagPath, tag));
-//
-//        }
 
     }
 

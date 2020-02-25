@@ -5,6 +5,7 @@ import com.epam.lab.dto.mapper.NewsMapper;
 import com.epam.lab.dto.NewsDTO;
 import com.epam.lab.dto.SearchCriteriaDTO;
 import com.epam.lab.dto.TagDTO;
+import com.epam.lab.dto.mapper.SearchCriteriaMapper;
 import com.epam.lab.model.Author;
 import com.epam.lab.model.News;
 import com.epam.lab.model.Tag;
@@ -65,7 +66,7 @@ public class SearchCriteriaTest {
         tagRepository = Mockito.mock(TagRepositoryImpl.class);
         NewsMapper newsMapper = new NewsMapper(new ModelMapper());
 
-        newsService = new NewsServiceImpl(newsMapper, newsRepository, authorRepository, tagRepository);
+        newsService = new NewsServiceImpl(newsMapper,new SearchCriteriaMapper(new ModelMapper()), newsRepository, authorRepository, tagRepository);
 
 
     }
