@@ -3,6 +3,7 @@ package com.epam.lab.repository.impl;
 
 import com.epam.lab.exception.ErrorOrderByException;
 import com.epam.lab.model.*;
+import jdk.internal.reflect.ConstantPool;
 
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ final class QueryBuilder {
     private CriteriaQuery<News> criteriaQuery;
     private Root<News> newsRoot;
     private Join<News, Author> newsAuthorJoin;
-    private ListJoin<News, Tag> newsTagJoin;
+    private Join<News, Tag> newsTagJoin;
 
     private List<Predicate> predicates;
 
@@ -23,7 +24,7 @@ final class QueryBuilder {
         criteriaQuery = criteriaBuilder.createQuery(News.class);
         newsRoot = criteriaQuery.from(News.class);
         newsAuthorJoin = newsRoot.join(News_.AUTHOR, JoinType.LEFT);
-        newsTagJoin = newsRoot.joinList(News_.TAGS, JoinType.LEFT);
+        newsTagJoin = newsRoot.join(News_.TAGS, JoinType.LEFT);
         predicates = new ArrayList<>();
     }
 
@@ -58,17 +59,32 @@ final class QueryBuilder {
     }
 
     private void searchByTags(Set<String> tags) {
-        Path<String> tagPath = newsTagJoin.get(Tag_.NAME);
         for (String tag : tags) {
-            predicates.add(criteriaBuilder.equal(tagPath, tag));
+
+            Subquery<String> subquery = criteriaQuery.subquery(String.class);
+            Root<News> subRoot = subquery.from(News.class);
+            Join<Tag, News> subTags = subRoot.join(News_.TAGS);
+
+            subquery.select(subTags.get(Tag_.NAME));
+            subquery.where(criteriaBuilder.equal(subRoot.get(News_.TAGS), subTags.get(Tag_.ID)));
+
+            predicates.add(criteriaBuilder.equal(criteriaBuilder.any(subquery), tag));
         }
+
+
+//        Path<String> tagPath = newsTagJoin.get(Tag_.NAME);
+//        for (String tag : tags) {
+//            predicates.add(criteriaBuilder.equal(tagPath, tag));
+//
+//        }
+
     }
 
-    private void orderBy(Set<String> orderParams){
+    private void orderBy(Set<String> orderParams) {
         List<Order> orders = new ArrayList<>();
         for (String sortBy : orderParams) {
-
-            OrderBy orderBy = OrderBy.valueOf(sortBy.toUpperCase());
+            OrderBy orderBy = getOrderBy(sortBy);
+            if (orderBy == null) continue;
             switch (orderBy) {
                 case TITLE:
                 case CREATION_DATE:
@@ -84,5 +100,15 @@ final class QueryBuilder {
             }
         }
         criteriaQuery.orderBy(orders);
+    }
+
+    private OrderBy getOrderBy(String sortBy) {
+        OrderBy orderBy;
+        try {
+            orderBy = OrderBy.valueOf(sortBy.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+        return orderBy;
     }
 }

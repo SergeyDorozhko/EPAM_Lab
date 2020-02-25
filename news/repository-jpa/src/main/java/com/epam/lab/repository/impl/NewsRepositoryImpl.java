@@ -1,9 +1,10 @@
 package com.epam.lab.repository.impl;
 
-import com.epam.lab.exception.AuthorNotFoundException;
-import com.epam.lab.exception.ErrorOrderByException;
 import com.epam.lab.exception.NewsWithoutAuthorException;
-import com.epam.lab.model.*;
+import com.epam.lab.model.Author;
+import com.epam.lab.model.News;
+import com.epam.lab.model.News_;
+import com.epam.lab.model.SearchCriteria;
 import com.epam.lab.repository.NewsRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,7 +12,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -71,60 +71,6 @@ public class NewsRepositoryImpl implements NewsRepository {
         QueryBuilder queryBuilder = new QueryBuilder(criteriaBuilder);
         return entityManager.createQuery(queryBuilder.buildCriteriaQuery(searchCriteria)).getResultList();
 
-
-//        CriteriaQuery<News> criteriaQuery = criteriaBuilder.createQuery(News.class);
-//        Root<News> newsRoot = criteriaQuery.from(News.class);
-//        Join<News, Author> newsAuthorJoin = newsRoot.join(News_.AUTHOR, JoinType.LEFT);
-//        ListJoin<News, Tag> newsTagJoin = newsRoot.joinList(News_.TAGS, JoinType.LEFT);
-//
-//        criteriaQuery.select(newsRoot);
-//
-//        List<Predicate> predicates = new ArrayList<>();
-//
-//
-//        criteriaQuery.groupBy(
-//                newsRoot.get(News_.ID),
-//                newsRoot.get(News_.AUTHOR).get(Author_.ID),
-//                newsAuthorJoin.get(Author_.NAME),
-//                newsAuthorJoin.get(Author_.SURNAME));
-//
-//        if (searchCriteria.getAuthorName() != null) {
-//            predicates.add(criteriaBuilder.equal(newsAuthorJoin.get(Author_.NAME), searchCriteria.getAuthorName()));
-//        }
-//        if (searchCriteria.getAuthorSurname() != null) {
-//            predicates.add(criteriaBuilder.equal(newsAuthorJoin.get(Author_.SURNAME), searchCriteria.getAuthorSurname()));
-//        }
-//        if (!searchCriteria.getTags().isEmpty()) {
-//            Path<String> tagPath = newsTagJoin.get(Tag_.NAME);
-//            for (String tag : searchCriteria.getTags()) {
-//                predicates.add(criteriaBuilder.equal(tagPath, tag));
-//            }
-//
-//        }
-//
-//        criteriaQuery.where(predicates.toArray(new Predicate[0]));
-//
-//        List<Order> orders = new ArrayList<>();
-//        for (String sortBy : searchCriteria.getOrderByParameter()) {
-//
-//            OrderBy orderBy = OrderBy.valueOf(sortBy.toUpperCase());
-//            switch (orderBy) {
-//                case TITLE:
-//                case CREATION_DATE:
-//                case MODIFICATION_DATE:
-//                    orders.add(criteriaBuilder.asc(newsRoot.get(orderBy.getColumn())));
-//                    break;
-//                case AUTHOR_NAME:
-//                case AUTHOR_SURNAME:
-//                    orders.add(criteriaBuilder.asc(newsAuthorJoin.get(orderBy.getColumn())));
-//                    break;
-//                default:
-//                    throw new ErrorOrderByException();
-//            }
-//        }
-//        criteriaQuery.orderBy(orders);
-//
-//        return entityManager.createQuery(criteriaQuery).getResultList();
     }
 
     @Override
@@ -152,12 +98,6 @@ public class NewsRepositoryImpl implements NewsRepository {
         return entityManager.merge(bean);
     }
 
-
-    private void isUpdated(int numberOfUpdatedLines) {
-        if (numberOfUpdatedLines == 0) {
-            throw new AuthorNotFoundException();
-        }
-    }
 
     @Override
     public News findBy(long id) {
