@@ -1,10 +1,8 @@
 package com.epam.lab.repository.impl;
 
+import com.epam.lab.exception.NewsNotFoundException;
 import com.epam.lab.exception.NewsWithoutAuthorException;
-import com.epam.lab.model.Author;
-import com.epam.lab.model.News;
-import com.epam.lab.model.News_;
-import com.epam.lab.model.SearchCriteria;
+import com.epam.lab.model.*;
 import com.epam.lab.repository.NewsRepository;
 import org.springframework.stereotype.Repository;
 
@@ -48,8 +46,8 @@ public class NewsRepositoryImpl implements NewsRepository {
         CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
         Root<News> root = criteriaQuery.from(News.class);
 
-        Join<News, Author> authorNewsJoin = root.join("author");
-        criteriaQuery.select(root.get("id")).where(criteriaBuilder.equal(authorNewsJoin.get("id"), authorId));
+        Join<News, Author> authorNewsJoin = root.join(News_.AUTHOR);
+        criteriaQuery.select(root.get(News_.ID)).where(criteriaBuilder.equal(authorNewsJoin.get(Author_.ID), authorId));
 
         return entityManager.createQuery(criteriaQuery).getResultList();
     }
@@ -101,6 +99,14 @@ public class NewsRepositoryImpl implements NewsRepository {
 
     @Override
     public News findBy(long id) {
-        return entityManager.find(News.class, id);
+        News news = entityManager.find(News.class, id);
+        newsFounded(news);
+        return news;
+    }
+
+    private void newsFounded(News news){
+        if(news == null) {
+            throw new NewsNotFoundException();
+        }
     }
 }

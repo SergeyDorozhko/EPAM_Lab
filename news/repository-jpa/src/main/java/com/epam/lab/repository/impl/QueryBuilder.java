@@ -58,19 +58,16 @@ final class QueryBuilder {
     }
 
     private void searchByTags(Set<String> tags) {
+        Subquery<Long> subquery = criteriaQuery.subquery(Long.class);
+        Root<News> subRoot = subquery.from(News.class);
+        Join<Tag, News> subTags = subRoot.join(News_.TAGS, JoinType.LEFT);
 
-
-            Subquery<Long> subquery = criteriaQuery.subquery(Long.class);
-            Root<News> subRoot = subquery.from(News.class);
-            Join<Tag, News> subTags = subRoot.join(News_.TAGS, JoinType.LEFT);
         for (String tag : tags) {
             subquery.select(subRoot.get(News_.ID));
             subquery.where(criteriaBuilder.equal(subTags.get(Tag_.NAME), tag));
 
-
             predicates.add(criteriaBuilder.equal(newsRoot.get(News_.ID), criteriaBuilder.any(subquery)));
         }
-
     }
 
     private void orderBy(Set<String> orderParams) {

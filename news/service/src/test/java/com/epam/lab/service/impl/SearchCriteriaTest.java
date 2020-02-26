@@ -8,6 +8,7 @@ import com.epam.lab.dto.TagDTO;
 import com.epam.lab.dto.mapper.SearchCriteriaMapper;
 import com.epam.lab.model.Author;
 import com.epam.lab.model.News;
+import com.epam.lab.model.SearchCriteria;
 import com.epam.lab.model.Tag;
 import com.epam.lab.repository.AuthorRepository;
 import com.epam.lab.repository.NewsRepository;
@@ -144,7 +145,7 @@ public class SearchCriteriaTest {
     @Test
     public void findAllNewsByQueryTest() {
         List<News> returnedList = new ArrayList<>(Arrays.asList(actualNews));
-        when(newsRepository.findAllNewsAndSortByQuery(any(String.class))).thenReturn(returnedList);
+        when(newsRepository.findAllNewsAndSortByQuery(any(SearchCriteria.class))).thenReturn(returnedList);
         when(tagRepository.findBy(any(News.class))).thenReturn(new ArrayList<Tag>());
 
 
@@ -152,7 +153,7 @@ public class SearchCriteriaTest {
 
         Assert.assertEquals(expectedNews, actualNewsDTOes.get(0));
         Assert.assertEquals(1, actualNewsDTOes.size());
-        verify(newsRepository, times(1)).findAllNewsAndSortByQuery(anyString());
+        verify(newsRepository, times(1)).findAllNewsAndSortByQuery(any(SearchCriteria.class));
         verify(tagRepository, times(1)).findBy(any(News.class));
     }
 }

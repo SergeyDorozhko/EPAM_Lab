@@ -1,18 +1,14 @@
 package com.epam.lab.repository.impl;
 
-import com.epam.lab.configuration.BeanConfig;
-import com.epam.lab.configuration.DataConfig;
+import com.epam.lab.configuration.RepositoryConfig;
 import com.epam.lab.exception.RepositoryException;
 import com.epam.lab.model.News;
 import com.epam.lab.model.SearchCriteria;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -23,24 +19,14 @@ import java.util.List;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {DataConfig.class, BeanConfig.class})
+@ContextConfiguration(classes = {RepositoryConfig.class})
 @Transactional
 public class NewsRepositoryImplTest {
 
-    @Autowired
-    JdbcTemplate jdbcTemplate;
 
     @Autowired
-    KeyHolder keyHolder;
-
     NewsRepositoryImpl newsRepository;
 
-    @Before
-    public void init() {
-        newsRepository = new NewsRepositoryImpl();
-        newsRepository.setJdbcTemplate(jdbcTemplate);
-        newsRepository.setKeyHolder(keyHolder);
-    }
 
 
     @Test
@@ -68,13 +54,6 @@ public class NewsRepositoryImplTest {
         newsRepository.create(new News());
     }
 
-    @Test
-    @Rollback
-    public void linkAuthorWithNews() {
-        newsRepository.linkAuthorWithNews(1, 1);
-        long actual = newsRepository.findAuthorIdByNewsId(1);
-        Assert.assertEquals(1L, actual);
-    }
 
     @Test
     @Rollback
@@ -127,10 +106,9 @@ public class NewsRepositoryImplTest {
     @Test
     @Rollback
     public void findNewsIdByAuthor() {
-        newsRepository.linkAuthorWithNews(1, 1);
-        newsRepository.linkAuthorWithNews(1, 8);
-        newsRepository.linkAuthorWithNews(1, 9);
-        Assert.assertEquals(3, newsRepository.findNewsIdByAuthor(1).size()); //If test fail first check Fill_tables.sql
+        Assert.assertEquals(1, newsRepository.findNewsIdByAuthor(2).size()); //If test fail first check Fill_tables.sql
+        Assert.assertEquals(0, newsRepository.findNewsIdByAuthor(1).size()); //If test fail first check Fill_tables.sql
+
     }
 
     @Test
@@ -140,16 +118,16 @@ public class NewsRepositoryImplTest {
         Assert.assertEquals(id, expectedNews.getId());
     }
 
-    @Test(expected = EmptyResultDataAccessException.class)
+    @Test(expected = RepositoryException.class)
     public void findByNegative() {
         newsRepository.findBy(0);
-    }
 
+    }
 
 
     @Test
     public void countAllNewsTest() {
-    Assert.assertEquals(20, newsRepository.countAllNews()); //If test fail first check Fill_tables.sql
+        Assert.assertEquals(20, newsRepository.countAllNews()); //If test fail first check Fill_tables.sql
     }
 
     @Test
@@ -171,6 +149,5 @@ public class NewsRepositoryImplTest {
         newsList = newsRepository.findAllNewsAndSortByQuery(searchCriteria);
         Assert.assertEquals(0, newsList.size());
     }
-
 
 }
