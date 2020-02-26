@@ -4,12 +4,16 @@ import com.epam.lab.dto.AuthorDTO;
 import com.epam.lab.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 
 @RestController
 @RequestMapping("/author")
+@Validated
 public class AuthorController {
 
     private static final String DON_T_DELETED_MESSAGE = "don't deleted";
@@ -25,7 +29,7 @@ public class AuthorController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public AuthorDTO findAuthorBy(@PathVariable long id, HttpServletResponse response) {
+    public AuthorDTO findAuthorBy(@Valid @PathVariable("id") @Positive long id, HttpServletResponse response) {
         AuthorDTO authorDTO = null;
         try {
             authorDTO = authorService.findById(id);
@@ -38,7 +42,7 @@ public class AuthorController {
 
     @RequestMapping(value = "/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public AuthorDTO createAuthor(@RequestBody AuthorDTO authorDTO) {
+    public AuthorDTO createAuthor(@RequestBody @Valid AuthorDTO authorDTO) {
 
         return authorService.create(authorDTO);
     }
@@ -46,7 +50,7 @@ public class AuthorController {
 
     @RequestMapping(value = "/", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String deleteAuthor(@RequestBody long id) {
+    public String deleteAuthor(@RequestBody @Valid @Positive long id) {
         if (authorService.delete(id)) {
             return OK_MESSAGE;
         }
@@ -55,7 +59,7 @@ public class AuthorController {
 
     @RequestMapping(value = "/", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public AuthorDTO updateAuthor(@RequestBody AuthorDTO authorDTO) {
+    public AuthorDTO updateAuthor(@RequestBody @Valid AuthorDTO authorDTO) {
         return authorService.update(authorDTO);
     }
 }

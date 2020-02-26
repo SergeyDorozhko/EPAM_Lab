@@ -1,6 +1,7 @@
 package com.epam.lab.repository.impl;
 
 import com.epam.lab.exception.NewsNotFoundException;
+import com.epam.lab.exception.NewsNotUpdatedException;
 import com.epam.lab.exception.NewsWithoutAuthorException;
 import com.epam.lab.model.*;
 import com.epam.lab.repository.NewsRepository;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.persistence.criteria.*;
 import java.util.List;
 
@@ -93,7 +95,11 @@ public class NewsRepositoryImpl implements NewsRepository {
 
     @Override
     public News update(News bean) {
-        return entityManager.merge(bean);
+        try {
+            return entityManager.merge(bean);
+        } catch (PersistenceException e) {
+            throw new NewsNotUpdatedException();
+        }
     }
 
 

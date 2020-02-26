@@ -39,8 +39,7 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(ServiceException.class)
-    public ResponseEntity<Object> errorSaveTag( ServiceException ex) {
-
+    public ResponseEntity<Object> errorService( ServiceException ex) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
         body.put("status", HttpStatus.CONFLICT);
@@ -49,8 +48,12 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(RepositoryException.class)
-    public void errorSaveTag(HttpServletResponse response, RepositoryException ex) throws IOException {
-        response.sendError(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+    public ResponseEntity<Object> errorRepository(RepositoryException ex) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
+        body.put("status", HttpStatus.NOT_FOUND);
+        body.put("errors", ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
     @Override
@@ -77,10 +80,13 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     }
 
 
-//    @ExceptionHandler(Exception.class)
-//    public void errorFatal(HttpServletResponse response, Exception ex) throws IOException {
-//
-//        response.sendError(HttpStatus.BAD_REQUEST.value(), resourceBundle.getString("msg.exception"));
-//    }
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> errorFatal( Exception ex) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
+        body.put("status", HttpStatus.BAD_REQUEST);
+        body.put("errors", ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
 
 }

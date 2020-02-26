@@ -1,7 +1,17 @@
 package com.epam.lab.dto;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
 public class AuthorDTO extends AbstractDTO{
+    @NotNull
+    @Pattern(regexp = "(^[A-Za-zА-Яа-я0-9-]+$)", message = "Name must consist of letters or '-'.")
+    @Size(min = 1, max = 30, message = "Name size must be between 1 and 30.")
     private String name;
+    @NotNull
+    @Pattern(regexp = "(^[A-Za-zА-Яа-я0-9-]+$)", message = "Surname must consist of letters or '-'.")
+    @Size(min = 1, max = 30, message = "Surname size must be between 1 and 30.")
     private String surname;
 
     public AuthorDTO(){

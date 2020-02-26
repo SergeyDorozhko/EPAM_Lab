@@ -8,7 +8,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -92,12 +91,11 @@ public class NewsRepositoryImplTest {
     @Test
     @Rollback
     public void findAuthorIdByNewsIdPositive() {
-        newsRepository.linkAuthorWithNews(1, 1);
-        long actual = newsRepository.findAuthorIdByNewsId(1);
-        Assert.assertEquals(1L, actual);
+        long actual = newsRepository.findAuthorIdByNewsId(2);
+        Assert.assertEquals(3L, actual);//If test fail first check Fill_tables.sql
     }
 
-    @Test(expected = EmptyResultDataAccessException.class)
+    @Test(expected = RepositoryException.class)
     public void findAuthorIdByNewsIdNegative() {
         long actual = newsRepository.findAuthorIdByNewsId(1);
         Assert.assertEquals(1L, actual);

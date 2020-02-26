@@ -45,12 +45,12 @@ public class TagController {
 
     @RequestMapping(value = "/", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public TagDTO updateTag(@RequestBody TagDTO tagDTO) {
+    public TagDTO updateTag(@RequestBody @Valid TagDTO tagDTO) {
         return tagService.update(tagDTO);
     }
 
     @RequestMapping(value = "/", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public String deleteTag(@RequestBody long id) {
+    public String deleteTag(@Valid @RequestBody @Positive long id) {
         if(tagService.delete(id)){
             return OK_MESSAGE;
         }
