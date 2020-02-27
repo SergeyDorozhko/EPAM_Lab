@@ -10,6 +10,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.persistence.EntityManagerFactory;
@@ -34,7 +35,7 @@ public class RepositoryConfig {
 
 
     @Bean
-    LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource, Environment environment){
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource, Environment environment){
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
         factoryBean.setDataSource(dataSource);
         Properties properties = new Properties();
@@ -50,7 +51,7 @@ public class RepositoryConfig {
     }
 
     @Bean
-    JpaTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
+    public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(entityManagerFactory);
         return transactionManager;

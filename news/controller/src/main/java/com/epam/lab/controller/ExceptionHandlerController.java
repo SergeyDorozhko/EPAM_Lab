@@ -75,7 +75,7 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
         body.put("status", HttpStatus.BAD_REQUEST);
-        body.put("error", resourceBundle.getString("msg.invalidId"));
+        body.put("error", e.getMessage().split("([\\w.<>\\[\\] ]+[:]{1}[ ]{1})|([,]{1})"));
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 

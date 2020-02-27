@@ -29,6 +29,7 @@ public class AuthorServiceImpl implements AuthorService {
     /**
      * Transfer AuthorDTO to Author then call repository method create to insert data to storage.
      * After taking response from repository Transfer to AuthorDTO.
+     *
      * @param bean AuthorDTO with name and surname of author.
      * @return AuthorDTO with generated id.
      */
@@ -42,6 +43,7 @@ public class AuthorServiceImpl implements AuthorService {
     /**
      * Before delete author take authorId of all news of this author. If author has news delete all his news.
      * then delete author.
+     *
      * @param authorId of author which try to delete
      * @return if author exist and was deleted return true, otherwise false.
      */
@@ -57,7 +59,7 @@ public class AuthorServiceImpl implements AuthorService {
         return newsRepository.findNewsIdByAuthor(authorId);
     }
 
-    private void deleteAllNewsOfAuthor(List<Long> newsIds){
+    private void deleteAllNewsOfAuthor(List<Long> newsIds) {
         for (Long newsId : newsIds) {
             newsRepository.delete(newsId);
         }

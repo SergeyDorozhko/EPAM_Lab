@@ -232,11 +232,7 @@ public class NewsServiceImplTest {
         verify(tagRepository, times(3)).linkTagWithNews(anyLong(), anyLong());
     }
 
-    @Test(expected = ServiceException.class)
-    public void createNewsNegativeByContentTest() {
-        newsDTO = new NewsDTO();
-        newsService.create(newsDTO);
-    }
+
 
     @Test(expected = InvalidAuthorException.class)
     public void createNewsNegativeByAuthorTest() {

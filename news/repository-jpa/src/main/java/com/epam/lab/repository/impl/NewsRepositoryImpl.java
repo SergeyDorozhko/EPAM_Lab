@@ -7,10 +7,7 @@ import com.epam.lab.model.*;
 import com.epam.lab.repository.NewsRepository;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
+import javax.persistence.*;
 import javax.persistence.criteria.*;
 import java.util.List;
 

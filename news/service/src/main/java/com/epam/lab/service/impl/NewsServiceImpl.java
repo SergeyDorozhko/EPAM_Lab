@@ -1,8 +1,8 @@
 package com.epam.lab.service.impl;
 
-import com.epam.lab.dto.mapper.NewsMapper;
 import com.epam.lab.dto.NewsDTO;
 import com.epam.lab.dto.SearchCriteriaDTO;
+import com.epam.lab.dto.mapper.NewsMapper;
 import com.epam.lab.dto.mapper.SearchCriteriaMapper;
 import com.epam.lab.exception.InvalidAuthorException;
 import com.epam.lab.exception.InvalidNewsDataException;
@@ -18,6 +18,7 @@ import com.epam.lab.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -28,7 +29,6 @@ import java.util.Set;
 
 
 @Service
-@Transactional
 public class NewsServiceImpl implements NewsService {
     private NewsMapper mapper;
     private SearchCriteriaMapper criteriaMapper;
@@ -71,9 +71,9 @@ public class NewsServiceImpl implements NewsService {
      * @param bean NewsDTO with title, short_text and full_text, it can have or not author and list of tags.
      * @return NewsDTO with all generated data.
      */
+    @Transactional
     @Override
     public NewsDTO create(NewsDTO bean) {
-        checkNews(bean);
 
         News news = mapper.toBean(bean);
 
@@ -93,14 +93,7 @@ public class NewsServiceImpl implements NewsService {
     }
 
 
-    private void checkNews(NewsDTO newsDTO) {
-        boolean notValidNews = newsDTO.getTitle() == null
-                || newsDTO.getShortText() == null
-                || newsDTO.getFullText() == null;
-        if (notValidNews) {
-            throw new InvalidNewsDataException();
-        }
-    }
+
 
 
     private void checkAndCreateAuthorIfNew(News news) {
@@ -180,6 +173,7 @@ public class NewsServiceImpl implements NewsService {
         }
     }
 
+    @Transactional
     @Override
     public boolean delete(long id) {
         return newsRepository.delete(id);
@@ -215,7 +209,6 @@ public class NewsServiceImpl implements NewsService {
     @Transactional
     @Override
     public NewsDTO update(NewsDTO bean) {
-        checkNews(bean);
         News news = mapper.toBean(bean);
         checkAuthorOrAddIfNewsWithoutAuthor(news);
 
@@ -242,7 +235,7 @@ public class NewsServiceImpl implements NewsService {
     private Long findAuthorOfNews(News news) {
         try {
             return newsRepository.findAuthorIdByNewsId(news.getId());
-        } catch (EmptyResultDataAccessException|RepositoryException ex) {
+        } catch (EmptyResultDataAccessException | RepositoryException ex) {
             //TODO logger.
             System.err.println("News has no author (update action)");
         }
@@ -303,7 +296,6 @@ public class NewsServiceImpl implements NewsService {
         List<News> news = newsRepository.findAllNewsAndSortByQuery(searchCriteria);
         return addTagsAndTransferToDTO(news);
     }
-
 
 
     private List<NewsDTO> addTagsAndTransferToDTO(List<News> news) {

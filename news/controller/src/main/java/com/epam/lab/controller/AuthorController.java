@@ -18,6 +18,7 @@ public class AuthorController {
 
     private static final String DON_T_DELETED_MESSAGE = "don't deleted";
     private static final String OK_MESSAGE = "OK";
+    public static final String ID_MUST_BE_POSITIVE = "Id must be positive.";
     private AuthorService authorService;
 
 
@@ -29,7 +30,7 @@ public class AuthorController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public AuthorDTO findAuthorBy(@Valid @PathVariable("id") @Positive long id, HttpServletResponse response) {
+    public AuthorDTO findAuthorBy(@Valid @PathVariable("id") @Positive(message = ID_MUST_BE_POSITIVE) long id, HttpServletResponse response) {
         AuthorDTO authorDTO = null;
         try {
             authorDTO = authorService.findById(id);
@@ -50,7 +51,7 @@ public class AuthorController {
 
     @RequestMapping(value = "/", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String deleteAuthor(@RequestBody @Valid @Positive long id) {
+    public String deleteAuthor(@RequestBody @Valid @Positive(message = ID_MUST_BE_POSITIVE) long id) {
         if (authorService.delete(id)) {
             return OK_MESSAGE;
         }

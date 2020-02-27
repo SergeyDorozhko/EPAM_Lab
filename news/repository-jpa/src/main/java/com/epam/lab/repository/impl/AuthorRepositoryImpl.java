@@ -1,14 +1,18 @@
 package com.epam.lab.repository.impl;
 
 import com.epam.lab.exception.AuthorNotFoundException;
-import com.epam.lab.exception.TagNotFoundException;
 import com.epam.lab.model.Author;
 import com.epam.lab.repository.AuthorRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.*;
+import javax.persistence.PersistenceContextType;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.CriteriaUpdate;
+import javax.persistence.criteria.Root;
 
 @Repository
 public class AuthorRepositoryImpl implements AuthorRepository {

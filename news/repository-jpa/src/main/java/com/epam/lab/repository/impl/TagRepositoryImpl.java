@@ -1,12 +1,11 @@
 package com.epam.lab.repository.impl;
 
-import com.epam.lab.exception.RepositoryException;
+import com.epam.lab.exception.TagNotCreatedException;
 import com.epam.lab.exception.TagNotFoundException;
 import com.epam.lab.model.News;
 import com.epam.lab.model.Tag;
 import com.epam.lab.repository.TagRepository;
 import org.springframework.stereotype.Repository;
-import sun.security.krb5.internal.TGSRep;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -73,9 +72,15 @@ public class TagRepositoryImpl implements TagRepository {
     @Override
     public Tag create(Tag bean) {
         entityManager.persist(bean);
+        checkCreated(bean);
         return bean;
     }
 
+    private void checkCreated(Tag tag){
+        if(tag.getId() == 0) {
+            throw new TagNotCreatedException();
+        }
+    }
     @Override
     public boolean delete(long id) {
 
