@@ -1,6 +1,5 @@
 package com.epam.lab.repository.impl;
 
-import com.epam.lab.exception.TagNotCreatedException;
 import com.epam.lab.exception.TagNotFoundException;
 import com.epam.lab.model.News;
 import com.epam.lab.model.Tag;
@@ -72,15 +71,9 @@ public class TagRepositoryImpl implements TagRepository {
     @Override
     public Tag create(Tag bean) {
         entityManager.persist(bean);
-        checkCreated(bean);
         return bean;
     }
 
-    private void checkCreated(Tag tag){
-        if(tag.getId() == 0) {
-            throw new TagNotCreatedException();
-        }
-    }
     @Override
     public boolean delete(long id) {
 

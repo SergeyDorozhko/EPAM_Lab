@@ -111,7 +111,7 @@ public class NewsServiceImpl implements NewsService {
     private void checkAuthor(Author author) {
         try {
             authorRepository.findBy(author);
-        } catch (EmptyResultDataAccessException ex) {
+        } catch (EmptyResultDataAccessException | RepositoryException ex) {
             throw new InvalidAuthorException();
         }
     }

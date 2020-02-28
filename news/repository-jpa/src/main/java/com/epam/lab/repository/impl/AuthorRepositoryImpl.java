@@ -2,6 +2,7 @@ package com.epam.lab.repository.impl;
 
 import com.epam.lab.exception.AuthorNotFoundException;
 import com.epam.lab.model.Author;
+import com.epam.lab.model.Author_;
 import com.epam.lab.repository.AuthorRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,10 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaDelete;
-import javax.persistence.criteria.CriteriaUpdate;
-import javax.persistence.criteria.Root;
+import javax.persistence.PersistenceException;
+import javax.persistence.criteria.*;
 
 @Repository
 public class AuthorRepositoryImpl implements AuthorRepository {
@@ -21,7 +20,20 @@ public class AuthorRepositoryImpl implements AuthorRepository {
 
     @Override
     public Author findBy(Author author) {
-        return null;
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Author> query = criteriaBuilder.createQuery(Author.class);
+        Root<Author> root = query.from(Author.class);
+        query.select(root)
+                .where(criteriaBuilder.equal(root.get(Author_.ID), author.getId()),
+                        criteriaBuilder.equal(root.get(Author_.NAME), author.getName()),
+                        criteriaBuilder.equal(root.get(Author_.SURNAME), author.getSurname()));
+
+        try {
+            entityManager.createQuery(query).getSingleResult();
+        } catch (PersistenceException e) {
+            throw new AuthorNotFoundException();
+        }
+        return author;
     }
 
     @Override
