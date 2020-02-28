@@ -20,7 +20,7 @@ public class News extends Bean implements Serializable {
     @Column(name = "modification_date")
     private LocalDate modificationDate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinTable(
             name = "news_author",
             joinColumns = @JoinColumn(name = "news_id", referencedColumnName = "id"),
@@ -28,7 +28,7 @@ public class News extends Bean implements Serializable {
     )
     private Author author;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
            name = "news_tag",
             joinColumns = @JoinColumn(name = "news_id", referencedColumnName = "id"),
