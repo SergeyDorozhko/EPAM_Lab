@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import static com.epam.lab.model.Bean_.ID;
+
 final class QueryBuilder {
     private CriteriaBuilder criteriaBuilder;
     private CriteriaQuery<News> criteriaQuery;
@@ -35,8 +37,8 @@ final class QueryBuilder {
         searchByTags(searchCriteria.getTags());
 
         criteriaQuery.groupBy(
-                newsRoot.get(News_.ID),
-                newsRoot.get(News_.AUTHOR).get(Author_.ID),
+                newsRoot.get(ID),
+                newsRoot.get(News_.AUTHOR).get(ID),
                 newsAuthorJoin.get(Author_.NAME),
                 newsAuthorJoin.get(Author_.SURNAME));
 
@@ -63,10 +65,10 @@ final class QueryBuilder {
         Join<Tag, News> subTags = subRoot.join(News_.TAGS, JoinType.LEFT);
 
         for (String tag : tags) {
-            subquery.select(subRoot.get(News_.ID));
+            subquery.select(subRoot.get(ID));
             subquery.where(criteriaBuilder.equal(subTags.get(Tag_.NAME), tag));
 
-            predicates.add(criteriaBuilder.equal(newsRoot.get(News_.ID), criteriaBuilder.any(subquery)));
+            predicates.add(criteriaBuilder.equal(newsRoot.get(ID), criteriaBuilder.any(subquery)));
         }
     }
 
