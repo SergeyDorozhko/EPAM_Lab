@@ -20,14 +20,6 @@
 
         <maven.compiler.target>1.8</maven.compiler.target>
 
-
-
-<!--        <runSuite>**/*Suite.class</runSuite>-->
-        <!-- Sonar-JaCoCo properties -->
-<!--        <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>-->
-<!--        <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>-->
-<!--        <sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>-->
-<!--        <sonar.language>java</sonar.language>-->
     </properties>
 
     <packaging>pom</packaging>
@@ -266,10 +258,6 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.2</version>
-                <configuration>
-                    <destFile>${sonar.coverage.jacoco.xmlReportPaths}</destFile>
-                    <append>true</append>
-                </configuration>
                 <executions>
                     <execution>
                         <goals>
@@ -284,13 +272,6 @@
                             <goal>report</goal>
                         </goals>
                     </execution>
-<!--                    <execution>-->
-<!--                        <id>report</id>-->
-<!--                        <goals>-->
-<!--                            <goal>report-aggregate</goal>-->
-<!--                        </goals>-->
-<!--                        <phase>verify</phase>-->
-<!--                    </execution>-->
                 </executions>
             </plugin>
 
