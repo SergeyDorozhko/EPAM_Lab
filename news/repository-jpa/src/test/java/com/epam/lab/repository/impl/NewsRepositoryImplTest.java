@@ -47,11 +47,11 @@ public class NewsRepositoryImplTest {
 
     }
 
-    @Test(expected = RuntimeException.class)
-    @Rollback
-    public void createNegative() {
-  //      newsRepository.create(new News());
-    }
+//    @Test(expected = RuntimeException.class)
+//    @Rollback
+//    public void createNegative() {
+//        newsRepository.create(new News());
+//    }
 
 
     @Test
@@ -76,8 +76,8 @@ public class NewsRepositoryImplTest {
 //        Assert.assertEquals(testNews, actualNews);
     }
 
-    @Test(expected = RepositoryException.class)
-    public void updateNegative() {
+//    @Test(expected = RepositoryException.class)
+//    public void updateNegative() {
 //
 //        News news = new News();
 //        news.setTitle("dfsds");
@@ -85,8 +85,8 @@ public class NewsRepositoryImplTest {
 //        news.setShortText("dfdsfds");
 //        news.setModificationDate(LocalDate.now());
 //        newsRepository.update(news);
-
-    }
+//
+//    }
 
     @Test
     @Rollback
@@ -116,11 +116,11 @@ public class NewsRepositoryImplTest {
         Assert.assertEquals(id, expectedNews.getId());
     }
 
-    @Test(expected = RepositoryException.class)
-    public void findByNegative() {
- //       newsRepository.findBy(0);
-
-    }
+//    @Test(expected = RepositoryException.class)
+//    public void findByNegative() {
+//        newsRepository.findBy(0);
+//
+//    }
 
 
     @Test
