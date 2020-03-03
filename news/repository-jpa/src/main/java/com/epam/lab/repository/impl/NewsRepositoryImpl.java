@@ -7,9 +7,14 @@ import com.epam.lab.model.*;
 import com.epam.lab.repository.NewsRepository;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.persistence.criteria.*;
 import java.util.List;
+
+import static com.epam.lab.model.Bean_.ID;
 
 @Repository
 public class NewsRepositoryImpl implements NewsRepository {
@@ -28,8 +33,8 @@ public class NewsRepositoryImpl implements NewsRepository {
         CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
         Root<News> root = criteriaQuery.from(News.class);
 
-        Join<News, Author> authorNewsJoin = root.join("author");
-        criteriaQuery.select(authorNewsJoin.get("id")).where(criteriaBuilder.equal(root.get("id"), newsId));
+        Join<News, Author> authorNewsJoin = root.join(News_.AUTHOR);
+        criteriaQuery.select(authorNewsJoin.get(ID)).where(criteriaBuilder.equal(root.get(ID), newsId));
         Long resultId = null;
         try {
             resultId = entityManager.createQuery(criteriaQuery).getSingleResult();
@@ -46,7 +51,7 @@ public class NewsRepositoryImpl implements NewsRepository {
         Root<News> root = criteriaQuery.from(News.class);
 
         Join<News, Author> authorNewsJoin = root.join(News_.AUTHOR);
-        criteriaQuery.select(root.get(News_.ID)).where(criteriaBuilder.equal(authorNewsJoin.get(Author_.ID), authorId));
+        criteriaQuery.select(root.get(ID)).where(criteriaBuilder.equal(authorNewsJoin.get(ID), authorId));
 
         return entityManager.createQuery(criteriaQuery).getResultList();
     }
@@ -57,7 +62,7 @@ public class NewsRepositoryImpl implements NewsRepository {
         CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
         Root<News> root = criteriaQuery.from(News.class);
 
-        criteriaQuery.select(criteriaBuilder.count(root.get(News_.ID)));
+        criteriaQuery.select(criteriaBuilder.count(root.get(ID)));
         return entityManager.createQuery(criteriaQuery).getSingleResult();
     }
 
@@ -81,7 +86,7 @@ public class NewsRepositoryImpl implements NewsRepository {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaDelete<News> criteriaDelete = criteriaBuilder.createCriteriaDelete(News.class);
         Root<News> root = criteriaDelete.from(News.class);
-        criteriaDelete.where(criteriaBuilder.equal(root.get("id"), id));
+        criteriaDelete.where(criteriaBuilder.equal(root.get(ID), id));
         int result = entityManager.createQuery(criteriaDelete).executeUpdate();
         return isDeleted(result);
     }

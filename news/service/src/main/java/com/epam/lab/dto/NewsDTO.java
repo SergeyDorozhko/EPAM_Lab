@@ -103,10 +103,6 @@ public class NewsDTO extends AbstractDTO {
         return tags;
     }
 
-    public void addTag(TagDTO tag) {
-        tags.add(tag);
-    }
-
 
     @Override
     public boolean equals(Object o) {

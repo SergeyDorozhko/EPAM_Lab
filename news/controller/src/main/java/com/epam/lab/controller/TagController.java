@@ -17,6 +17,7 @@ public class TagController {
 
     private static final String DON_T_DELETED_MESSAGE = "don't deleted";
     private static final String OK_MESSAGE = "OK";
+    private static final String ID = "id";
 
     private TagService tagService;
 
@@ -25,16 +26,16 @@ public class TagController {
         this.tagService = tagService;
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/")
     @ResponseBody
     public TagDTO createTag(@RequestBody @Valid TagDTO tagDTO) {
 
         return tagService.create(tagDTO);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}")
     @ResponseBody
-    public TagDTO findTagBy(@Valid @PathVariable("id") @Positive Long id) {
+    public TagDTO findTagBy(@Valid @PathVariable(ID) @Positive Long id) {
         TagDTO tagDTO = null;
         System.out.println(id);
             tagDTO = tagService.findById(id);
@@ -43,13 +44,13 @@ public class TagController {
         return tagDTO;
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/")
     @ResponseBody
     public TagDTO updateTag(@RequestBody @Valid TagDTO tagDTO) {
         return tagService.update(tagDTO);
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/")
     public String deleteTag(@Valid @RequestBody @Positive long id) {
         if(tagService.delete(id)){
             return OK_MESSAGE;

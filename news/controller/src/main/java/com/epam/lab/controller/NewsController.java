@@ -21,6 +21,7 @@ public class NewsController {
     private static final String DON_T_DELETED_MESSAGE = "don't deleted";
     private static final String OK_MESSAGE = "OK";
     private static final String ID_MUST_BE_POSITIVE = "Id must be positive.";
+    private static final String ID = "id";
 
     private NewsService service;
 
@@ -29,40 +30,40 @@ public class NewsController {
         this.service = service;
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}")
     @ResponseBody
-    public NewsDTO findBy(@Valid @PathVariable("id") @Positive(message = ID_MUST_BE_POSITIVE) long id) {
+    public NewsDTO findBy(@Valid @PathVariable(ID) @Positive(message = ID_MUST_BE_POSITIVE) long id) {
         return service.findById(id);
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/")
     @ResponseBody
     public NewsDTO createNews(@RequestBody @Valid NewsDTO newsDTO) {
         return service.create(newsDTO);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public String deleteNews(@Valid @PathVariable("id") @Positive(message = ID_MUST_BE_POSITIVE) long id) {
+    @DeleteMapping(value = "/{id}")
+    public String deleteNews(@Valid @PathVariable(ID) @Positive(message = ID_MUST_BE_POSITIVE) long id) {
         if(service.delete(id)){
             return OK_MESSAGE;
         }
         return DON_T_DELETED_MESSAGE;
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/")
     @ResponseBody
     public NewsDTO updateNews(@RequestBody @Valid NewsDTO newsDTO) {
         return service.update(newsDTO);
     }
 
-    @RequestMapping(value = "/count", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/count")
     @ResponseBody
     public long countNews() {
         return service.countAllNews();
     }
 
 
-    @RequestMapping(value = "/search", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/search")
     @ResponseBody
     public List<NewsDTO> searchNews(@Valid SearchCriteriaDTO searchCriteriaDTO, BindingResult bindingResult) {
         return service.findAllNewsByQuery(searchCriteriaDTO);

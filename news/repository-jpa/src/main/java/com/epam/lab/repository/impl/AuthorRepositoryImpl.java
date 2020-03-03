@@ -5,13 +5,13 @@ import com.epam.lab.model.Author;
 import com.epam.lab.model.Author_;
 import com.epam.lab.repository.AuthorRepository;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
 import javax.persistence.PersistenceException;
 import javax.persistence.criteria.*;
+
+import static com.epam.lab.model.Bean_.ID;
 
 @Repository
 public class AuthorRepositoryImpl implements AuthorRepository {
@@ -24,7 +24,7 @@ public class AuthorRepositoryImpl implements AuthorRepository {
         CriteriaQuery<Author> query = criteriaBuilder.createQuery(Author.class);
         Root<Author> root = query.from(Author.class);
         query.select(root)
-                .where(criteriaBuilder.equal(root.get(Author_.ID), author.getId()),
+                .where(criteriaBuilder.equal(root.get(ID), author.getId()),
                         criteriaBuilder.equal(root.get(Author_.NAME), author.getName()),
                         criteriaBuilder.equal(root.get(Author_.SURNAME), author.getSurname()));
 
@@ -47,7 +47,7 @@ public class AuthorRepositoryImpl implements AuthorRepository {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaDelete<Author> criteriaDelete = criteriaBuilder.createCriteriaDelete(Author.class);
         Root<Author> root = criteriaDelete.from(Author.class);
-        criteriaDelete.where(criteriaBuilder.equal(root.get("id"), id));
+        criteriaDelete.where(criteriaBuilder.equal(root.get(ID), id));
         int result = entityManager.createQuery(criteriaDelete).executeUpdate();
         return isDeleted(result);
     }
@@ -61,9 +61,9 @@ public class AuthorRepositoryImpl implements AuthorRepository {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaUpdate<Author> criteriaUpdate = criteriaBuilder.createCriteriaUpdate(Author.class);
         Root<Author> root = criteriaUpdate.from(Author.class);
-        criteriaUpdate.set(root.get("name"), bean.getName());
-        criteriaUpdate.set(root.get("surname"), bean.getSurname());
-        criteriaUpdate.where(criteriaBuilder.equal(root.get("id"), bean.getId()));
+        criteriaUpdate.set(root.get(Author_.NAME), bean.getName());
+        criteriaUpdate.set(root.get(Author_.SURNAME), bean.getSurname());
+        criteriaUpdate.where(criteriaBuilder.equal(root.get(ID), bean.getId()));
         int result = entityManager.createQuery(criteriaUpdate).executeUpdate();
         isUpdated(result);
         return bean;

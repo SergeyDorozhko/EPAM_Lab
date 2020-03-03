@@ -28,7 +28,7 @@ public class AuthorController {
     }
 
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}")
     @ResponseBody
     public AuthorDTO findAuthorBy(@Valid @PathVariable("id") @Positive(message = ID_MUST_BE_POSITIVE) long id, HttpServletResponse response) {
         AuthorDTO authorDTO = null;
@@ -41,7 +41,7 @@ public class AuthorController {
     }
 
 
-    @RequestMapping(value = "/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/")
     @ResponseBody
     public AuthorDTO createAuthor(@RequestBody @Valid AuthorDTO authorDTO) {
 
@@ -49,7 +49,7 @@ public class AuthorController {
     }
 
 
-    @RequestMapping(value = "/", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/")
     @ResponseBody
     public String deleteAuthor(@RequestBody @Valid @Positive(message = ID_MUST_BE_POSITIVE) long id) {
         if (authorService.delete(id)) {
@@ -58,7 +58,7 @@ public class AuthorController {
         return DON_T_DELETED_MESSAGE;
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/")
     @ResponseBody
     public AuthorDTO updateAuthor(@RequestBody @Valid AuthorDTO authorDTO) {
         return authorService.update(authorDTO);

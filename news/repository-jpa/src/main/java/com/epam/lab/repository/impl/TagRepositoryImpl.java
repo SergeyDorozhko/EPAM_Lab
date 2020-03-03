@@ -3,6 +3,7 @@ package com.epam.lab.repository.impl;
 import com.epam.lab.exception.TagNotFoundException;
 import com.epam.lab.model.News;
 import com.epam.lab.model.Tag;
+import com.epam.lab.model.Tag_;
 import com.epam.lab.repository.TagRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,6 +12,8 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.*;
 import java.util.List;
+
+import static com.epam.lab.model.Bean_.ID;
 
 @Repository
 public class TagRepositoryImpl implements TagRepository {
@@ -24,7 +27,7 @@ public class TagRepositoryImpl implements TagRepository {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Tag> criteriaQuery = cb.createQuery(Tag.class);
         Root<Tag> root = criteriaQuery.from(Tag.class);
-        criteriaQuery.select(root).where(cb.equal(root.get("name"), name));
+        criteriaQuery.select(root).where(cb.equal(root.get(Tag_.NAME), name));
         Tag tag = null;
         try {
             tag = entityManager.createQuery(criteriaQuery).getSingleResult();
@@ -36,12 +39,10 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     public Tag findBy(Tag tag) {
-        System.out.println("tag with id" + tag);
-
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Tag> criteriaQuery = criteriaBuilder.createQuery(Tag.class);
         Root<Tag> root = criteriaQuery.from(Tag.class);
-        criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("id"), tag.getId()), criteriaBuilder.equal(root.get("name"), tag.getName()));
+        criteriaQuery.select(root).where(criteriaBuilder.equal(root.get(ID), tag.getId()), criteriaBuilder.equal(root.get(Tag_.NAME), tag.getName()));
 
         Tag foundTag = null;
         try {
@@ -81,7 +82,7 @@ public class TagRepositoryImpl implements TagRepository {
         CriteriaDelete<Tag> criteriaDelete = criteriaBuilder.createCriteriaDelete(Tag.class);
         Root<Tag> root = criteriaDelete.from(Tag.class);
 
-        criteriaDelete.where(criteriaBuilder.equal(root.get("id"), id));
+        criteriaDelete.where(criteriaBuilder.equal(root.get(ID), id));
 
         int result = entityManager.createQuery(criteriaDelete).executeUpdate();
 
@@ -98,8 +99,8 @@ public class TagRepositoryImpl implements TagRepository {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaUpdate<Tag> criteriaUpdate = criteriaBuilder.createCriteriaUpdate(Tag.class);
         Root<Tag> root = criteriaUpdate.from(Tag.class);
-        criteriaUpdate.set(root.get("name"), bean.getName());
-        criteriaUpdate.where(criteriaBuilder.equal(root.get("id"), bean.getId()));
+        criteriaUpdate.set(root.get(Tag_.NAME), bean.getName());
+        criteriaUpdate.where(criteriaBuilder.equal(root.get(ID), bean.getId()));
 
         int result = entityManager.createQuery(criteriaUpdate).executeUpdate();
         isUpdated(result);
