@@ -42,13 +42,9 @@ public class TagServiceImpl implements TagService {
         try {
             repository.findBy(name);
             throw new DuplicateTagException();
-        } catch (EmptyResultDataAccessException ex) {
+        } catch (EmptyResultDataAccessException | RepositoryException ex) {
             //TODO logger;
             System.err.println("new tag");
-        } catch (RepositoryException ex){
-            //TODO logger;
-            System.err.println("new tag");
-
         }
     }
 

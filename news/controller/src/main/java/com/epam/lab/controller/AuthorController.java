@@ -3,7 +3,6 @@ package com.epam.lab.controller;
 import com.epam.lab.dto.AuthorDTO;
 import com.epam.lab.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 

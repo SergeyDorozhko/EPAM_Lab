@@ -4,7 +4,6 @@ import com.epam.lab.dto.NewsDTO;
 import com.epam.lab.dto.SearchCriteriaDTO;
 import com.epam.lab.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;

@@ -1,6 +1,5 @@
 package com.epam.lab.dto;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.PositiveOrZero;
 import java.io.Serializable;
 

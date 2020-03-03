@@ -22,6 +22,9 @@ public class NewsRepositoryImpl implements NewsRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
+    /*this method exist only for realise switch between JDBC and JPA repositorty.
+    * in JPA repository no need of realisation.
+    */
     @Override
     public void linkAuthorWithNews(long authorId, long newsId) {
 

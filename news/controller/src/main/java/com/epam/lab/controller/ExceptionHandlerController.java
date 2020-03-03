@@ -78,7 +78,7 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<?> validateIdException(ConstraintViolationException e) {
+    public ResponseEntity<Object> validateIdException(ConstraintViolationException e) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put(TIMESTAMP, LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
         body.put(STATUS, HttpStatus.BAD_REQUEST);

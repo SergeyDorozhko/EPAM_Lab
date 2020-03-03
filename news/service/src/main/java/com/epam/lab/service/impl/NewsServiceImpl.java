@@ -5,7 +5,6 @@ import com.epam.lab.dto.SearchCriteriaDTO;
 import com.epam.lab.dto.mapper.NewsMapper;
 import com.epam.lab.dto.mapper.SearchCriteriaMapper;
 import com.epam.lab.exception.InvalidAuthorException;
-import com.epam.lab.exception.InvalidNewsDataException;
 import com.epam.lab.exception.RepositoryException;
 import com.epam.lab.model.Author;
 import com.epam.lab.model.News;
@@ -18,7 +17,6 @@ import com.epam.lab.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;

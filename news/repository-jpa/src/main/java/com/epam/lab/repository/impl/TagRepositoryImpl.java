@@ -59,11 +59,17 @@ public class TagRepositoryImpl implements TagRepository {
         return news.getTags();
     }
 
+    /*this method exist only for realise switch between JDBC and JPA repositorty.
+     * in JPA repository no need of realisation.
+     */
     @Override
     public void linkTagWithNews(long tagId, long newsId) {
 
     }
 
+    /*this method exist only for realise switch between JDBC and JPA repositorty.
+     * in JPA repository no need of realisation.
+     */
     @Override
     public void deleteTagNewsLinks(long newsId) {
 

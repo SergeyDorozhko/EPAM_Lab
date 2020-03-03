@@ -3,7 +3,6 @@ package com.epam.lab.controller;
 import com.epam.lab.dto.TagDTO;
 import com.epam.lab.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,10 +36,7 @@ public class TagController {
     @ResponseBody
     public TagDTO findTagBy(@Valid @PathVariable(ID) @Positive Long id) {
         TagDTO tagDTO = null;
-        System.out.println(id);
             tagDTO = tagService.findById(id);
-        System.out.println(id);
-
         return tagDTO;
     }
 

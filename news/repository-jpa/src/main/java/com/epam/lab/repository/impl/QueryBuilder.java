@@ -16,7 +16,6 @@ final class QueryBuilder {
     private CriteriaQuery<News> criteriaQuery;
     private Root<News> newsRoot;
     private Join<News, Author> newsAuthorJoin;
-    private Join<News, Tag> newsTagJoin;
 
     private List<Predicate> predicates;
 
@@ -25,7 +24,6 @@ final class QueryBuilder {
         criteriaQuery = criteriaBuilder.createQuery(News.class);
         newsRoot = criteriaQuery.from(News.class);
         newsAuthorJoin = newsRoot.join(News_.AUTHOR, JoinType.LEFT);
-        newsTagJoin = newsRoot.join(News_.TAGS, JoinType.LEFT);
         predicates = new ArrayList<>();
     }
 

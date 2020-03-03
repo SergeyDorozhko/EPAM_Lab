@@ -4,6 +4,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public class SearchCriteriaDTO extends AbstractDTO {
@@ -85,5 +86,23 @@ public class SearchCriteriaDTO extends AbstractDTO {
 
     public void setDesc(boolean desc) {
         this.desc = desc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        SearchCriteriaDTO that = (SearchCriteriaDTO) o;
+        return desc == that.desc &&
+                Objects.equals(authorName, that.authorName) &&
+                Objects.equals(authorSurname, that.authorSurname) &&
+                Objects.equals(tags, that.tags) &&
+                Objects.equals(orderByParameter, that.orderByParameter);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), authorName, authorSurname, tags, orderByParameter, desc);
     }
 }
