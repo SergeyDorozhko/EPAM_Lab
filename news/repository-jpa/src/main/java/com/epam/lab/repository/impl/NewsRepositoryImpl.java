@@ -72,7 +72,7 @@ public class NewsRepositoryImpl implements NewsRepository {
 
     @Override
     public News create(News bean) {
-      //  entityManager.persist(bean);
+        entityManager.persist(bean);
         return bean;
     }
 
