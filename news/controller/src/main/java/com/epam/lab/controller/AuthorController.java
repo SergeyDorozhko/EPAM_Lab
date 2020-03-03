@@ -18,6 +18,8 @@ public class AuthorController {
     private static final String DON_T_DELETED_MESSAGE = "don't deleted";
     private static final String OK_MESSAGE = "OK";
     public static final String ID_MUST_BE_POSITIVE = "Id must be positive.";
+    private static final String ID = "id";
+
     private AuthorService authorService;
 
 
@@ -48,9 +50,9 @@ public class AuthorController {
     }
 
 
-    @DeleteMapping(value = "/")
+    @DeleteMapping(value = "/{id}")
     @ResponseBody
-    public String deleteAuthor(@RequestBody @Valid @Positive(message = ID_MUST_BE_POSITIVE) long id) {
+    public String deleteAuthor(@Valid @PathVariable(ID) @Positive(message = ID_MUST_BE_POSITIVE) long id) {
         if (authorService.delete(id)) {
             return OK_MESSAGE;
         }

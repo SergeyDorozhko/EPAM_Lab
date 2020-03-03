@@ -17,6 +17,8 @@ public class TagController {
     private static final String DON_T_DELETED_MESSAGE = "don't deleted";
     private static final String OK_MESSAGE = "OK";
     private static final String ID = "id";
+    public static final String ID_MUST_BE_POSITIVE = "Id must be positive.";
+
 
     private TagService tagService;
 
@@ -46,8 +48,8 @@ public class TagController {
         return tagService.update(tagDTO);
     }
 
-    @DeleteMapping(value = "/")
-    public String deleteTag(@Valid @RequestBody @Positive long id) {
+    @DeleteMapping(value = "/{id}")
+    public String deleteTag(@Valid @PathVariable(ID) @Positive(message = ID_MUST_BE_POSITIVE) long id) {
         if(tagService.delete(id)){
             return OK_MESSAGE;
         }
