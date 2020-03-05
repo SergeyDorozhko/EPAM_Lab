@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
-@Component
+
 public abstract class AbstractMapper<T extends Bean, K extends AbstractDTO> implements Mapper {
     private ModelMapper modelMapper;
 
@@ -16,7 +16,6 @@ public abstract class AbstractMapper<T extends Bean, K extends AbstractDTO> impl
     private Class<K> dtoClass;
 
 
-    @Autowired
     public AbstractMapper(Class<T> beanClass, Class<K> dtoClass, ModelMapper modelMapper) {
         this.beanClass = beanClass;
         this.dtoClass = dtoClass;
