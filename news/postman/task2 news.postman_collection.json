@@ -25,7 +25,12 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": ""
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "http://localhost:8080/news/author/91",
@@ -57,12 +62,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"newAuthor\",\r\n    \"surname\": \"New Author\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							"raw": "{\r\n    \"name\": \"newAuthor\",\r\n    \"surname\": \"NewAuthor\"\r\n}"
 						},
 						"url": {
 							"raw": "http://localhost:8080/news/author/",
@@ -94,10 +94,13 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "91"
+							"raw": "",
+							"options": {
+								"raw": {}
+							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/news/author/",
+							"raw": "http://localhost:8080/news/author/49",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -106,7 +109,7 @@
 							"path": [
 								"news",
 								"author",
-								""
+								"49"
 							]
 						}
 					},
@@ -126,7 +129,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": 91,\r\n    \"name\": \"Update Name\",\r\n    \"surname\": \"UPDATE Author\"\r\n}"
+							"raw": "{\r\n    \"id\": 47,\r\n    \"name\": \"UpdateName\",\r\n    \"surname\": \"UPDATEAuthor\"\r\n}"
 						},
 						"url": {
 							"raw": "http://localhost:8080/news/author/",
@@ -164,7 +167,10 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"title\": \"News for Test fdssdgf\",\r\n    \"shortText\": \"Text about how creation\",\r\n    \"fullText\": \"full story of text\",\r\n    \"author\": {\r\n        \"name\": \"Petr\",\r\n        \"surname\": \"Fedorov\"\r\n    },\r\n    \"tags\": [\r\n        {\r\n            \"name\": \"car\"\r\n        },\r\n\r\n        {\r\n            \"name\": \"road\"\r\n        },           \r\n        {\r\n            \"name\": \"road\"\r\n        }\r\n        \r\n        \r\n    ]\r\n}"
+							"raw": "{\r\n    \"title\": \"News for Test fdssdgf\",\r\n    \"shortText\": \"Text about how creation\",\r\n    \"fullText\": \"full story of text\",\r\n    \"author\": {\r\n        \"name\": \"Petr\",\r\n        \"surname\": \"Fedorov\"\r\n    },\r\n    \"tags\": [\r\n        {\r\n            \"name\": \"car\"\r\n        },\r\n\r\n        {\r\n            \"name\": \"road\"\r\n        },           \r\n        {\r\n            \"name\": \"road\"\r\n        }\r\n        \r\n        \r\n    ]\r\n}",
+							"options": {
+								"raw": {}
+							}
 						},
 						"url": {
 							"raw": "http://localhost:8080/news/news/",
@@ -188,7 +194,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/news/news/68",
+							"raw": "http://localhost:8080/news/news/38",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -197,7 +203,7 @@
 							"path": [
 								"news",
 								"news",
-								"68"
+								"38"
 							]
 						}
 					},
@@ -209,7 +215,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/news/news/68",
+							"raw": "http://localhost:8080/news/news/38",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -218,7 +224,7 @@
 							"path": [
 								"news",
 								"news",
-								"68"
+								"38"
 							]
 						}
 					},
@@ -238,7 +244,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": 68,\r\n    \"title\": \"titleUpdated\",\r\n    \"shortText\": \"newsummery\",\r\n    \"fullText\": \"full story45\",\r\n    \"author\": {\r\n        \"id\": 86,\r\n        \"name\": \"newAuthor\",\r\n        \"surname\": \"New Author\"\r\n    },\r\n    \"tags\": [\r\n        {\r\n            \"id\": 2,\r\n            \"name\": \"newTag\"\r\n        },\r\n\r\n        {\r\n           \r\n            \"name\": \"newTag456\"\r\n        },\r\n        {\r\n           \r\n            \"name\": \"newTag4565\"\r\n        },\r\n            {\r\n           \r\n            \"name\": \"newTag4565\"\r\n        },\r\n        \r\n        {\r\n           \r\n            \"name\": \"newTag4ds6\"\r\n        },\r\n        \r\n        {\r\n           \r\n            \"name\": \"newTag4ds6\"\r\n        }\r\n        \r\n        \r\n        \r\n    ]\r\n}",
+							"raw": "{\r\n    \"id\": 38,\r\n    \"title\": \"titleUpdated\",\r\n    \"shortText\": \"newsummery\",\r\n    \"fullText\": \"full story45\",\r\n    \"author\": {\r\n        \"id\": 48,\r\n        \"name\": \"newAuthor\",\r\n        \"surname\": \"NewAuthor\"\r\n    },\r\n    \"tags\": [\r\n        {\r\n            \"id\": 2,\r\n            \"name\": \"newTag\"\r\n        },\r\n\r\n        {\r\n           \r\n            \"name\": \"newTag456\"\r\n        },\r\n        {\r\n           \r\n            \"name\": \"newTag4565\"\r\n        },\r\n            {\r\n           \r\n            \"name\": \"newTag4565\"\r\n        },\r\n        \r\n        {\r\n           \r\n            \"name\": \"newTag4ds6\"\r\n        },\r\n        \r\n        {\r\n           \r\n            \"name\": \"newTag4ds6\"\r\n        }\r\n        \r\n        \r\n        \r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -288,7 +294,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/news/news/search?authorName=newAuthor&authorSurname=New Author&tags=newTag&tags=neaasdasdTag&desc=true&orderByParameter=author_name&orderByParameter=creation_date",
+							"raw": "http://localhost:8080/news/news/search?orderByParameter=author_name&orderByParameter=creation_date&orderByParameter=TITLE&orderByParameter=AUTHOR_SURNAME&orderByParameter=MODIFICATION_DATE",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -302,23 +308,23 @@
 							"query": [
 								{
 									"key": "authorName",
-									"value": "newAuthor"
+									"value": "newAuthor",
+									"disabled": true
 								},
 								{
 									"key": "authorSurname",
-									"value": "New Author"
+									"value": "NewAuthor",
+									"disabled": true
 								},
 								{
 									"key": "tags",
-									"value": "newTag"
+									"value": "newTag",
+									"disabled": true
 								},
 								{
 									"key": "tags",
-									"value": "neaasdasdTag"
-								},
-								{
-									"key": "desc",
-									"value": "true"
+									"value": "neaasdasdTag",
+									"disabled": true
 								},
 								{
 									"key": "orderByParameter",
@@ -329,9 +335,16 @@
 									"value": "creation_date"
 								},
 								{
-									"key": "",
-									"value": "",
-									"disabled": true
+									"key": "orderByParameter",
+									"value": "TITLE"
+								},
+								{
+									"key": "orderByParameter",
+									"value": "AUTHOR_SURNAME"
+								},
+								{
+									"key": "orderByParameter",
+									"value": "MODIFICATION_DATE"
 								}
 							]
 						}
@@ -358,7 +371,12 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"newTahgfhfghgfh\"\r\n}"
+							"raw": "{\r\n    \"name\": \"newTag\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "http://localhost:8080/news/tag/",
@@ -382,7 +400,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/news/tag/39",
+							"raw": "http://localhost:8080/news/tag/22",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -391,7 +409,7 @@
 							"path": [
 								"news",
 								"tag",
-								"39"
+								"22"
 							]
 						}
 					},
@@ -411,7 +429,12 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": 39,\r\n    \"name\": \"UpdateTag\"\r\n}"
+							"raw": "{\r\n    \"id\": 22,\r\n    \"name\": \"UpdateTag\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "http://localhost:8080/news/tag/",
@@ -443,10 +466,15 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "39"
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/news/tag/",
+							"raw": "http://localhost:8080/news/tag/22",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -455,7 +483,7 @@
 							"path": [
 								"news",
 								"tag",
-								""
+								"22"
 							]
 						}
 					},
