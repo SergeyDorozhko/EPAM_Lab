@@ -3,6 +3,7 @@ package com.epam.lab.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
@@ -12,13 +13,13 @@ import java.util.Objects;
 
 
 public class NewsDTO extends AbstractDTO {
-    @NotNull(message = "News must contain a title")
+    @NotBlank(message = "News must contain a title")
     @Size(min = 1, max = 30, message = "Title size must be between 1 and 30.")
     private String title;
-    @NotNull(message = "News must contain a shortText")
+    @NotBlank(message = "News must contain a shortText")
     @Size(min = 1, max = 100, message = "Short text size must be between 1 and 100.")
     private String shortText;
-    @NotNull(message = "News must contain a fullText")
+    @NotBlank(message = "News must contain a fullText")
     @Size(min = 1, max = 2000, message = "Full text size must be between 1 and 2000.")
     private String fullText;
     @JsonFormat(pattern = "yyyy-MM-dd")
