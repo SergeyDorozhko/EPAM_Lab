@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class News extends Bean {
+
     private String title;
     private String shortText;
     private String fullText;
@@ -14,11 +15,11 @@ public class News extends Bean {
 
     private Author author;
 
-    private List<Tag> listOfTags;
+    private List<Tag> tags;
 
     public News(){
         super();
-        listOfTags = new ArrayList<>();
+        tags = new ArrayList<>();
     }
 
 
@@ -32,7 +33,7 @@ public class News extends Bean {
         this.creationDate = creationDate;
         this.modificationDate = modificationDate;
         this.author = author;
-        this.listOfTags = listOfTags;
+        this.tags = listOfTags;
     }
 
     public String getTitle() {
@@ -83,16 +84,16 @@ public class News extends Bean {
         this.author = author;
     }
 
-    public List<Tag> getListOfTags() {
-        return listOfTags;
+    public List<Tag> getTags() {
+        return tags;
     }
 
     public void addTag(Tag tag) {
-        listOfTags.add(tag);
+        tags.add(tag);
     }
 
-    public void setListOfTags(List<Tag> listOfTags) {
-        this.listOfTags = listOfTags;
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
     }
 
     @Override
@@ -107,14 +108,14 @@ public class News extends Bean {
                 Objects.equals(creationDate, news.creationDate) &&
                 Objects.equals(modificationDate, news.modificationDate) &&
                 Objects.equals(author, news.author) &&
-                Objects.equals(listOfTags, news.listOfTags);
+                Objects.equals(tags, news.tags);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(),
                 title, shortText, fullText, creationDate,
-                modificationDate, author, listOfTags);
+                modificationDate, author, tags);
     }
 
     @Override
@@ -126,7 +127,7 @@ public class News extends Bean {
                 ", creationDate=" + creationDate +
                 ", modificationDate=" + modificationDate +
                 ", author=" + author +
-                ", listOfTags=" + listOfTags +
+                ", listOfTags=" + tags +
                 '}';
     }
 }

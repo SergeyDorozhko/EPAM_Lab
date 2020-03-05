@@ -61,3 +61,158 @@ It is forbidden to use:
 3. JPA,
 4. Lombok,
 5. Powermock.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+task4:
+Create module for accessing the database.
+
+Technology stack:
+
+Application container:Spring IoC (Spring Framework version 5.x).
+Data access: JPA (Hibernate as JPA Provider).
+Bean validation: Hibernate Validator.
+
+Tech requirements:
+
+Create new module for data access to use JPA. Use different Criteria Queries.
+Enable logging of SQL queries.
+Add transactions support using Spring declarative transactions management. Don't forget to test your transactional methods.
+There is option switching between JPA+Hibernate or Spring JDBC in configuration file.
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+task5:
+Main requirements:
+
+Jenkins have to build your project according to the Maven build script.
+Project is deployed at your local Tomcat Server by Jenkins job, can be accessed by a link in EPAM internal LAN (example: EPBYMINW1111.minsk.epam.com:8080/simple-project).
+Readme file in your project should contain:
+link to: -Sonarqube, -Jenkins (with credential), -deploy link.
+
+Sonarqube: http://epbyminw7595.minsk.epam.com:9000/dashboard?id=com.epam.lab%3Anews
+
+Jenkins (dev / dev): http://epbyminw7595.minsk.epam.com:8090/
+
+Deploy link: http://epbyminw7595.minsk.epam.com:8080/news/
+
+Rest API:
+
+Example: author
+
+GET: /author/id - Gets author by id.
+
+POST: /author/ - Create new author.
+body json example:
+{
+    "name": "Petr",
+    "surname": "Petrov"
+}
+
+DELETE: /author/id - Delete author by id.
+
+PUT: /author/ - Update author.
+body json example:
+{
+    "id": 1,
+    "name": "Ivan",
+    "surname": "Ivanov"
+}
+
+Example: news
+
+GET: /news/id - Gets news by id.
+
+POST: /news/ - Create new news.
+body json example:
+{
+    "title": "title",
+    "shortText": "Text about",
+    "fullText": "full story of text",
+    "author": {
+        "name": "Petr",
+        "surname": "Fedorov"
+    },
+    "tags": [
+        {
+            "name": "car"
+        },
+        {
+            "name": "road"
+        },           
+        {
+            "name": "road"
+        }
+    ]
+}
+
+DELETE: /news/id - Delete news by id.
+
+PUT: /news/ - Update news.
+body json example:
+{
+    "id": 1,
+    "title": "titleUpdated",
+    "shortText": "newsummery",
+    "fullText": "full story",
+    "author": {
+        "id": 1,
+        "name": "Petr",
+        "surname": "Fedorov"
+    },
+    "tags": [
+        {
+            "id": 2,
+            "name": "newTag"
+        },
+        {
+            "name": "newTag456"
+        },
+        { 
+            "name": "newTag4565"
+        },
+        { 
+            "name": "newTag4565"
+        }        
+    ]
+}
+
+GET: /news/count - Count all news.
+ 
+GET: /news/search - Search news by query.
+example of params:
+?authorName=newAuthor&authorSurname=New Author&tags=newTag&tags=neaasdasdTag&orderByParameter=author_name&orderByParameter=creation_date
+
+Example: tags
+
+GET: /tag/id - Gets tag by id.
+
+POST: /tag/ - Create new tag.
+body json example:
+{
+    "name": "Name"
+}
+
+DELETE: /tag/id - Delete tag by id.
+
+PUT: /tag/ - Update tag.
+body json example:
+{
+    "id": 1,
+    "name": "newName"
+}
+
+Also You can find postman backup in package postman in root of project.
+
+
+Technology stack:
+
+Build tool: Maven.
+Tomcat Server - should be installed as Service and start automatic.
+Unit testing framework: JUnit (version 4.x is preferred, but you can use 5.x).
+Database: PostgreSQL (version 9.x is preferred, but you can use 10.x).
+Continuous Integration server: Jenkins LTS (see CI section for more info).
+Continuous Integration: 
+
+Configure Jenkins security (install Role strategy plugin). Remove anonymous access. Create administrator user (all permissions) and developer user (build job, cancel builds). Add Jenkins credentials to Readme file in your git repository.
+Configure Jenkins build job (pool, run test, build) to checkout your repository, use pooling interval.
+Install SonarQube. Configure Jenkins to use local SonarQube installation. Analyze your source code with SonarQube after Maven builds your project. Use JaCoCo for code coverage.

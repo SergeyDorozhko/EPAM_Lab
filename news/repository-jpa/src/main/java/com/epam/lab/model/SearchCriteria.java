@@ -1,9 +1,10 @@
-package com.epam.lab.dto;
+package com.epam.lab.model;
 
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
 
-public class SearchCriteria {
+public class SearchCriteria extends Bean{
     private String authorName;
     private String authorSurname;
     private Set<String> tags;
@@ -65,5 +66,24 @@ public class SearchCriteria {
 
     public void setDesc(boolean desc) {
         this.desc = desc;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        SearchCriteria that = (SearchCriteria) o;
+        return desc == that.desc &&
+                Objects.equals(authorName, that.authorName) &&
+                Objects.equals(authorSurname, that.authorSurname) &&
+                Objects.equals(tags, that.tags) &&
+                Objects.equals(orderByParameter, that.orderByParameter);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), authorName, authorSurname, tags, orderByParameter, desc);
     }
 }

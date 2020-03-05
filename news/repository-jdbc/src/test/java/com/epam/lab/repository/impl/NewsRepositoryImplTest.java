@@ -4,6 +4,7 @@ import com.epam.lab.configuration.BeanConfig;
 import com.epam.lab.configuration.DataConfig;
 import com.epam.lab.exception.RepositoryException;
 import com.epam.lab.model.News;
+import com.epam.lab.model.SearchCriteria;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -153,16 +154,21 @@ public class NewsRepositoryImplTest {
 
     @Test
     public void findAllNewsAndSortByQuery() {
-        String query = "WHERE (1=1)  AND (author_name = 'Igor')  AND (author_surname = 'Bikov')";
-        List<News> newsList = newsRepository.findAllNewsAndSortByQuery(query);
+        SearchCriteria searchCriteria = new SearchCriteria();
+        searchCriteria.setAuthorName("Igor");
+        searchCriteria.setAuthorSurname("Bikov");
+        List<News> newsList = newsRepository.findAllNewsAndSortByQuery(searchCriteria);
         Assert.assertEquals(4, newsList.size());
 
-        query = "";
-        newsList = newsRepository.findAllNewsAndSortByQuery(query);
+        searchCriteria = new SearchCriteria();
+        newsList = newsRepository.findAllNewsAndSortByQuery(searchCriteria);
         Assert.assertEquals(20, newsList.size());
 
-        query = "WHERE (1=1)  AND (author_name = 'Igorghjugh D')  AND (author_surname = 'Bikov')";
-        newsList = newsRepository.findAllNewsAndSortByQuery(query);
+
+        searchCriteria = new SearchCriteria();
+        searchCriteria.setAuthorName("Igorghjugh");
+        searchCriteria.setAuthorSurname("Bikov");
+        newsList = newsRepository.findAllNewsAndSortByQuery(searchCriteria);
         Assert.assertEquals(0, newsList.size());
     }
 

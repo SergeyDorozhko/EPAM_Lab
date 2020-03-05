@@ -1,6 +1,7 @@
 package com.epam.lab.repository;
 
 import com.epam.lab.model.News;
+import com.epam.lab.model.SearchCriteria;
 
 import java.util.List;
 
@@ -13,5 +14,5 @@ public interface NewsRepository extends Repository<News> {
 
     long countAllNews();
 
-    List<News> findAllNewsAndSortByQuery(String query);
+    List<News> findAllNewsAndSortByQuery(SearchCriteria searchCriteria);
 }

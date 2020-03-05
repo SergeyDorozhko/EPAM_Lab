@@ -1,9 +1,12 @@
 package com.epam.lab.dto;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class TagDTO extends AbstractDTO {
-
+    @NotNull(message = "Tag can not be without tame")
+    @Pattern(regexp = "(^[A-Za-zА-Яа-я0-9-]+$)", message = "Name of tag must consist of letters or '-'.")
     @Size(min = 1, max = 30, message = "Size must be between 1 and 30.")
     private String name;
 

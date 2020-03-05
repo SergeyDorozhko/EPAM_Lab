@@ -1,13 +1,15 @@
 package com.epam.lab.service.impl;
 
-import com.epam.lab.dto.mapper.TagMapper;
 import com.epam.lab.dto.TagDTO;
+import com.epam.lab.dto.mapper.TagMapper;
 import com.epam.lab.exception.DuplicateTagException;
+import com.epam.lab.exception.RepositoryException;
 import com.epam.lab.repository.TagRepository;
 import com.epam.lab.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class TagServiceImpl implements TagService {
@@ -27,6 +29,7 @@ public class TagServiceImpl implements TagService {
      * @param bean TagDTO with name of new tag.
      * @return tagDTO with name and generated id.
      */
+    @Transactional
     @Override
     public TagDTO create(TagDTO bean) {
         checkTag(bean.getName());
@@ -39,12 +42,14 @@ public class TagServiceImpl implements TagService {
         try {
             repository.findBy(name);
             throw new DuplicateTagException();
-        } catch (EmptyResultDataAccessException ex) {
+        } catch (EmptyResultDataAccessException | RepositoryException ex) {
             //TODO logger;
             System.err.println("new tag");
         }
     }
 
+
+    @Transactional
     @Override
     public boolean delete(long id) {
         return repository.delete(id);
@@ -57,6 +62,7 @@ public class TagServiceImpl implements TagService {
      * @param bean TagDTO with new name and id of tag.
      * @return tagDTO with id and new name.
      */
+    @Transactional
     @Override
     public TagDTO update(TagDTO bean) {
         checkTag(bean.getName());

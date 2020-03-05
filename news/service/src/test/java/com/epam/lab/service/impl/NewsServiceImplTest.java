@@ -4,6 +4,7 @@ import com.epam.lab.dto.AuthorDTO;
 import com.epam.lab.dto.mapper.NewsMapper;
 import com.epam.lab.dto.NewsDTO;
 import com.epam.lab.dto.TagDTO;
+import com.epam.lab.dto.mapper.SearchCriteriaMapper;
 import com.epam.lab.exception.InvalidAuthorException;
 import com.epam.lab.exception.ServiceException;
 import com.epam.lab.model.Author;
@@ -58,7 +59,7 @@ public class NewsServiceImplTest {
         tagRepository = Mockito.mock(TagRepositoryImpl.class);
         NewsMapper newsMapper = new NewsMapper(new ModelMapper());
 
-        newsService = new NewsServiceImpl(newsMapper, newsRepository, authorRepository, tagRepository);
+        newsService = new NewsServiceImpl(newsMapper,new SearchCriteriaMapper(new ModelMapper()), newsRepository, authorRepository, tagRepository);
 
 
     }
@@ -191,7 +192,7 @@ public class NewsServiceImplTest {
         tagsDTOList.add(twoTagDTO);
         tagsDTOList.add(threeTagDTO);
         tagsDTOList.add(fourTagDTO);
-        newsDTO.setListOfTags(tagsDTOList);
+        newsDTO.setTags(tagsDTOList);
 
         news = new News();
         Author author = new Author();
@@ -218,8 +219,8 @@ public class NewsServiceImplTest {
         when(tagRepository.findBy(TAG_NAME_ONE)).thenThrow(EmptyResultDataAccessException.class);
         when(tagRepository.findBy(TAG_NAME_FOUR)).thenReturn(fourTag);
 
-        Assert.assertEquals(newsDTO.getListOfTags().size() - 1L,
-                newsService.create(newsDTO).getListOfTags().size());
+        Assert.assertEquals(newsDTO.getTags().size() - 1L,
+                newsService.create(newsDTO).getTags().size());
         verify(authorRepository).findBy(any(Author.class));
         verify(authorRepository, never()).create(author);
         verify(newsRepository).create(any(News.class));
@@ -231,11 +232,7 @@ public class NewsServiceImplTest {
         verify(tagRepository, times(3)).linkTagWithNews(anyLong(), anyLong());
     }
 
-    @Test(expected = ServiceException.class)
-    public void createNewsNegativeByContentTest() {
-        newsDTO = new NewsDTO();
-        newsService.create(newsDTO);
-    }
+
 
     @Test(expected = InvalidAuthorException.class)
     public void createNewsNegativeByAuthorTest() {
@@ -323,7 +320,7 @@ public class NewsServiceImplTest {
         tagsDTOList.add(oneTagDTO);
         tagsDTOList.add(twoTagDTO);
         tagsDTOList.add(threeTagDTO);
-        newsDTO.setListOfTags(tagsDTOList);
+        newsDTO.setTags(tagsDTOList);
 
         Assert.assertEquals(newsDTO, newsService.findById(anyLong()));
 
@@ -375,7 +372,7 @@ public class NewsServiceImplTest {
         tagsDTOList.add(oneTagDTO);
         tagsDTOList.add(twoTagDTO);
         tagsDTOList.add(threeTagDTO);
-        newsDTO.setListOfTags(tagsDTOList);
+        newsDTO.setTags(tagsDTOList);
 
         Assert.assertEquals(newsDTO, newsService.findById(anyLong()));
 

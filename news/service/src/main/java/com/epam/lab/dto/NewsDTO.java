@@ -1,5 +1,10 @@
 package com.epam.lab.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,23 +12,31 @@ import java.util.Objects;
 
 
 public class NewsDTO extends AbstractDTO {
+    @NotNull(message = "News must contain a title")
+    @Size(min = 1, max = 30, message = "Title size must be between 1 and 30.")
     private String title;
+    @NotNull(message = "News must contain a shortText")
+    @Size(min = 1, max = 100, message = "Short text size must be between 1 and 100.")
     private String shortText;
+    @NotNull(message = "News must contain a fullText")
+    @Size(min = 1, max = 2000, message = "Full text size must be between 1 and 2000.")
     private String fullText;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate creationDate;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate modificationDate;
-
+    @Valid
     private AuthorDTO author;
-
-    private List<TagDTO> listOfTags;
+    @Valid
+    private List<TagDTO> tags;
 
     public NewsDTO() {
         super();
-        listOfTags = new ArrayList<>();
+        tags = new ArrayList<>();
     }
 
     public NewsDTO(int id, String title, String shortText, String fullText, LocalDate creationDate, LocalDate modificationDate,
-                   AuthorDTO author, List<TagDTO> listOfTags) {
+                   AuthorDTO author, List<TagDTO> tags) {
         super(id);
         this.title = title;
         this.shortText = shortText;
@@ -31,11 +44,11 @@ public class NewsDTO extends AbstractDTO {
         this.creationDate = creationDate;
         this.modificationDate = modificationDate;
         this.author = author;
-        this.listOfTags = listOfTags;
+        this.tags = tags;
     }
 
-    public void setListOfTags(List<TagDTO> listOfTags) {
-        this.listOfTags = listOfTags;
+    public void setTags(List<TagDTO> tags) {
+        this.tags = tags;
     }
 
     public String getTitle() {
@@ -86,12 +99,8 @@ public class NewsDTO extends AbstractDTO {
         this.author = author;
     }
 
-    public List<TagDTO> getListOfTags() {
-        return listOfTags;
-    }
-
-    public void addTag(TagDTO tag) {
-        listOfTags.add(tag);
+    public List<TagDTO> getTags() {
+        return tags;
     }
 
 
@@ -107,13 +116,13 @@ public class NewsDTO extends AbstractDTO {
                 Objects.equals(creationDate, newsDTO.creationDate) &&
                 Objects.equals(modificationDate, newsDTO.modificationDate) &&
                 Objects.equals(author, newsDTO.author) &&
-                Objects.equals(listOfTags, newsDTO.listOfTags);
+                Objects.equals(tags, newsDTO.tags);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(),
-                title, shortText, fullText, creationDate, modificationDate, author, listOfTags);
+                title, shortText, fullText, creationDate, modificationDate, author, tags);
     }
 
     @Override
@@ -125,7 +134,7 @@ public class NewsDTO extends AbstractDTO {
                 ", creationDate=" + creationDate +
                 ", modificationDate=" + modificationDate +
                 ", author=" + author +
-                ", listOfTags=" + listOfTags +
+                ", listOfTags=" + tags +
                 '}';
     }
 }

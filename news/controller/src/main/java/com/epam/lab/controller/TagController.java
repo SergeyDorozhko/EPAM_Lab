@@ -3,7 +3,6 @@ package com.epam.lab.controller;
 import com.epam.lab.dto.TagDTO;
 import com.epam.lab.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +16,9 @@ public class TagController {
 
     private static final String DON_T_DELETED_MESSAGE = "don't deleted";
     private static final String OK_MESSAGE = "OK";
+    private static final String ID = "id";
+    public static final String ID_MUST_BE_POSITIVE = "Id must be positive.";
+
 
     private TagService tagService;
 
@@ -25,32 +27,29 @@ public class TagController {
         this.tagService = tagService;
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/")
     @ResponseBody
     public TagDTO createTag(@RequestBody @Valid TagDTO tagDTO) {
 
         return tagService.create(tagDTO);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}")
     @ResponseBody
-    public TagDTO findTagBy(@Valid @PathVariable("id") @Positive Long id) {
+    public TagDTO findTagBy(@Valid @PathVariable(ID) @Positive Long id) {
         TagDTO tagDTO = null;
-        System.out.println(id);
             tagDTO = tagService.findById(id);
-        System.out.println(id);
-
         return tagDTO;
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/")
     @ResponseBody
-    public TagDTO updateTag(@RequestBody TagDTO tagDTO) {
+    public TagDTO updateTag(@RequestBody @Valid TagDTO tagDTO) {
         return tagService.update(tagDTO);
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public String deleteTag(@RequestBody long id) {
+    @DeleteMapping(value = "/{id}")
+    public String deleteTag(@Valid @PathVariable(ID) @Positive(message = ID_MUST_BE_POSITIVE) long id) {
         if(tagService.delete(id)){
             return OK_MESSAGE;
         }
