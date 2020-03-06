@@ -3,8 +3,6 @@ package com.epam.lab.dto.mapper;
 import com.epam.lab.dto.AbstractDTO;
 import com.epam.lab.model.Bean;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
