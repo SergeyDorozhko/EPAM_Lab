@@ -12,6 +12,7 @@ import javax.validation.constraints.Positive;
 @RestController
 @RequestMapping("/tag")
 @Validated
+@CrossOrigin(origins = { "http://localhost:3000"})
 public class TagController {
 
     private static final String DON_T_DELETED_MESSAGE = "don't deleted";

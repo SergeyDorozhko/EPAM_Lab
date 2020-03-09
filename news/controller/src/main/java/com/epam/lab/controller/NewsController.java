@@ -15,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/news")
 @Validated
+@CrossOrigin(origins = { "http://localhost:3000"})
 public class NewsController {
 
     private static final String DON_T_DELETED_MESSAGE = "don't deleted";

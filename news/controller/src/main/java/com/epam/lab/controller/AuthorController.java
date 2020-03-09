@@ -13,6 +13,7 @@ import javax.validation.constraints.Positive;
 @RestController
 @RequestMapping("/author")
 @Validated
+@CrossOrigin(origins = { "http://localhost:3000"})
 public class AuthorController {
 
     private static final String DON_T_DELETED_MESSAGE = "don't deleted";
