@@ -1,0 +1,22 @@
+@import url(https://unpkg.com/bootstrap@4.1.0/dist/css/bootstrap.min.css);
+
+
+.tags { 
+  height: 40px;
+  background: #ccc;
+  padding: 0px;
+  padding-right: 10px; 
+  padding-left: 20px;
+  border-radius: 30px;
+ }
+
+
+
+.tagLogo{
+  width: 40px;
+  height: 40px;
+}
+
+.container-my{
+  margin: 100px 100px;
+}
