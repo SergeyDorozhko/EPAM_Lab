@@ -7,6 +7,7 @@ import Main from "./Main";
 import Header from "./Header";
 import Footer from "./Footer";
 import Authors from "./author/Authors"
+import Tags from "./tags/Tags"
 
 class InstructorApp extends Component {
 
@@ -21,6 +22,7 @@ class InstructorApp extends Component {
                     <Route path="/news/:id" component={NewsComponent} />
                     <Route path="/news/add" component={NewsComponent} />
                     <Route path="/authors" component={Authors} />
+                    <Route path="/tags" component={Tags} />
 
                 </Switch>
                 <Footer />
