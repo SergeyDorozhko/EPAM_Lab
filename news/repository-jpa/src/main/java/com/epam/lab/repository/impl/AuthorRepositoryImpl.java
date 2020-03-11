@@ -11,6 +11,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.criteria.*;
 
+import java.util.List;
+
 import static com.epam.lab.model.Bean_.ID;
 
 @Repository
@@ -83,5 +85,14 @@ public class AuthorRepositoryImpl implements AuthorRepository {
             throw new AuthorNotFoundException();
         }
         return author;
+    }
+
+    @Override
+    public List<Author> findAll() {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Author> query = builder.createQuery(Author.class);
+        Root<Author> root = query.from(Author.class);
+        query.select(root);
+        return entityManager.createQuery(query).getResultList();
     }
 }

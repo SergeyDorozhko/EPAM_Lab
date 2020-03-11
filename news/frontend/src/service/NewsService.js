@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const NEWS_API_URL = 'http://localhost:8080/news/news/'
+const NEWS_API_URL = 'http://localhost:8080/news_app/news/'
 
 class NewsService {
 

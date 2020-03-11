@@ -2,6 +2,7 @@ package com.epam.lab.service.impl;
 
 import com.epam.lab.dto.AuthorDTO;
 import com.epam.lab.dto.mapper.AuthorMapper;
+import com.epam.lab.model.Author;
 import com.epam.lab.repository.AuthorRepository;
 import com.epam.lab.repository.NewsRepository;
 import com.epam.lab.service.AuthorService;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service("authorService")
 public class AuthorServiceImpl implements AuthorService {
@@ -75,5 +77,10 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public AuthorDTO findById(long authorId) {
         return mapper.toDTO(repository.findBy(authorId));
+    }
+
+    @Override
+    public List<AuthorDTO> findAll() {
+        return repository.findAll().stream().map(c -> mapper.toDTO(c)).collect(Collectors.toList());
     }
 }

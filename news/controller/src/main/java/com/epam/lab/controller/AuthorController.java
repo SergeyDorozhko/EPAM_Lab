@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.util.List;
 
 @RestController
 @RequestMapping("/author")
@@ -31,7 +32,6 @@ public class AuthorController {
 
 
     @GetMapping(value = "/{id}")
-    @ResponseBody
     public AuthorDTO findAuthorBy(@Valid @PathVariable("id") @Positive(message = ID_MUST_BE_POSITIVE) long id, HttpServletResponse response) {
         AuthorDTO authorDTO = null;
         try {
@@ -43,8 +43,7 @@ public class AuthorController {
     }
 
 
-    @PostMapping(value = "/")
-    @ResponseBody
+    @PostMapping
     public AuthorDTO createAuthor(@RequestBody @Valid AuthorDTO authorDTO) {
 
         return authorService.create(authorDTO);
@@ -52,7 +51,6 @@ public class AuthorController {
 
 
     @DeleteMapping(value = "/{id}")
-    @ResponseBody
     public String deleteAuthor(@Valid @PathVariable(ID) @Positive(message = ID_MUST_BE_POSITIVE) long id) {
         if (authorService.delete(id)) {
             return OK_MESSAGE;
@@ -60,9 +58,14 @@ public class AuthorController {
         return DON_T_DELETED_MESSAGE;
     }
 
-    @PutMapping(value = "/")
-    @ResponseBody
+    @PutMapping
     public AuthorDTO updateAuthor(@RequestBody @Valid AuthorDTO authorDTO) {
         return authorService.update(authorDTO);
     }
+
+    @GetMapping
+    public List<AuthorDTO> findAll() {
+        return authorService.findAll();
+    }
+
 }
