@@ -92,7 +92,7 @@ public class AuthorRepositoryImpl implements AuthorRepository {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Author> query = builder.createQuery(Author.class);
         Root<Author> root = query.from(Author.class);
-        query.select(root);
+        query.select(root).orderBy(builder.asc(root.get(ID)));
         return entityManager.createQuery(query).getResultList();
     }
 }

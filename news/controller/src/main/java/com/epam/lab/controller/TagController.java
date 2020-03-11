@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.util.List;
 
 @RestController
 @RequestMapping("/tag")
@@ -28,23 +29,20 @@ public class TagController {
         this.tagService = tagService;
     }
 
-    @PostMapping(value = "/")
-    @ResponseBody
+    @PostMapping
     public TagDTO createTag(@RequestBody @Valid TagDTO tagDTO) {
 
         return tagService.create(tagDTO);
     }
 
     @GetMapping(value = "/{id}")
-    @ResponseBody
     public TagDTO findTagBy(@Valid @PathVariable(ID) @Positive Long id) {
         TagDTO tagDTO = null;
             tagDTO = tagService.findById(id);
         return tagDTO;
     }
 
-    @PutMapping(value = "/")
-    @ResponseBody
+    @PutMapping
     public TagDTO updateTag(@RequestBody @Valid TagDTO tagDTO) {
         return tagService.update(tagDTO);
     }
@@ -55,5 +53,10 @@ public class TagController {
             return OK_MESSAGE;
         }
         return DON_T_DELETED_MESSAGE;
+    }
+
+    @GetMapping
+    public List<TagDTO> findAll() {
+        return tagService.findAll();
     }
 }

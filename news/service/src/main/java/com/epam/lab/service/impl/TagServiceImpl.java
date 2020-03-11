@@ -11,6 +11,9 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class TagServiceImpl implements TagService {
 
@@ -74,5 +77,10 @@ public class TagServiceImpl implements TagService {
     @Override
     public TagDTO findById(long id) {
         return mapper.toDTO(repository.findBy(id));
+    }
+
+    @Override
+    public List<TagDTO> findAll() {
+        return repository.findAll().stream().map(c -> mapper.toDTO(c)).collect(Collectors.toList());
     }
 }

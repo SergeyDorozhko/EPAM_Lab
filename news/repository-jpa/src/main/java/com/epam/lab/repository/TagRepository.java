@@ -12,4 +12,6 @@ public interface TagRepository extends Repository<Tag> {
     List<Tag> findBy(News news);
     void linkTagWithNews(long tagId, long newsId);
     void deleteTagNewsLinks(long newsId);
+
+    List<Tag> findAll();
 }

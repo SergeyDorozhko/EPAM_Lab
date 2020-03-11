@@ -1,10 +1,12 @@
 import React, { Component } from "react";
-import NewsComponent from "./NewsComponent";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import News from "./News";
+
+import NewsComponent from "./news/NewsComponent";
+import News from "./news/News";
 import Main from "./Main";
 import Header from "./Header";
 import Footer from "./Footer";
+import Authors from "./author/Authors"
 
 class InstructorApp extends Component {
 
@@ -18,6 +20,8 @@ class InstructorApp extends Component {
                     <Route path="/news" exact component={News} />
                     <Route path="/news/:id" component={NewsComponent} />
                     <Route path="/news/add" component={NewsComponent} />
+                    <Route path="/authors" component={Authors} />
+
                 </Switch>
                 <Footer />
             </Router>

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import NewsService from "../service/NewsService";
+import NewsService from "../../service/NewsService";
 
 class News extends Component {
     constructor(props) {

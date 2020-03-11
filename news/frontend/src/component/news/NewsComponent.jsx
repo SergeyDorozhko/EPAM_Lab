@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import NewsService from '../service/NewsService';
-import mainLogo from '../image/plus_PNG42.png';
+import NewsService from '../../service/NewsService';
+import mainLogo from '../../image/plus_PNG42.png';
 
 class NewsComponent extends Component {
 
@@ -29,13 +29,6 @@ class NewsComponent extends Component {
     }
 
     componentDidMount() {
-
-        console.log(this.state.id)
-
-        // eslint-disable-next-line
-        if (this.state.id == -1) {
-            return
-        }
 
         NewsService.findNewsById(this.state.id)
             .then(response => this.setState({
@@ -134,8 +127,6 @@ class NewsComponent extends Component {
             tags: this.state.tags
         }
 
-
-
         console.log(news.id);
 
         if (event.target.name == 'cancel') {
@@ -170,7 +161,7 @@ class NewsComponent extends Component {
         if (tags) {
             tagsField = (
                 tags.map(tag =>
-                    <div className="form-group">
+                    <div className="form-group" key={tag.name}>
                         <div className="row">
                             <div className="col-sm-3"></div>
 

@@ -2,19 +2,19 @@ import React from 'react';
 
 export default function Header() {
     return (
-        <nav class="navbar navbar-expand-sm bg-primary navbar-dark fixed-top ">
-            <div class="container">
+        <nav className="navbar navbar-expand-sm bg-primary navbar-dark fixed-top ">
+            <div className="container">
 
-                <a class="navbar-brand">News Portal</a>
+                <a className="navbar-brand">News Portal</a>
 
-                <ul class="nav-item">
-                    <button type="button" class="btn">EN</button>
-                    <button type="button" class="btn">RU</button>
-                    <button type="button" class="btn">FR</button>
+                <ul className="nav-item">
+                    <button type="button" className="btn">EN</button>
+                    <button type="button" className="btn">RU</button>
+                    <button type="button" className="btn">FR</button>
                 </ul>
-                <ul class="nav justify-content-right">
-                    <button type="button" class="btn">Log in</button>
-                    <button type="button" class="btn">Register</button>
+                <ul className="nav justify-content-right">
+                    <button type="button" className="btn">Log in</button>
+                    <button type="button" className="btn">Register</button>
                 </ul>
             </div>
         </nav>

@@ -128,4 +128,14 @@ public class TagRepositoryImpl implements TagRepository {
         }
         return tag;
     }
+
+    @Override
+    public List<Tag> findAll() {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Tag> criteriaQuery = criteriaBuilder.createQuery(Tag.class);
+        Root<Tag> root = criteriaQuery.from(Tag.class);
+
+        criteriaQuery.select(root).orderBy(criteriaBuilder.asc(root.get(ID)));
+        return entityManager.createQuery(criteriaQuery).getResultList();
+    }
 }
