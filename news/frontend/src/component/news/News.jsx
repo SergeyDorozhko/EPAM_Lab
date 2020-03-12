@@ -63,7 +63,7 @@ class News extends Component {
         NewsService.deleteNews(id)
             .then(response => {
                 this.setState({ message: `News ${id} successfully deleted!` })
-                this.findAllNews()
+                this.findAllNews(this.state.selectedTags)
             })
     }
 
