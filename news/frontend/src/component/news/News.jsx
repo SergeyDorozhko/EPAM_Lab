@@ -1,26 +1,40 @@
 import React, { Component } from "react";
 import NewsService from "../../service/NewsService";
+import { Multiselect } from 'multiselect-react-dropdown';
+import AuthorService from "../../service/AuthorService";
+import TagsService from "../../service/TagsService";
 
 class News extends Component {
     constructor(props) {
         super(props);
         this.state = {
             news: [],
-            message: null
+            message: null,
+
+            tags:[],
+            selectedTags:[],
+
+            authors:[],
+            seletedAuthor: null,
         }
         this.findAllNews = this.findAllNews.bind(this);
+        this.findAllAuthors = this.findAllAuthors.bind(this);
+        this.findAllTags = this.findAllTags.bind(this);
         this.deleteNewsClicked = this.deleteNewsClicked.bind(this)
         this.editNewsClicked = this.editNewsClicked.bind(this)
-
+        this.onSelect = this.onSelect.bind(this);
+        this.onRemove = this.onRemove.bind(this);
     }
 
 
     componentDidMount() {
         this.findAllNews();
+        this.findAllAuthors();
+        this.findAllTags();
     }
 
-    findAllNews() {
-        NewsService.findAllNews()
+    findAllNews(params) {
+        NewsService.findAllNews(params)
             .then(
                 response => {
                     console.log(response);
@@ -28,22 +42,57 @@ class News extends Component {
                 })
     }
 
+    findAllAuthors() {
+        AuthorService.findAll()
+            .then(
+                response => {
+                    console.log(response);
+                    this.setState({ authors: response.data })
+                })
+    }
+
+    findAllTags() {
+       TagsService.findAll()
+            .then(
+                response => {
+                    console.log(response);
+                    this.setState({ tags: response.data })
+                })
+    }
     deleteNewsClicked(id) {
         NewsService.deleteNews(id)
-        .then( response => {
-            this.setState({message: `News ${id} successfully deleted!`})
-            this.findAllNews()
-        })
+            .then(response => {
+                this.setState({ message: `News ${id} successfully deleted!` })
+                this.findAllNews()
+            })
     }
 
     editNewsClicked(id) {
         this.props.history.push(`/news/${id}`)
     }
-    
+
+    onSelect(selectedValues) {
+        this.findAllNews(selectedValues)
+        this.setState({selectedTags : selectedValues})
+    }
+
+    onRemove(selectedValues) {
+        this.findAllNews(selectedValues)
+        this.setState({selectedTags : selectedValues})
+    }
 
     render() {
         return (
             <div className="container-my">
+
+                <Multiselect
+                    options={this.state.tags} // Options to display in the dropdown
+                    selectedValues={this.state.selectedTags} // Preselected value to persist in dropdown
+                    onSelect={selectedValues => this.onSelect(selectedValues)} // Function will trigger on select event
+                    onRemove={selectedValues => this.onRemove(selectedValues)} // Function will trigger on remove event
+                    displayValue="name" // Property name to display in the dropdown options
+                />
+
                 {this.state.message && <div className="alert alert-success">{this.state.message}</div>}
 
                 {this.state.news.map(oneNews =>
@@ -62,8 +111,8 @@ class News extends Component {
                     </div>
                 )
                 }
-                
-                
+
+
             </div>
         )
     }

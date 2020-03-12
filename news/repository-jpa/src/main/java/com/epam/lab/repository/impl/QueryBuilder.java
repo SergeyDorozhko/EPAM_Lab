@@ -34,13 +34,15 @@ final class QueryBuilder {
         searchByAuthorSurname(searchCriteria.getAuthorSurname());
         searchByTags(searchCriteria.getTags());
 
+        criteriaQuery.where(predicates.toArray(new Predicate[0]));
         criteriaQuery.groupBy(
                 newsRoot.get(ID),
                 newsRoot.get(News_.AUTHOR).get(ID),
                 newsAuthorJoin.get(Author_.NAME),
-                newsAuthorJoin.get(Author_.SURNAME));
+                newsAuthorJoin.get(Author_.SURNAME))
+                .having(criteriaBuilder.ge(criteriaBuilder.count(newsRoot),
+                        searchCriteria.getTags().size()));
 
-        criteriaQuery.where(predicates.toArray(new Predicate[0]));
         orderBy(searchCriteria.getOrderByParameter());
         return criteriaQuery;
     }
@@ -58,15 +60,10 @@ final class QueryBuilder {
     }
 
     private void searchByTags(Set<String> tags) {
-        Subquery<Long> subquery = criteriaQuery.subquery(Long.class);
-        Root<News> subRoot = subquery.from(News.class);
-        Join<Tag, News> subTags = subRoot.join(News_.TAGS, JoinType.LEFT);
-
-        for (String tag : tags) {
-            subquery.select(subRoot.get(ID));
-            subquery.where(criteriaBuilder.equal(subTags.get(Tag_.NAME), tag));
-
-            predicates.add(criteriaBuilder.equal(newsRoot.get(ID), criteriaBuilder.any(subquery)));
+        if(!tags.isEmpty()) {
+            Expression<String> expression = newsRoot.join(News_.TAGS).get(Tag_.NAME);
+            Predicate predicate = expression.in(tags);
+            predicates.add(predicate);
         }
     }
 

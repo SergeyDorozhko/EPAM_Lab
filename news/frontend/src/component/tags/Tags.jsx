@@ -97,9 +97,8 @@ export default class Tags extends Component {
         }
     }
 
-    render() {
-
-        let tags = this.state.tags.map(tag => {
+    makeView() {
+       return this.state.tags.map(tag => {
             let tagView
             if (this.state.editTag == tag.id) {
                 tagView = <div className="form-group">
@@ -142,8 +141,11 @@ export default class Tags extends Component {
         }
 
         )
+    }
 
+    render() {
 
+        let tags = this.makeView();
 
         return (
             <div className="container-my ">
