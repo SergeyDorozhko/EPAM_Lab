@@ -5,14 +5,25 @@ const NEWS_API_URL = 'http://localhost:8080/news_app/news/'
 
 class NewsService {
 
-    findAllNews(searchParams) {
-        var search5 = new URLSearchParams()
-        if (searchParams) {
-            searchParams.map(x => search5.append('tags', x.name))
-            console.log(search5.toString())
+    findAllNews(searchByTags, searchByAuthor) {
+        console.log(searchByAuthor)
+        var search = new URLSearchParams()
+        if (searchByTags) {
+            console.log(searchByTags)
+            searchByTags.map(x => search.append('tags', x.name))
+            console.log(search.toString())
             
         } 
-        return axios.get(`${NEWS_API_URL}search?` + search5.toString());
+        if (searchByAuthor) {
+            console.log(searchByAuthor)
+            const author = searchByAuthor.split(' ')
+            search.append('authorName', author[0])
+            search.append('authorSurname', author[1])
+            console.log(search.toString())
+            
+        } 
+        console.log('HERE')
+        return axios.get(`${NEWS_API_URL}search?` + search.toString());
     }
 
     deleteNews(id) {

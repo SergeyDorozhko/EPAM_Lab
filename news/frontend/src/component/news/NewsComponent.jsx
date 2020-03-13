@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import NewsService from '../../service/NewsService';
 import mainLogo from '../../image/plus_PNG42.png';
+import TagsService from '../../service/TagsService';
 
 class NewsComponent extends Component {
 
@@ -14,7 +15,9 @@ class NewsComponent extends Component {
             fullText: '',
             author: null,
             tags: [],
-            newTag: null
+            newTag: null,
+
+            tagsOption: []
         }
 
         this.onSubmit = this.onSubmit.bind(this)
@@ -38,6 +41,10 @@ class NewsComponent extends Component {
                 author: response.data.author,
                 tags: response.data.tags
             }))
+
+        TagsService.findAll().then(response => this.setState({
+            tagsOption: response.data
+        }))
     }
 
     handleInputChange(event) {
@@ -130,13 +137,13 @@ class NewsComponent extends Component {
         console.log(news.id);
 
         if (event.target.name == 'cancel') {
-            this.props.history.push('/news')
+            this.props.history.push('/')
         } else if (event.target.name == 'add' && news.id !== 0) {
             NewsService.updateNews(news)
-            this.props.history.push('/news')
+            this.props.history.push('/')
         } else {
             NewsService.createNews(news)
-            this.props.history.push('/news')
+            this.props.history.push('/')
         }
     }
 
@@ -220,7 +227,15 @@ class NewsComponent extends Component {
                                         </div>
                                     </div>
                                     <div className="col-sm-3">
-                                        <input type="text" className="form-control" id="newTag" value={this.state.newTag ? this.state.newTag.name : ''} onChange={this.handleNewTagInput} />
+                                        <input type="text" list="tagList" className="form-control" id="newTag" value={this.state.newTag ? this.state.newTag.name : ''} onChange={this.handleNewTagInput} />
+
+                                        <datalist id="tagList">
+                                            {this.state.tagsOption.map(x => {
+                                                return <option value={x.name}/>
+
+                                            })}
+                                      
+                                        </datalist>
                                     </div>
                                 </div>
                             </div>

@@ -5,7 +5,7 @@ export default function Header() {
         <nav className="navbar navbar-expand-sm bg-primary navbar-dark fixed-top ">
             <div className="container">
 
-                <a className="navbar-brand">News Portal</a>
+                <a className="navbar-brand" href="/">News Portal</a>
 
                 <ul className="nav-item">
                     <button type="button" className="btn">EN</button>
