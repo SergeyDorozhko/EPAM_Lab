@@ -7,10 +7,10 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaDelete;
-import javax.persistence.criteria.CriteriaUpdate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.epam.lab.model.Bean_.ID;
 
@@ -55,14 +55,6 @@ public class UserRepositoryImpl implements UserRepository {
         if (result == 0) {
             throw new UserNotFoundException();
         }
-
-        //TODO think about update role
-//        CriteriaUpdate<Roles> criteriaUpdateRoles = criteriaBuilder.createCriteriaUpdate(Roles.class);
-//        Root<Roles> rolesRoot = criteriaUpdateRoles.from(Roles.class);
-//        criteriaUpdate.set(rolesRoot.get(Roles_.ROLE), bean.getRole().getRole())
-//                .where(criteriaBuilder.equal(rolesRoot.get(ID), bean.getId()));
-//        result = entityManager.createQuery(criteriaUpdateRoles).executeUpdate();
-//        System.out.println(result + "RESULT-2");
         return bean;
     }
 
@@ -73,5 +65,42 @@ public class UserRepositoryImpl implements UserRepository {
             throw new UserNotFoundException();
         }
         return user;
+    }
+
+    @Override
+    public User singIn(User user) {
+        Object[] userData = findUserByLoginPWD(user);
+        return createUserFromData(userData);
+    }
+
+
+    private Object[] findUserByLoginPWD(User user) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Object[]> criteriaQuery = criteriaBuilder.createQuery(Object[].class);
+        Root<User> root = criteriaQuery.from(User.class);
+        List<Predicate> predicate = new ArrayList<>();
+        predicate.add(criteriaBuilder.equal(root.get(User_.LOGIN), user.getLogin()));
+        predicate.add(criteriaBuilder.equal(root.get(User_.PASSWORD), user.getPassword()));
+        criteriaQuery.select(
+                criteriaBuilder.array(root.get(ID),
+                        root.get(User_.NAME),
+                        root.get(User_.SURNAME),
+                        root.get(User_.LOGIN),
+                        root.get(User_.ROLE).get(Roles_.ROLE)));
+        criteriaQuery.where(predicate.toArray(new Predicate[0]));
+        return entityManager.createQuery(criteriaQuery).getSingleResult();
+    }
+
+    private User createUserFromData(Object[] data) {
+        User authorizedUser = new User();
+        int counter = 0;
+        authorizedUser.setId((Long) data[counter++]);
+        authorizedUser.setName((String) data[counter++]);
+        authorizedUser.setSurname((String) data[counter++]);
+        authorizedUser.setLogin((String) data[counter++]);
+        Roles role = new Roles();
+        role.setRole((Role) data[counter]);
+        authorizedUser.setRole(role);
+        return authorizedUser;
     }
 }

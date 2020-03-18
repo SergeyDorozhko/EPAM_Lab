@@ -16,7 +16,7 @@ public class User extends Bean implements Serializable {
     @Column
     private String password;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, optional = false)
     private Roles role;
 
     public String getName() {

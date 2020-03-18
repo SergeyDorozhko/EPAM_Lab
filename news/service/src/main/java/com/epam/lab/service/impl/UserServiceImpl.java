@@ -46,4 +46,9 @@ public class UserServiceImpl implements UserService {
     public UserDTO findById(long id) {
         return mapper.toDTO(repository.findBy(id));
     }
+
+    @Override
+    public UserDTO singIn(UserDTO user) {
+        return mapper.toDTO(repository.singIn(mapper.toBean(user)));
+    }
 }

@@ -7,13 +7,8 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class UserDTO extends AbstractDTO {
-    @NotNull
-    @Pattern(regexp = "(^[A-Za-zА-Яа-я0-9-]+$)", message = "Name must consist of letters or '-'.")
-    @Size(min = 1, max = 20, message = "Name size must be between 1 and 20.")
     private String name;
-    @NotNull
-    @Pattern(regexp = "(^[A-Za-zА-Яа-я0-9-]+$)", message = "Surname must consist of letters or '-'.")
-    @Size(min = 1, max = 20, message = "Surname size must be between 1 and 20.")
+
     private String surname;
     @NotNull
     @Pattern(regexp = "(^[A-Za-zА-Яа-я0-9-]+$)", message = "Login must consist of letters or '-'.")

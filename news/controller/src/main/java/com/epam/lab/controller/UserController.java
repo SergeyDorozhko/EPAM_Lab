@@ -2,6 +2,7 @@ package com.epam.lab.controller;
 
 import com.epam.lab.dto.TagDTO;
 import com.epam.lab.dto.UserDTO;
+import com.epam.lab.model.User_;
 import com.epam.lab.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -50,5 +51,10 @@ public class UserController {
     public UserDTO findBy(@Valid @PathVariable(ID) @Positive Long id) {
 
         return service.findById(id);
+    }
+
+    @PostMapping(value = "/singIn")
+    public UserDTO singIn(@RequestBody @Valid UserDTO user) {
+        return service.singIn(user);
     }
 }
