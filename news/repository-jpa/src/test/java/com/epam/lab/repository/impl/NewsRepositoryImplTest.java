@@ -137,6 +137,7 @@ public class NewsRepositoryImplTest {
         Assert.assertEquals(4, newsList.size());
 
         searchCriteria = new SearchCriteria();
+        searchCriteria.setPageSize(100); //TODO think about this test default value 10.
         newsList = newsRepository.findAllNewsAndSortByQuery(searchCriteria);
         Assert.assertEquals(20, newsList.size());
 

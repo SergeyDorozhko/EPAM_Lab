@@ -1,5 +1,6 @@
 package com.epam.lab.service.impl;
 
+import com.epam.lab.dto.AllNewsByQuery;
 import com.epam.lab.dto.NewsDTO;
 import com.epam.lab.dto.SearchCriteriaDTO;
 import com.epam.lab.dto.mapper.NewsMapper;
@@ -89,9 +90,6 @@ public class NewsServiceImpl implements NewsService {
 
         return mapper.toDTO(news);
     }
-
-
-
 
 
     private void checkAndCreateAuthorIfNew(News news) {
@@ -289,10 +287,14 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public List<NewsDTO> findAllNewsByQuery(SearchCriteriaDTO searchCriteriaDTO) {
+    public AllNewsByQuery findAllNewsByQuery(SearchCriteriaDTO searchCriteriaDTO) {
         SearchCriteria searchCriteria = criteriaMapper.toBean(searchCriteriaDTO);
         List<News> news = newsRepository.findAllNewsAndSortByQuery(searchCriteria);
-        return addTagsAndTransferToDTO(news);
+        AllNewsByQuery newsByQuery = new AllNewsByQuery();
+        newsByQuery.setItems(addTagsAndTransferToDTO(news));
+        newsByQuery.setTotalCount(
+                newsRepository.countAllNewsAndSortByQuery(searchCriteria));
+        return newsByQuery;
     }
 
 

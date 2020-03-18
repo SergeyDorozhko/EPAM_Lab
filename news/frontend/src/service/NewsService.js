@@ -5,7 +5,7 @@ const NEWS_API_URL = 'http://localhost:8080/news_app/news/'
 
 class NewsService {
 
-    findAllNews(searchByTags, searchByAuthor) {
+    findAllNews(currentPage, pageSize, searchByTags, searchByAuthor ) {
         console.log(searchByAuthor)
         var search = new URLSearchParams()
         if (searchByTags) {
@@ -22,7 +22,9 @@ class NewsService {
             console.log(search.toString())
             
         } 
-        console.log('HERE')
+
+        search.append('page', currentPage)
+        search.append('pageSize', pageSize)
         return axios.get(`${NEWS_API_URL}search?` + search.toString());
     }
 

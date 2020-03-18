@@ -5,13 +5,18 @@ import AuthorService from "../../service/AuthorService";
 import TagsService from "../../service/TagsService";
 import Select from 'react-select';
 import Dashboard from "../dashboard/Dashboard";
-
+import { NavLink } from "react-router-dom";
+import Pagination from "./pagination/Pagination"
+import PageSize from "./pageSize/PageSize";
 
 class News extends Component {
     constructor(props) {
         super(props);
         this.state = {
             news: [],
+            currentPage: 1,
+            totalCount: 0,
+            pageSize: 5,
             message: null,
 
             tags: [],
@@ -27,21 +32,26 @@ class News extends Component {
         this.editNewsClicked = this.editNewsClicked.bind(this)
         this.handleMultiSelectChange = this.handleMultiSelectChange.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
+        this.onPageClick = this.onPageClick.bind(this);
+        this.onChangePageSize = this.onChangePageSize.bind(this);
     }
 
 
     componentDidMount() {
-        this.findAllNews();
+        this.findAllNews(this.state.currentPage, this.state.pageSize);
         this.findAllAuthors();
         this.findAllTags();
     }
 
-    findAllNews(tags, author) {
-        NewsService.findAllNews(tags, author)
+    findAllNews(currentPage, pageSize, tags, author) {
+        NewsService.findAllNews(currentPage, pageSize, tags, author)
             .then(
                 response => {
                     console.log(response);
-                    this.setState({ news: response.data })
+                    this.setState({
+                        news: response.data.items,
+                        totalCount: response.data.totalCount
+                    })
                 })
     }
 
@@ -71,7 +81,10 @@ class News extends Component {
         NewsService.deleteNews(id)
             .then(response => {
                 this.setState({ message: `News ${id} successfully deleted!` })
-                this.findAllNews(this.state.selectedTags, (this.state.seletedAuthor ? this.state.seletedAuthor.value : null))
+                this.findAllNews(this.state.currentPage,
+                    this.state.pageSize,
+                    this.state.selectedTags,
+                    (this.state.seletedAuthor ? this.state.seletedAuthor.value : null))
             })
     }
 
@@ -80,18 +93,51 @@ class News extends Component {
     }
 
     handleMultiSelectChange(selectedTagsValues) {
-        this.findAllNews(selectedTagsValues, (this.state.seletedAuthor ? this.state.seletedAuthor.value : null))
-        this.setState({ selectedTags: selectedTagsValues })
+        this.findAllNews(1,
+            this.state.pageSize,
+            selectedTagsValues,
+            (this.state.seletedAuthor ? this.state.seletedAuthor.value : null))
+        this.setState({
+            selectedTags: selectedTagsValues,
+            currentPage: 1
+        })
     }
 
 
     handleSelectChange(seletedAuthor) {
-        this.findAllNews(this.selectedTags, seletedAuthor.value);
-        this.setState({ seletedAuthor: seletedAuthor });
+        this.findAllNews(1,
+            this.state.pageSize,
+            this.state.selectedTags,
+            seletedAuthor.value);
+        this.setState({
+            seletedAuthor: seletedAuthor,
+            currentPage: 1
+        });
         console.log(`Option selected:`, seletedAuthor);
 
     };
 
+    onPageClick(page) {
+        console.log(page)
+        this.findAllNews(page,
+            this.state.pageSize,
+            this.state.selectedTags,
+            (this.state.seletedAuthor ? this.state.seletedAuthor.value : null));
+        this.setState({
+            currentPage: page
+        })
+    }
+
+    onChangePageSize(size) {
+        console.log(size);
+        this.findAllNews(this.state.page,
+            size.value,
+            this.state.selectedTags,
+            (this.state.seletedAuthor ? this.state.seletedAuthor.value : null));
+        this.setState({
+            pageSize: size.value
+        })
+    }
 
     render() {
 
@@ -101,7 +147,7 @@ class News extends Component {
             <div className="container-my">
                 <div className="row">
                     <div className="col-sm-3">
-                        <Dashboard/>
+                        <Dashboard />
 
                     </div>
 
@@ -155,8 +201,19 @@ class News extends Component {
                             </div>
                         )
                         }
+                        <PageSize 
+                            perPage={this.state.pageSize}
+                            onChange={this.onChangePageSize}
+                        />
+                        <Pagination
+                            pageSize={this.state.pageSize}
+                            totalNews={this.state.totalCount}
+                            currentPage={this.state.currentPage}
+                            onClick={this.onPageClick}
+                        />
+
                     </div>
-                    <div className="col-sm-3"/>
+                    <div className="col-sm-3" />
                 </div>
             </div>
         )

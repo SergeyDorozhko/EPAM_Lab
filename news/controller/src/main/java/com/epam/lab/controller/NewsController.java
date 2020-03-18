@@ -1,5 +1,6 @@
 package com.epam.lab.controller;
 
+import com.epam.lab.dto.AllNewsByQuery;
 import com.epam.lab.dto.NewsDTO;
 import com.epam.lab.dto.SearchCriteriaDTO;
 import com.epam.lab.service.NewsService;
@@ -65,7 +66,7 @@ public class NewsController {
 
     @GetMapping(value = "/search")
     @ResponseBody
-    public List<NewsDTO> searchNews(@Valid SearchCriteriaDTO searchCriteriaDTO, BindingResult bindingResult) {
+    public AllNewsByQuery searchNews(@Valid SearchCriteriaDTO searchCriteriaDTO, BindingResult bindingResult) {
         return service.findAllNewsByQuery(searchCriteriaDTO);
     }
 

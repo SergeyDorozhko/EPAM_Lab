@@ -86,6 +86,9 @@ final class QueryBuilder {
                     throw new ErrorOrderByException();
             }
         }
+        if(orders.isEmpty()) {
+            orders.add(criteriaBuilder.asc(newsRoot.get(ID)));
+        }
         criteriaQuery.orderBy(orders);
     }
 

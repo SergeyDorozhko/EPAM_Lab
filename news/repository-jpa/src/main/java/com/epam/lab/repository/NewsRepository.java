@@ -15,4 +15,7 @@ public interface NewsRepository extends Repository<News> {
     long countAllNews();
 
     List<News> findAllNewsAndSortByQuery(SearchCriteria searchCriteria);
+
+    long countAllNewsAndSortByQuery(SearchCriteria searchCriteria);
+
 }

@@ -1,0 +1,26 @@
+{
+    "saveChanges" : ["SAVE CHANGES", "SAUVEGARDER LES MODIFICATIONS" , "СОХРАНИТЬ ИЗМЕНЕНИЯ"],
+    "discardChanges" : ["DISCARD CHANGES","ANNULER LES MODIFICATIONS", "ОТМЕНИТЬ ИЗМЕНЕНИЯ"],
+    "add": [
+        "ADD",
+        "ajouter",
+        "ДОБАВИТЬ"
+    ],
+    "edit":["Edit", "Éditer", "Редактировать"],
+    "tags" : {
+        "add/edit": [
+            "Add/Edit Tags",
+            "Ajouter / modifier des balises",
+            "Добавить/Редактировать Тэги"
+        ],
+        "tag": ["Tag", "Étiquette","Тег"],
+        "addTag": ["Add Tag", "Ajouter une étiquette", "Добавть Тег"]
+        
+    },
+
+    "header":{
+        "logIn":["Log in", "S'identifier", "Войти"],
+        "registration":["Register", "S'inscrire", "Зарегистрироватся"]
+    }
+    
+}

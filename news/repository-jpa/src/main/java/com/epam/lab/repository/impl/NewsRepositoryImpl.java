@@ -23,8 +23,8 @@ public class NewsRepositoryImpl implements NewsRepository {
     private EntityManager entityManager;
 
     /*this method exist only for realise switch between JDBC and JPA repositorty.
-    * in JPA repository no need of realisation.
-    */
+     * in JPA repository no need of realisation.
+     */
     @Override
     public void linkAuthorWithNews(long authorId, long newsId) {
 
@@ -72,10 +72,24 @@ public class NewsRepositoryImpl implements NewsRepository {
     @Override
     public List<News> findAllNewsAndSortByQuery(SearchCriteria searchCriteria) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-
         QueryBuilder queryBuilder = new QueryBuilder(criteriaBuilder);
-        return entityManager.createQuery(queryBuilder.buildCriteriaQuery(searchCriteria)).getResultList();
+        int offset = searchCriteria.getPage() * searchCriteria.getPageSize();
+        int limit = (searchCriteria.getPageSize() > 0 ? searchCriteria.getPageSize() : 10);
+        return entityManager.createQuery(
+                queryBuilder.buildCriteriaQuery(searchCriteria))
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
 
+    }
+
+    @Override
+    public long countAllNewsAndSortByQuery(SearchCriteria searchCriteria) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        QueryBuilder queryBuilder = new QueryBuilder(criteriaBuilder);
+        return entityManager.createQuery(
+                queryBuilder.buildCriteriaQuery(searchCriteria))
+                .getResultList().size();
     }
 
     @Override
@@ -115,8 +129,8 @@ public class NewsRepositoryImpl implements NewsRepository {
         return news;
     }
 
-    private void newsFounded(News news){
-        if(news == null) {
+    private void newsFounded(News news) {
+        if (news == null) {
             throw new NewsNotFoundException();
         }
     }

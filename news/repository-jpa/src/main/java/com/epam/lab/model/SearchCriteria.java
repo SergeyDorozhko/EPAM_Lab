@@ -9,6 +9,8 @@ public class SearchCriteria extends Bean{
     private String authorSurname;
     private Set<String> tags;
     private Set<String> orderByParameter;
+    private int page;
+    private int pageSize;
     private boolean desc;
 
     public SearchCriteria() {
@@ -69,21 +71,19 @@ public class SearchCriteria extends Bean{
     }
 
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        SearchCriteria that = (SearchCriteria) o;
-        return desc == that.desc &&
-                Objects.equals(authorName, that.authorName) &&
-                Objects.equals(authorSurname, that.authorSurname) &&
-                Objects.equals(tags, that.tags) &&
-                Objects.equals(orderByParameter, that.orderByParameter);
+    public int getPage() {
+        return page;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), authorName, authorSurname, tags, orderByParameter, desc);
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
     }
 }

@@ -13,16 +13,12 @@ class InstructorApp extends Component {
     render() {
         return (
             <Router>
-
                 <Header />
-                <Switch>
-                    <Route path="/" exact component={News} />
-                    <Route path="/edit/:id" component={NewsComponent} />
-                    <Route path="/add" component={NewsComponent} />
-                    <Route path="/authors" component={Authors} />
-                    <Route path="/tags" component={Tags} />
-
-                </Switch>
+                <Route path="/" exact component={News} />
+                <Route path="/edit/:id" component={NewsComponent} />
+                <Route path="/add" component={NewsComponent} />
+                <Route path="/authors" component={Authors} />
+                <Route path="/tags" component={Tags} />
                 <Footer />
             </Router>
         )

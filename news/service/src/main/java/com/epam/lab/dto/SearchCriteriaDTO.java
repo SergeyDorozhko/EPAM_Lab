@@ -31,6 +31,9 @@ public class SearchCriteriaDTO extends AbstractDTO {
 
     private boolean desc;
 
+    private int page;
+    private int pageSize;
+
     public SearchCriteriaDTO() {
         this.tags = new LinkedHashSet<>();
         this.orderByParameter = new LinkedHashSet<>();
@@ -88,21 +91,19 @@ public class SearchCriteriaDTO extends AbstractDTO {
         this.desc = desc;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        SearchCriteriaDTO that = (SearchCriteriaDTO) o;
-        return desc == that.desc &&
-                Objects.equals(authorName, that.authorName) &&
-                Objects.equals(authorSurname, that.authorSurname) &&
-                Objects.equals(tags, that.tags) &&
-                Objects.equals(orderByParameter, that.orderByParameter);
+    public int getPage() {
+        return page;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), authorName, authorSurname, tags, orderByParameter, desc);
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
     }
 }

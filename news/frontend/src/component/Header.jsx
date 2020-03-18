@@ -1,23 +1,28 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { withLocalize, Translate } from "react-localize-redux";
+import LanguageToggle from './Locale/LanguageToggle';
+import { NavLink } from 'react-router-dom/cjs/react-router-dom.min';
 
-export default function Header() {
+
+class Header extends Component {
+  render() {
+
+
     return (
-        <nav className="navbar navbar-expand-sm bg-primary navbar-dark fixed-top ">
-            <div className="container">
+      <nav className="navbar navbar-expand-sm bg-primary navbar-dark fixed-top ">
+        <div className="container">
 
-                <a className="navbar-brand" href="/">News Portal</a>
+          <NavLink className="navbar-brand" to="/">News Portal</NavLink>
+          <LanguageToggle/>
 
-                <ul className="nav-item">
-                    <button type="button" className="btn">EN</button>
-                    <button type="button" className="btn">RU</button>
-                    <button type="button" className="btn">FR</button>
-                </ul>
-                <ul className="nav justify-content-right">
-                    <button type="button" className="btn">Log in</button>
-                    <button type="button" className="btn">Register</button>
-                </ul>
-            </div>
-        </nav>
+          <ul className="nav justify-content-right">
+            <button type="button" className="btn"><Translate id="header.logIn"/></button>
+            <button type="button" className="btn"><Translate id="header.registration"/></button>
+          </ul>
+        </div>
+      </nav>
     )
-
+  }
 }
+
+export default withLocalize(Header)

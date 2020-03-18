@@ -148,8 +148,8 @@ public class SearchCriteriaTest {
         when(newsRepository.findAllNewsAndSortByQuery(any(SearchCriteria.class))).thenReturn(returnedList);
         when(tagRepository.findBy(any(News.class))).thenReturn(new ArrayList<Tag>());
 
-
-        List<NewsDTO> actualNewsDTOes = newsService.findAllNewsByQuery(testQuery);
+//TODO update tests
+        List<NewsDTO> actualNewsDTOes = newsService.findAllNewsByQuery(testQuery).getItems();
 
         Assert.assertEquals(expectedNews, actualNewsDTOes.get(0));
         Assert.assertEquals(1, actualNewsDTOes.size());

@@ -1,10 +1,13 @@
 import React, { Component } from "react";
 import TagsService from "../../service/TagsService";
+import { withLocalize, Translate } from "react-localize-redux";
 
-export default class Tags extends Component {
+class Tags extends Component {
 
     constructor(props) {
         super(props);
+
+
         this.state = {
             tags: [],
             editTag: '',
@@ -98,7 +101,7 @@ export default class Tags extends Component {
     }
 
     makeView() {
-       return this.state.tags.map(tag => {
+        return this.state.tags.map(tag => {
             let tagView
             if (this.state.editTag == tag.id) {
                 tagView = <div className="form-group">
@@ -106,14 +109,14 @@ export default class Tags extends Component {
                         <div className="col-sm-3" />
 
                         <div className="col-sm-1">
-                            <div>Tag:</div>
+                            <div><Translate id="tags.tag" />:</div>
                         </div>
                         <div className="col-sm-3">
                             <input type="text" className="form-control" id={tag.id} value={tag.name} onChange={this.handleInputChange} />
                         </div>
                         <div className="col-sm-5">
-                            <button className="btn btn-primary btn-sm" onClick={() => this.saveClicked(tag.id)}>SAVE CHANGES</button>
-                            <button className="btn btn-danger btn-sm" onClick={this.discardClicked}>DISCARD CHANGES</button>
+                            <button className="btn btn-primary btn-sm" onClick={() => this.saveClicked(tag.id)}><Translate id="saveChanges"/></button>
+                            <button className="btn btn-danger btn-sm" onClick={this.discardClicked}><Translate id="discardChanges"/></button>
                         </div>
                     </div>
                 </div>
@@ -123,13 +126,13 @@ export default class Tags extends Component {
                         <div className="col-sm-3"></div>
 
                         <div className="col-sm-1">
-                            <div>Tag:</div>
+                            <div><Translate id="tags.tag" />:</div>
                         </div>
                         <div className="col-sm-3">
                             <input type="text" className="form-control" id={tag.id} value={tag.name} disabled />
                         </div>
                         <div className="col-sm-3">
-                            <button className="btn btn-primary" onClick={() => this.editClicked(tag.id)}>Edit</button>
+                            <button className="btn btn-primary" onClick={() => this.editClicked(tag.id)}><Translate id="edit" /></button>
                         </div>
 
 
@@ -149,7 +152,7 @@ export default class Tags extends Component {
 
         return (
             <div className="container-my ">
-                <h3 align="center">Add/Edit Tags</h3>
+                <h3 align="center"><Translate id="tags.add/edit" /></h3>
                 {tags}
 
                 <div className="form-group">
@@ -158,13 +161,13 @@ export default class Tags extends Component {
                             <div className="col-sm-2" />
 
                             <div className="col-sm-2">
-                                <div>Add Tag:</div>
+                                <div><Translate id="tags.addTag"/>:</div>
                             </div>
                             <div className="col-sm-3">
                                 <input type="text" className="form-control" onChange={this.handleNewTagInputChange} />
                             </div>
                             <div className="col-sm-5">
-                                <button className="btn btn-primary" onClick={this.addClicked}>ADD</button>
+                                <button className="btn btn-primary" onClick={this.addClicked}><Translate id="add" /></button>
                             </div>
                         </div>
                     </form>
@@ -174,3 +177,4 @@ export default class Tags extends Component {
     }
 }
 
+export default withLocalize(Tags);
