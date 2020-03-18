@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/tag")
 @Validated
-@CrossOrigin(origins = { "http://localhost:3000"})
+@CrossOrigin(origins = {"http://localhost:3000"})
 public class TagController {
 
     private static final String DON_T_DELETED_MESSAGE = "don't deleted";
@@ -31,15 +31,12 @@ public class TagController {
 
     @PostMapping
     public TagDTO createTag(@RequestBody @Valid TagDTO tagDTO) {
-
         return tagService.create(tagDTO);
     }
 
     @GetMapping(value = "/{id}")
     public TagDTO findTagBy(@Valid @PathVariable(ID) @Positive Long id) {
-        TagDTO tagDTO = null;
-            tagDTO = tagService.findById(id);
-        return tagDTO;
+        return tagService.findById(id);
     }
 
     @PutMapping
@@ -49,7 +46,7 @@ public class TagController {
 
     @DeleteMapping(value = "/{id}")
     public String deleteTag(@Valid @PathVariable(ID) @Positive(message = ID_MUST_BE_POSITIVE) long id) {
-        if(tagService.delete(id)){
+        if (tagService.delete(id)) {
             return OK_MESSAGE;
         }
         return DON_T_DELETED_MESSAGE;
