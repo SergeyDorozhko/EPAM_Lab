@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import TagsService from "../../service/TagsService";
 import { withLocalize, Translate } from "react-localize-redux";
+import { Redirect } from "react-router-dom";
 
 class Tags extends Component {
 
@@ -11,7 +12,10 @@ class Tags extends Component {
         this.state = {
             tags: [],
             editTag: '',
-            newTag: null
+            newTag: null,
+
+            autorizedUser: props.userStorage.user
+
         }
 
         this.findAll = this.findAll.bind(this);
@@ -115,8 +119,8 @@ class Tags extends Component {
                             <input type="text" className="form-control" id={tag.id} value={tag.name} onChange={this.handleInputChange} />
                         </div>
                         <div className="col-sm-5">
-                            <button className="btn btn-primary btn-sm" onClick={() => this.saveClicked(tag.id)}><Translate id="saveChanges"/></button>
-                            <button className="btn btn-danger btn-sm" onClick={this.discardClicked}><Translate id="discardChanges"/></button>
+                            <button className="btn btn-primary btn-sm" onClick={() => this.saveClicked(tag.id)}><Translate id="saveChanges" /></button>
+                            <button className="btn btn-danger btn-sm" onClick={this.discardClicked}><Translate id="discardChanges" /></button>
                         </div>
                     </div>
                 </div>
@@ -148,32 +152,38 @@ class Tags extends Component {
 
     render() {
 
-        let tags = this.makeView();
+        if (this.state.autorizedUser && this.state.autorizedUser.role == 'ADMIN') {
+            let tags = this.makeView();
 
-        return (
-            <div className="container-my ">
-                <h3 align="center"><Translate id="tags.add/edit" /></h3>
-                {tags}
+            return (
+                <div className="container-my ">
+                    <h3 align="center"><Translate id="tags.add/edit" /></h3>
+                    {tags}
 
-                <div className="form-group">
-                    <form>
-                        <div className="row">
-                            <div className="col-sm-2" />
+                    <div className="form-group">
+                        <form>
+                            <div className="row">
+                                <div className="col-sm-2" />
 
-                            <div className="col-sm-2">
-                                <div><Translate id="tags.addTag"/>:</div>
+                                <div className="col-sm-2">
+                                    <div><Translate id="tags.addTag" />:</div>
+                                </div>
+                                <div className="col-sm-3">
+                                    <input type="text" className="form-control" onChange={this.handleNewTagInputChange} />
+                                </div>
+                                <div className="col-sm-5">
+                                    <button className="btn btn-primary" onClick={this.addClicked}><Translate id="add" /></button>
+                                </div>
                             </div>
-                            <div className="col-sm-3">
-                                <input type="text" className="form-control" onChange={this.handleNewTagInputChange} />
-                            </div>
-                            <div className="col-sm-5">
-                                <button className="btn btn-primary" onClick={this.addClicked}><Translate id="add" /></button>
-                            </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
-            </div>
-        )
+            )
+        } else {
+            return (
+                <Redirect to="/login" />
+            )
+        }
     }
 }
 

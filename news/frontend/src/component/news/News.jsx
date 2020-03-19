@@ -5,7 +5,7 @@ import AuthorService from "../../service/AuthorService";
 import TagsService from "../../service/TagsService";
 import Select from 'react-select';
 import Dashboard from "../dashboard/Dashboard";
-import { NavLink } from "react-router-dom";
+import { NavLink, withRouter } from "react-router-dom";
 import Pagination from "./pagination/Pagination"
 import PageSize from "./pageSize/PageSize";
 
@@ -24,6 +24,8 @@ class News extends Component {
 
             authors: [],
             seletedAuthor: null,
+
+            autorizedUser: props.userStorage.user
         }
         this.findAllNews = this.findAllNews.bind(this);
         this.findAllAuthors = this.findAllAuthors.bind(this);
@@ -89,6 +91,7 @@ class News extends Component {
     }
 
     editNewsClicked(id) {
+        debugger
         this.props.history.push(`/edit/${id}`)
     }
 
@@ -141,14 +144,18 @@ class News extends Component {
 
     render() {
 
+
+        console.log(this.state.autorizedUser)
+
         const { seletedAuthor } = this.state;
         console.log(this.state.authors)
         return (
             <div className="container-my">
                 <div className="row">
                     <div className="col-sm-3">
-                        <Dashboard />
-
+                        {this.state.autorizedUser &&
+                            <Dashboard />
+                        }
                     </div>
 
                     <div className="col-sm-7">
@@ -195,22 +202,35 @@ class News extends Component {
                                     </div>
                                     <p className="card-text">{oneNews.shortText}</p>
                                     <p className="card-tags">{oneNews.tags.length > 0 ? (oneNews.tags.map(tag => tag.name + ' ')) : ''}</p>
-                                    <button className="btn btn-primary" onClick={() => this.editNewsClicked(oneNews.id)}>Edit</button>
-                                    <button className="btn btn-danger" onClick={() => this.deleteNewsClicked(oneNews.id)}>Delete</button>
+                                    {this.state.autorizedUser &&
+                                        <div>
+                                            <button className="btn btn-primary" onClick={() => this.editNewsClicked(oneNews.id)}>Edit</button>
+                                            <button className="btn btn-danger" onClick={() => this.deleteNewsClicked(oneNews.id)}>Delete</button>
+                                        </div>
+                                    }
                                 </div>
                             </div>
                         )
                         }
-                        <PageSize 
-                            perPage={this.state.pageSize}
-                            onChange={this.onChangePageSize}
-                        />
-                        <Pagination
-                            pageSize={this.state.pageSize}
-                            totalNews={this.state.totalCount}
-                            currentPage={this.state.currentPage}
-                            onClick={this.onPageClick}
-                        />
+                        <div className="form-group">
+                            <div className="row">
+                                <div className="col-sm-3" >
+
+                                    <PageSize
+                                        perPage={this.state.pageSize}
+                                        onChange={this.onChangePageSize}
+                                    />
+                                </div>
+                                <div className="col-sm-9">
+                                    <Pagination
+                                        pageSize={this.state.pageSize}
+                                        totalNews={this.state.totalCount}
+                                        currentPage={this.state.currentPage}
+                                        onClick={this.onPageClick}
+                                    />
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
                     <div className="col-sm-3" />
@@ -220,4 +240,4 @@ class News extends Component {
     }
 }
 
-export default News
+export default withRouter(News)

@@ -4,11 +4,17 @@ import InstructorApp from './component/InstructorApp';
 import { LocalizeProvider } from "react-localize-redux";
 import Localizer from './component/Locale/Localizer';
 
-function App() {
+function App(props) {
   return (
     <LocalizeProvider>
-      <Localizer/>
-      <InstructorApp />
+      <Localizer />
+      <InstructorApp userStorage={props.userStorage}
+        inputLogin={props.inputLogin}
+        inputPassword={props.inputPassword} 
+        loginClicked={props.loginClicked}
+        logoutClicked={props.logoutClicked}
+
+        />
     </LocalizeProvider>
 
   );

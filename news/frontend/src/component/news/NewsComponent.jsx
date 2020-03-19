@@ -2,12 +2,13 @@ import React, { Component } from 'react'
 import NewsService from '../../service/NewsService';
 import mainLogo from '../../image/plus_PNG42.png';
 import TagsService from '../../service/TagsService';
+import { Redirect, withRouter } from 'react-router-dom';
 
 class NewsComponent extends Component {
 
     constructor(props) {
         super(props)
-
+        debugger
         this.state = {
             id: this.props.match.params.id,
             title: '',
@@ -17,7 +18,10 @@ class NewsComponent extends Component {
             tags: [],
             newTag: null,
 
-            tagsOption: []
+            tagsOption: [],
+
+            autorizedUser: props.userStorage.user
+
         }
 
         this.onSubmit = this.onSubmit.bind(this)
@@ -126,7 +130,7 @@ class NewsComponent extends Component {
         }
 
         let news = {
-            id: (this.state.id == 'add' ? 0 : this.state.id),
+            id: (this.state.id ? this.state.id : 0),
             title: this.state.title,
             shortText: this.state.shortText,
             fullText: this.state.fullText,
@@ -136,19 +140,28 @@ class NewsComponent extends Component {
 
         console.log(news.id);
 
+        debugger
+
         if (event.target.name == 'cancel') {
             this.props.history.push('/')
         } else if (event.target.name == 'add' && news.id !== 0) {
             NewsService.updateNews(news)
+            debugger
             this.props.history.push('/')
         } else {
             NewsService.createNews(news)
+            debugger
             this.props.history.push('/')
         }
     }
 
 
     render() {
+
+        if (!this.state.autorizedUser) {
+            return <Redirect to="/login" />
+        }
+
         const author = this.state.author;
         let authorField;
         console.log(this.state.id);
@@ -231,10 +244,10 @@ class NewsComponent extends Component {
 
                                         <datalist id="tagList">
                                             {this.state.tagsOption.map(x => {
-                                                return <option value={x.name}/>
+                                                return <option value={x.name} />
 
                                             })}
-                                      
+
                                         </datalist>
                                     </div>
                                 </div>
@@ -259,4 +272,4 @@ class NewsComponent extends Component {
 
 }
 
-export default NewsComponent
+export default withRouter(NewsComponent)

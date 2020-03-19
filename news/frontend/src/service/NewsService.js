@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 
-const NEWS_API_URL = 'http://localhost:8080/news_app/news/'
+const NEWS_API_URL = 'http://localhost:8080/news_app/news'
 
 class NewsService {
 
@@ -25,22 +25,24 @@ class NewsService {
 
         search.append('page', currentPage)
         search.append('pageSize', pageSize)
-        return axios.get(`${NEWS_API_URL}search?` + search.toString());
+        return axios.get(`${NEWS_API_URL}/search?` + search.toString());
     }
 
     deleteNews(id) {
-        return axios.delete(`${NEWS_API_URL}${id}`);
+        return axios.delete(`${NEWS_API_URL}/${id}`);
     }
 
     findNewsById(id) {
-        return axios.get(`${NEWS_API_URL}${id}`);
+        return axios.get(`${NEWS_API_URL}/${id}`);
     }
 
     updateNews(news) {
-        return axios.put(`${NEWS_API_URL}`, news);
+        debugger
+        return axios.put(`${NEWS_API_URL}/`, news);
     }
 
     createNews(news) {
+debugger
         return axios.post(`${NEWS_API_URL}`, news);
     }
 }

@@ -46,10 +46,10 @@ public class UserRepositoryImpl implements UserRepository {
         CriteriaUpdate<User> criteriaUpdate = criteriaBuilder.createCriteriaUpdate(User.class);
         Root<User> root = criteriaUpdate.from(User.class);
 
-        criteriaUpdate.set(User_.NAME, bean.getName());
-        criteriaUpdate.set(User_.SURNAME, bean.getSurname());
-        criteriaUpdate.set(User_.LOGIN, bean.getLogin());
-        criteriaUpdate.set(User_.PASSWORD, bean.getPassword());
+        criteriaUpdate.set(root.get(User_.NAME), bean.getName());
+        criteriaUpdate.set(root.get(User_.SURNAME), bean.getSurname());
+        criteriaUpdate.set(root.get(User_.LOGIN), bean.getLogin());
+        criteriaUpdate.set(root.get(User_.PASSWORD), bean.getPassword());
         criteriaUpdate.where(criteriaBuilder.equal(root.get(ID), bean.getId()));
         int result = entityManager.createQuery(criteriaUpdate).executeUpdate();
         if (result == 0) {
