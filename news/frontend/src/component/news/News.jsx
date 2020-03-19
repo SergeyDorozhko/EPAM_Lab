@@ -154,7 +154,7 @@ class News extends Component {
                 <div className="row">
                     <div className="col-sm-3">
                         {this.state.autorizedUser &&
-                            <Dashboard />
+                            <Dashboard user={this.state.autorizedUser}/>
                         }
                     </div>
 

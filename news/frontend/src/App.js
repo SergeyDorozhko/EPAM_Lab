@@ -9,8 +9,6 @@ function App(props) {
     <LocalizeProvider>
       <Localizer />
       <InstructorApp userStorage={props.userStorage}
-        inputLogin={props.inputLogin}
-        inputPassword={props.inputPassword} 
         loginClicked={props.loginClicked}
         logoutClicked={props.logoutClicked}
 

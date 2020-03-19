@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import React from "react";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
 import NewsComponent from "./news/NewsComponent";
 import News from "./news/News";
@@ -33,8 +33,6 @@ const InstructorApp = (props) => {
             />
             <Route path="/login" component={() => <LogInPage
                 userStorage={props.userStorage}
-                inputLogin={props.inputLogin}
-                inputPassword={props.inputPassword}
                 loginClicked={props.loginClicked}
             />} />
             <Footer />
