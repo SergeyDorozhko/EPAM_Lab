@@ -5,16 +5,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 
-import java.util.ResourceBundle;
-
 @Configuration
 @ComponentScan("com.epam.lab")
 public class ControllerConfig {
 
-    @Bean
-    ResourceBundle resourceBundle(){
-        return ResourceBundle.getBundle("/exceptionMessages");
-    }
 
     @Bean
     public MethodValidationPostProcessor methodValidationPostProcessor() {

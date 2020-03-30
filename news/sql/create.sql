@@ -13,8 +13,8 @@
     id bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
     name character varying(20) NOT NULL,
     surname character varying(20) NOT NULL,
-    login character varying(30) NOT NULL,
-    password character varying(30) NOT NULL,
+    login character varying(30) NOT NULL UNIQUE,
+    password character varying(64) NOT NULL,
     PRIMARY KEY (id)
 );
 	

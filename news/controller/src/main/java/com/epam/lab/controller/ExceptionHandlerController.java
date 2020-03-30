@@ -3,7 +3,9 @@ package com.epam.lab.controller;
 import com.epam.lab.exception.RepositoryException;
 import com.epam.lab.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.core.env.Environment;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -26,6 +28,7 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
+@PropertySource("classpath:exceptionMessages.properties")
 public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
     private static final String MSG_NO_CONTENT = "msg.noContent";
@@ -33,20 +36,21 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     private static final String STATUS = "status";
     private static final String ERROR = "error";
     private static final String REGEX_FOR_CUT_UNNEEDED_INFORMATION = "([\\w.<>\\[\\] ]+[:]{1}[ ]{1})|([,]{1})";
-    private ResourceBundle resourceBundle;
+
+    private Environment environment;
 
     @Autowired
-    public ExceptionHandlerController(ResourceBundle resourceBundle) {
-        this.resourceBundle = resourceBundle;
+    public ExceptionHandlerController(Environment environment) {
+        this.environment = environment;
     }
 
     @ExceptionHandler(EmptyResultDataAccessException.class)
     public void errorFindQuery(HttpServletResponse response) throws IOException {
-        response.sendError(HttpStatus.CONFLICT.value(), resourceBundle.getString(MSG_NO_CONTENT));
+        response.sendError(HttpStatus.CONFLICT.value(), environment.getProperty(MSG_NO_CONTENT));
     }
 
     @ExceptionHandler(ServiceException.class)
-    public ResponseEntity<Object> errorService( ServiceException ex) {
+    public ResponseEntity<Object> errorService(ServiceException ex) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put(TIMESTAMP, LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
         body.put(STATUS, HttpStatus.CONFLICT);
@@ -88,7 +92,7 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> errorFatal( Exception ex) {
+    public ResponseEntity<Object> errorFatal(Exception ex) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put(TIMESTAMP, LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
         body.put(STATUS, HttpStatus.BAD_REQUEST);

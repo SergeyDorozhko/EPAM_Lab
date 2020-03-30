@@ -152,7 +152,7 @@ class Tags extends Component {
 
     render() {
 
-        if (this.state.autorizedUser && this.state.autorizedUser.role == 'ADMIN') {
+        if (this.state.autorizedUser && this.state.autorizedUser.ERole == 'ADMIN') {
             let tags = this.makeView();
 
             return (

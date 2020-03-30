@@ -3,6 +3,8 @@ package com.epam.lab.controller;
 import com.epam.lab.dto.TagDTO;
 import com.epam.lab.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,8 +31,10 @@ public class TagController {
         this.tagService = tagService;
     }
 
-    @PostMapping
-    public TagDTO createTag(@RequestBody @Valid TagDTO tagDTO) {
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public TagDTO createTag(@RequestBody
+                            @Valid TagDTO tagDTO) {
         return tagService.create(tagDTO);
     }
 
@@ -39,13 +43,18 @@ public class TagController {
         return tagService.findById(id);
     }
 
-    @PutMapping
-    public TagDTO updateTag(@RequestBody @Valid TagDTO tagDTO) {
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public TagDTO updateTag(@RequestBody
+                            @Valid TagDTO tagDTO) {
         return tagService.update(tagDTO);
     }
 
     @DeleteMapping(value = "/{id}")
-    public String deleteTag(@Valid @PathVariable(ID) @Positive(message = ID_MUST_BE_POSITIVE) long id) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public String deleteTag(@Valid
+                            @PathVariable(ID)
+                            @Positive(message = ID_MUST_BE_POSITIVE) long id) {
         if (tagService.delete(id)) {
             return OK_MESSAGE;
         }

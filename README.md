@@ -216,3 +216,79 @@ Continuous Integration:
 Configure Jenkins security (install Role strategy plugin). Remove anonymous access. Create administrator user (all permissions) and developer user (build job, cancel builds). Add Jenkins credentials to Readme file in your git repository.
 Configure Jenkins build job (pool, run test, build) to checkout your repository, use pooling interval.
 Install SonarQube. Configure Jenkins to use local SonarQube installation. Analyze your source code with SonarQube after Maven builds your project. Use JaCoCo for code coverage.
+
+
+---------------------------------------------------------------------------------------------------------------------
+Task7
+
+Develop News Management application. It should include backend for simple News Management application + introduce UI layer.
+
+UI requirements:
+
+Fixed left-hand sidebar menu. Only the actions applicable to current main view should be displayed on the menu;
+Fixed footer. Footer should contain copyright and year.
+Fixed header. Login/Logout Button, Top area should contain links to change application language;
+News title, short description and creation (or modification) date should present on news list view;
+News title, short description and full news text should present on news view page;
+Pagination should be present on the news list page;
+Username should be seen when user is logged in.
+User should be redirected to the login page after clicking on “Logout” button;
+
+
+Technology stack:
+
+React
+Node NPM
+HTML5
+CSS3
+Bundler and dependency management:
+
+Webpack
+
+
+-----------------------------------------------------------------------------------------------------------------------
+Task8
+
+This task is an extension of the RESTful web-service for News Management application .
+
+Application should support user-based authentication. This means a user is stored in a database with some basic information and a password.
+
+User Permissions:
+Guest:
+
+-Read operations for News.
+-Sign up.
+-Log in.
+
+
+User:
+
+-All read operations.
+-All create operations.
+-All update operations.
+
+
+Administrator (can be added only via database call):
+
+-All operations.
+
+
+Tools and Implementation Requirements:
+Please note that only GA versions of tools, frameworks, and libraries are allowed.
+
+Spring Boot.
+Server should support only stateless user authentication and verify integrity of JWT token.
+Use OAuth2 as an authorization protocol.
+OAuth2 scopes should be used to restrict data.
+Implicit grant and Resource owner credentials grant should be implemented.
+Implement CSRF protection.
+APIs should be demonstrated using Postman tool.
+For demo, prepare Postman collections with APIs.
+
+
+Restrictions:
+It is forbidden to use:
+
+Spring Data Repositories,,
+Lombok,
+Powermock.

@@ -1,6 +1,6 @@
 package com.epam.lab.dto;
 
-import com.epam.lab.model.Role;
+import com.epam.lab.model.ERole;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -17,7 +17,7 @@ public class UserDTO extends AbstractDTO {
 
     private String password;
 
-    private Role role;
+    private ERole ERole;
 
     public String getName() {
         return name;
@@ -52,12 +52,12 @@ public class UserDTO extends AbstractDTO {
     }
 
 
-    public Role getRole() {
-        return role;
+    public ERole getERole() {
+        return ERole;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setERole(ERole ERole) {
+        this.ERole = ERole;
     }
 
     @Override
@@ -67,7 +67,7 @@ public class UserDTO extends AbstractDTO {
                 ", surname='" + surname + '\'' +
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
-                ", role=" + role +
+                ", role=" + ERole +
                 '}';
     }
 }

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,7 +85,7 @@ public class UserRepositoryImpl implements UserRepository {
                         root.get(User_.NAME),
                         root.get(User_.SURNAME),
                         root.get(User_.LOGIN),
-                        root.get(User_.ROLE).get(Roles_.ROLE)));
+                        root.get(User_.ROLE).get(Roles_.E_ROLE)));
         criteriaQuery.where(predicate.toArray(new Predicate[0]));
         return entityManager.createQuery(criteriaQuery).getSingleResult();
     }
@@ -99,8 +98,17 @@ public class UserRepositoryImpl implements UserRepository {
         authorizedUser.setSurname((String) data[counter++]);
         authorizedUser.setLogin((String) data[counter++]);
         Roles role = new Roles();
-        role.setRole((Role) data[counter]);
+        role.setERole((ERole) data[counter]);
         authorizedUser.setRole(role);
         return authorizedUser;
+    }
+
+    @Override
+    public User findByUsername(String username) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
+        Root<User> root = criteriaQuery.from(User.class);
+        criteriaQuery.select(root).where(criteriaBuilder.equal(root.get(User_.LOGIN), username));
+        return entityManager.createQuery(criteriaQuery).getSingleResult();
     }
 }

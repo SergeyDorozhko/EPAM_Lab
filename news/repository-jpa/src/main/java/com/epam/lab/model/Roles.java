@@ -11,18 +11,18 @@ public class Roles {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role_name")
-    Role role;
+    ERole ERole;
 
     @OneToOne
     @MapsId
     private User user;
 
-    public Role getRole() {
-        return role;
+    public ERole getERole() {
+        return ERole;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setERole(ERole ERole) {
+        this.ERole = ERole;
     }
 
     public long getId() {

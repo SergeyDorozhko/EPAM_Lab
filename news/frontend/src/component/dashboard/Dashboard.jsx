@@ -29,7 +29,7 @@ class Dashboard extends Component {
     }
 
     render() {
-        const isAdmin = this.state.autorizedUser.role == 'ADMIN'
+        const isAdmin = this.state.autorizedUser.ERole == 'ADMIN'
         return (
             <div className="container" >
                 <div className="row-auto bg-info text-white" >

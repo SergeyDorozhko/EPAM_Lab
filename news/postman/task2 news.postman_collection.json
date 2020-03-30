@@ -27,22 +27,19 @@
 							"mode": "raw",
 							"raw": "",
 							"options": {
-								"raw": {
-									"language": "json"
-								}
+								"raw": {}
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/news/author/91",
+							"raw": "http://localhost:8080/author/62",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"news",
 								"author",
-								"91"
+								"62"
 							]
 						}
 					},
@@ -51,6 +48,21 @@
 				{
 					"name": "create new author",
 					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessToken",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJVc2VyIiwiaWF0IjoxNTg1NTY4NDA0LCJleHAiOjE1ODU2NTQ4MDR9.hYEWo2zy7ZOkxu_9SCjfGcSiYe7_p1wVcUY4kvizV92bKZmQSlLl_3IcaySCYCjYqHKjyYMSePOaFELU7o7Pdw",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [
 							{
@@ -58,23 +70,29 @@
 								"name": "Content-Type",
 								"value": "application/json",
 								"type": "text"
+							},
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "1d55c44e-ae98-4866-8029-3c8aba0756fb",
+								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"newAuthor\",\r\n    \"surname\": \"NewAuthor\"\r\n}"
+							"raw": "{\r\n    \"name\": \"newAuthor\",\r\n    \"surname\": \"NewAuthor\"\r\n}",
+							"options": {
+								"raw": {}
+							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/news/author/",
+							"raw": "http://localhost:8080/author",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"news",
-								"author",
-								""
+								"author"
 							]
 						}
 					},
@@ -83,12 +101,32 @@
 				{
 					"name": "DELETE author by id",
 					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessToken",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJVc2VyIiwiaWF0IjoxNTg1NTY4NDA0LCJleHAiOjE1ODU2NTQ4MDR9.hYEWo2zy7ZOkxu_9SCjfGcSiYe7_p1wVcUY4kvizV92bKZmQSlLl_3IcaySCYCjYqHKjyYMSePOaFELU7o7Pdw",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
 								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "68e2ecc4-71a5-44db-a5a0-6ad6e6982b32",
 								"type": "text"
 							}
 						],
@@ -100,16 +138,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/news/author/49",
+							"raw": "http://localhost:8080/author/62",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"news",
 								"author",
-								"49"
+								"62"
 							]
 						}
 					},
@@ -125,23 +162,49 @@
 								"name": "Content-Type",
 								"value": "application/json",
 								"type": "text"
+							},
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "68e2ecc4-71a5-44db-a5a0-6ad6e6982b32",
+								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": 47,\r\n    \"name\": \"UpdateName\",\r\n    \"surname\": \"UPDATEAuthor\"\r\n}"
+							"raw": "{\r\n    \"id\": 62,\r\n    \"name\": \"UpdateName\",\r\n    \"surname\": \"UPDATEAuthor\"\r\n}",
+							"options": {
+								"raw": {}
+							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/news/author/",
+							"raw": "http://localhost:8080/author/",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"news",
 								"author",
 								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "find All authors",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/author",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"author"
 							]
 						}
 					},
@@ -155,7 +218,34 @@
 			"item": [
 				{
 					"name": "CREATE news",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "25bff467-38b7-4e3d-add0-678a233e0aff",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessToken",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBZG1pbiIsImlhdCI6MTU4NTU2NTc5OCwiZXhwIjoxNTg1NjUyMTk4fQ.rMONU-yrJtCUNqGp_0NnUhnAbX-ryR-HYmU9PKafHcx0UJE0bgfZ27L7QSWY8C16Px-VTAkbH-YM0DVOSCwbEQ",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [
 							{
@@ -163,26 +253,29 @@
 								"name": "Content-Type",
 								"value": "application/json",
 								"type": "text"
+							},
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "f9ea1046-fca3-47f8-b712-6061add7b28e",
+								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"title\": \"News for Test fdssdgf\",\r\n    \"shortText\": \"Text about how creation\",\r\n    \"fullText\": \"full story of text\",\r\n    \"author\": {\r\n        \"name\": \"Petr\",\r\n        \"surname\": \"Fedorov\"\r\n    },\r\n    \"tags\": [\r\n        {\r\n            \"name\": \"car\"\r\n        },\r\n\r\n        {\r\n            \"name\": \"road\"\r\n        },           \r\n        {\r\n            \"name\": \"road\"\r\n        }\r\n        \r\n        \r\n    ]\r\n}",
+							"raw": "{\r\n    \"title\": \"News for Test fdssdgf\",\r\n    \"shortText\": \"Text about how creation\",\r\n    \"fullText\": \"full story of text\",\r\n    \"author\": {\r\n        \"name\": \"Petr\",\r\n        \"surname\": \"Fedorov\"\r\n    },\r\n    \"tags\": [\r\n        {\r\n            \"name\": \"car\"\r\n        },\r\n        {\r\n            \"name\": \"road\"\r\n        },           \r\n        {\r\n            \"name\": \"road\"\r\n        }\r\n        \r\n        \r\n    ]\r\n}",
 							"options": {
 								"raw": {}
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/news/news/",
+							"raw": "http://localhost:8080/news",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"news",
-								"news",
-								""
+								"news"
 							]
 						}
 					},
@@ -194,7 +287,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/news/news/38",
+							"raw": "http://localhost:8080/news/50",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -202,8 +295,7 @@
 							"port": "8080",
 							"path": [
 								"news",
-								"news",
-								"38"
+								"50"
 							]
 						}
 					},
@@ -212,10 +304,31 @@
 				{
 					"name": "DELETE news",
 					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessToken",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBZG1pbiIsImlhdCI6MTU4NTU2NjAwNSwiZXhwIjoxNTg1NjUyNDA1fQ.ggwQeg4M-gSfSHuCNhnFpGR2Pc4wR5sEyk3jsUBLtZ7hXhGd5y1captT9bemETd4hteNidgTUmAyUUuajDd41g",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
-						"header": [],
+						"header": [
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "c1309e95-349b-4217-aefa-d867e9b456f0",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "http://localhost:8080/news/news/38",
+							"raw": "http://localhost:8080/news/51",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -223,8 +336,7 @@
 							"port": "8080",
 							"path": [
 								"news",
-								"news",
-								"38"
+								"51"
 							]
 						}
 					},
@@ -244,7 +356,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": 38,\r\n    \"title\": \"titleUpdated\",\r\n    \"shortText\": \"newsummery\",\r\n    \"fullText\": \"full story45\",\r\n    \"author\": {\r\n        \"id\": 48,\r\n        \"name\": \"newAuthor\",\r\n        \"surname\": \"NewAuthor\"\r\n    },\r\n    \"tags\": [\r\n        {\r\n            \"id\": 2,\r\n            \"name\": \"newTag\"\r\n        },\r\n\r\n        {\r\n           \r\n            \"name\": \"newTag456\"\r\n        },\r\n        {\r\n           \r\n            \"name\": \"newTag4565\"\r\n        },\r\n            {\r\n           \r\n            \"name\": \"newTag4565\"\r\n        },\r\n        \r\n        {\r\n           \r\n            \"name\": \"newTag4ds6\"\r\n        },\r\n        \r\n        {\r\n           \r\n            \"name\": \"newTag4ds6\"\r\n        }\r\n        \r\n        \r\n        \r\n    ]\r\n}",
+							"raw": "{\r\n    \"id\": 45,\r\n    \"title\": \"titleUpdated\",\r\n    \"shortText\": \"newsummery\",\r\n    \"fullText\": \"full story45\",\r\n    \"author\": {\r\n        \"id\": 56,\r\n        \"name\": \"newAuthor\",\r\n        \"surname\": \"NewAuthor\"\r\n    },\r\n    \"tags\": [\r\n\r\n\r\n        {\r\n           \r\n            \"name\": \"newTag456\"\r\n        },\r\n        {\r\n           \r\n            \"name\": \"newTag4565\"\r\n        },\r\n            {\r\n           \r\n            \"name\": \"newTag4565\"\r\n        },\r\n        \r\n        {\r\n           \r\n            \"name\": \"newTag4ds6\"\r\n        },\r\n        \r\n        {\r\n           \r\n            \"name\": \"newTag4ds6\"\r\n        }\r\n        \r\n        \r\n        \r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -252,14 +364,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/news/news/",
+							"raw": "http://localhost:8080/news_app/news/",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"news",
+								"news_app",
 								"news",
 								""
 							]
@@ -270,17 +382,26 @@
 				{
 					"name": "Count all news",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJVc2VyIiwiaWF0IjoxNTg1Mzg3NjExLCJleHAiOjE1ODU0NzQwMTF9.jXoQ0lbXprSX8v50PTwkkwt_yaJhZ3VpkI6-yBhBg0YP-jvaOAlE_QljZ_5HTVIgCnH3598Zg5gvK5g8HfG9KA",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/news/news/count",
+							"raw": "http://localhost:8080/news/count",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"news",
 								"news",
 								"count"
 							]
@@ -294,14 +415,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/news/news/search?orderByParameter=author_name&orderByParameter=creation_date&orderByParameter=TITLE&orderByParameter=AUTHOR_SURNAME&orderByParameter=MODIFICATION_DATE",
+							"raw": "http://localhost:8080/news/search",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"news",
 								"news",
 								"search"
 							],
@@ -328,23 +448,38 @@
 								},
 								{
 									"key": "orderByParameter",
-									"value": "author_name"
+									"value": "author_name",
+									"disabled": true
 								},
 								{
 									"key": "orderByParameter",
-									"value": "creation_date"
+									"value": "creation_date",
+									"disabled": true
 								},
 								{
 									"key": "orderByParameter",
-									"value": "TITLE"
+									"value": "TITLE",
+									"disabled": true
 								},
 								{
 									"key": "orderByParameter",
-									"value": "AUTHOR_SURNAME"
+									"value": "AUTHOR_SURNAME",
+									"disabled": true
 								},
 								{
 									"key": "orderByParameter",
-									"value": "MODIFICATION_DATE"
+									"value": "MODIFICATION_DATE",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "0",
+									"disabled": true
+								},
+								{
+									"key": "pageSize",
+									"value": "5",
+									"disabled": true
 								}
 							]
 						}
@@ -360,12 +495,32 @@
 				{
 					"name": "CREATE tag",
 					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessToken",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJVc2VyIiwiaWF0IjoxNTg1NTY4ODAxLCJleHAiOjE1ODU2NTUyMDF9.ph7a7EtPkheQErDLb2c5fntBhhPoxaKTLBKBsXJXggSMNg-VByF1xgYlZzXhr0nzfYuDH1eF304ujb6iqKsd3w",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
 								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "42eb873c-0485-4f3a-baef-4693f12d219d",
 								"type": "text"
 							}
 						],
@@ -379,14 +534,13 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/news/tag/",
+							"raw": "http://localhost:8080/tag/",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"news",
 								"tag",
 								""
 							]
@@ -400,16 +554,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/news/tag/22",
+							"raw": "http://localhost:8080/tag/26",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"news",
 								"tag",
-								"22"
+								"26"
 							]
 						}
 					},
@@ -418,6 +571,21 @@
 				{
 					"name": "UPDATE tag",
 					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessToken",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJVc2VyIiwiaWF0IjoxNTg1NTY4ODAxLCJleHAiOjE1ODU2NTUyMDF9.ph7a7EtPkheQErDLb2c5fntBhhPoxaKTLBKBsXJXggSMNg-VByF1xgYlZzXhr0nzfYuDH1eF304ujb6iqKsd3w",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [
 							{
@@ -425,11 +593,16 @@
 								"name": "Content-Type",
 								"value": "application/json",
 								"type": "text"
+							},
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "17b9ce61-c309-483e-9d13-42d83ba595e1",
+								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": 22,\r\n    \"name\": \"UpdateTag\"\r\n}",
+							"raw": "{\r\n    \"id\": 26,\r\n    \"name\": \"UpdateTag6\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -437,14 +610,13 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/news/tag/",
+							"raw": "http://localhost:8080/tag/",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"news",
 								"tag",
 								""
 							]
@@ -455,12 +627,32 @@
 				{
 					"name": "DELETE tag",
 					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessToken",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBZG1pbiIsImlhdCI6MTU4NTU2OTA5NCwiZXhwIjoxNTg1NjU1NDk0fQ.lDv2ac152W6N6b8GPXuEsy6T-2KGGFFUmsMdYhd77EF-fQnAPCenVS54q3UXdqyJPcLSRuCb9YM6KgDlUFkkLQ",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
 								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "0c04d6bb-60c6-47be-b7fc-c363aa5d3e3a",
 								"type": "text"
 							}
 						],
@@ -474,16 +666,227 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/news/tag/22",
+							"raw": "http://localhost:8080/tag/26",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"news",
 								"tag",
-								"22"
+								"26"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "FIND ALL tags",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/tag",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tag"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "create User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"AdministratorName\",\r\n    \"surname\": \"AdministratorSurname\",\r\n    \"login\": \"Admin\",\r\n    \"password\": \"Admin\",\r\n    \"role\": \"ADMIN\"\r\n    \t\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/news_app/user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"news_app",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "find by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/news_app/user/25",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"news_app",
+								"user",
+								"25"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update user",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 25,\r\n    \"name\": \"Administrator\",\r\n    \"surname\": \"AdministratorSurname\",\r\n    \"login\": \"Admin\",\r\n    \"password\": \"Admin\",\r\n    \"role\": \"USER\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/news_app/user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"news_app",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/news_app/user/25",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"news_app",
+								"user",
+								"25"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "sing in",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "4692ac12-b88c-45bc-8430-035216b16d2d",
+								"exec": [
+									"console.log('Pre-request Script from Request start');\r",
+									"\r",
+									"// We don't need to do anything if it's GET or x-csrf-token header is explicitly presented\r",
+									"if (pm.request.method !== 'GET' && !(pm.request.headers.has('x-csrf-token'))) {\r",
+									"\r",
+									"  var csrfRequest = pm.request.clone();\r",
+									"  csrfRequest.method = 'GET';\r",
+									"  if (pm.request.method === 'POST') {\r",
+									"    // for POST method usually it is ....<something>Collection in the URL\r",
+									"    // so we add $top=1 just to quickly get csrf token; \r",
+									"    // for PUT, PATCH or DELETE the same URL would be enough,\r",
+									"    // because it points to the actual entity\r",
+									"    csrfRequest.url = pm.request.url + '?$top=1';\r",
+									"  }\r",
+									"\r",
+									"  csrfRequest.upsertHeader({\r",
+									"    key: 'x-csrf-token',\r",
+									"    value: 'fetch'\r",
+									"  });\r",
+									"\r",
+									"  pm.sendRequest(csrfRequest, function(err, res) {\r",
+									"    console.log('pm.sendRequest start');\r",
+									"    if (err) {\r",
+									"      console.log(err);\r",
+									"    } else {\r",
+									"      var csrfToken = res.headers.get('x-csrf-token');\r",
+									"      if (csrfToken) {\r",
+									"        console.log('csrfToken fetched:' + csrfToken);\r",
+									"        pm.request.headers.upsert({\r",
+									"          key: 'x-csrf-token',\r",
+									"          value: csrfToken\r",
+									"        });\r",
+									"      } else {\r",
+									"        console.log('No csrf token fetched');\r",
+									"      }\r",
+									"    }\r",
+									"    console.log('pm.sendRequest end');\r",
+									"  });\r",
+									"}\r",
+									"\r",
+									"console.log('Pre-request Script from Request end');"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "0c04d6bb-60c6-47be-b7fc-c363aa5d3e3a",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"login\": \"Admin\",\r\n    \"password\": \"Admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/signin",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"signin"
 							]
 						}
 					},

@@ -4,4 +4,5 @@ import com.epam.lab.model.User;
 
 public interface UserRepository extends Repository<User> {
     User singIn(User user);
+    User findByUsername(String username);
 }
