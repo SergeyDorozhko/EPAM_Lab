@@ -21,6 +21,7 @@ CREATE USER admin
         GRANT DEBUG ANY PROCEDURE, DEBUG CONNECT SESSION TO admin;
 
      
-    
+        GRANT create type TO admin;
+
     
     

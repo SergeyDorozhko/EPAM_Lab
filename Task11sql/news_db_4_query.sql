@@ -13,6 +13,17 @@ SELECT news.id, news.title, list_of_tags_of_current_news(news.id, ', ') FROM new
 
 --b)
 
+
+
+SELECT news.id, news.title, CAST(COLLECT(tag.name)AS DBMSOUTPUT_LINESARRAY) AS tags FROM news 
+LEFT JOIN news_tag ON news.id = news_tag.news_id
+LEFT JOIN tag ON news_tag.tag_id = tag.id
+GROUP BY news.id, news.title
+ORDER by news.id;
+
+
+--PL/SQL
+
 SET SERVEROUTPUT ON;
 
 
