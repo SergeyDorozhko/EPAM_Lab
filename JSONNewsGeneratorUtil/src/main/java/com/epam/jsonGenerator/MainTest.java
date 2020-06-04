@@ -13,11 +13,14 @@ public class MainTest {
         String path = rb.getString("rootCatalog");
         int subfoldersCount = Integer.valueOf(rb.getString("subfoldersCount"));
         long taskTime = Long.valueOf(rb.getString("testTime"));
+        int filesCount = Integer.valueOf(rb.getString("filesCount"));
+        double periodTime = Double.valueOf(rb.getString("periodTime")) * 1000;
+
 
         ServiceFactory.getInstance().getCatalogService().dropAll(path);
         ServiceFactory.getInstance().getCatalogService().createCatalogs(subfoldersCount, path);
 
-        ServiceFactory.getInstance().getNewsService().generator(path, taskTime);
+        ServiceFactory.getInstance().getNewsService().generator(path);
         System.out.println("FINISH in : " + ((double)(new Date().getTime() - now)) / 1000d + "s.");
     }
 

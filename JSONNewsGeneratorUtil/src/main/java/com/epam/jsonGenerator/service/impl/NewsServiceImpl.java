@@ -5,93 +5,71 @@ import com.epam.jsonGenerator.dao.bean.Author;
 import com.epam.jsonGenerator.dao.bean.News;
 import com.epam.jsonGenerator.dao.bean.Tag;
 import com.epam.jsonGenerator.service.NewsService;
-import com.github.javafaker.Faker;
+import me.xdrop.jrand.JRand;
 
 import java.io.File;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class NewsServiceImpl implements NewsService {
+    long taskTime;
+    int filesCount;
+    long periodTime;
 
-    private List<TimerTask> tasks = new ArrayList<>();
+    public NewsServiceImpl() {
+        readProperties();
+    }
 
-//    @Override
-//    public void generator(String basePath, long endTime) {
-//        System.out.println(Thread.currentThread().getName());
-//        File folder = new File(basePath);
-//
-//        if (folder.list().length != 0) {
-//            for (File subfolder : folder.listFiles()) {
-//                if (subfolder.isDirectory() && !subfolder.getName().equals("logs") && !subfolder.getName().equals("error")) {
-//                    Timer timer = new Timer();
-//                    TimerTask timerTask = new TimerTask() {
-//                        @Override
-//                        public void run() {
-//                            generator(subfolder.getPath(), endTime);
-//                            if (System.currentTimeMillis() >= endTime) {
-//                                System.out.println("TIMER CANCEL" + Thread.currentThread().getName());
-//                                timer.cancel();
-//                            }
-//                        }
-//                    };
-//                    timer.schedule(timerTask, 0, 80);
-//                }
-//            }
-//        }
-//
-//
-//        int countFiles = 10;
-//        while (countFiles > 0) {
-//            countFiles--;
-//            List<News> newsList = new ArrayList<>();
-//            for (int i = 0; i < new Random().nextInt(20) + 3; i++) {
-//                News news = createOneNewsWithRandomValues();
-//                newsList.add(news);
-//            }
-//            FactoryDao.getInstance().getNewsJsonDao().write(newsList, basePath);
-//        }
-//
-//    }
+    private void readProperties() {
+        ResourceBundle rb = ResourceBundle.getBundle("app");
+        taskTime = Long.valueOf(rb.getString("testTime"));
+        filesCount = Integer.valueOf(rb.getString("filesCount"));
+        periodTime = Long.valueOf(rb.getString("periodTime"));
+    }
 
 
     @Override
-    public void generator(String basePath, long endTime) {
+    public void generator(String basePath) {
+
         System.out.println("start");
         File folder = new File(basePath);
-        tasks = generateTasks(folder);
+
+        List<TimerTask> tasks = new ArrayList<>();
+        generateTasks(folder, tasks);
 
         List<Timer> timers = new ArrayList<>();
         for (TimerTask task : tasks) {
             Timer timer = new Timer();
-            timer.schedule(task, 0, 80);
+            timer.schedule(task, 0, periodTime);
             timers.add(timer);
         }
 
         System.out.println("finish start task");
+
         try {
             System.out.println(Thread.currentThread().getName() + "   SLEEP");
-            Thread.sleep(TimeUnit.SECONDS.toMillis(endTime));
+            Thread.sleep(TimeUnit.SECONDS.toMillis(taskTime));
             System.out.println(Thread.currentThread().getName() + "   Wake UP");
 
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         timers.forEach(Timer::cancel);
-
     }
 
-    private List<TimerTask> generateTasks(File folder) {
+
+    private void generateTasks(File folder, List<TimerTask> tasks) {
+
         tasks.add(createTimerTask(folder));
         if (folder.list().length != 0) {
             for (File subfolder : folder.listFiles()) {
                 if (subfolder.isDirectory() && !subfolder.getName().equals("logs") && !subfolder.getName().equals("error")) {
                     System.out.println(subfolder.getPath());
-                    generateTasks(subfolder);
+                    generateTasks(subfolder, tasks);
                     tasks.add(createTimerTask(subfolder));
                 }
             }
         }
-        return tasks;
     }
 
     private TimerTask createTimerTask(File folder) {
@@ -106,7 +84,7 @@ public class NewsServiceImpl implements NewsService {
     private void generateNews(File folder) {
 
         //TODO from properties    countFiles
-        int countFiles = 10;
+        int countFiles = filesCount;
         while (countFiles > 0) {
             countFiles--;
             int numberOfNews = new Random().nextInt(20) + 3;
@@ -121,24 +99,21 @@ public class NewsServiceImpl implements NewsService {
 
     private News createOneNewsWithRandomValues() {
 
-        Faker faker = new Faker();
-
         News news = new News();
         Author author = new Author();
-        author.setName(faker.name().firstName());
-        author.setSurname(faker.name().lastName());
+        author.setName(JRand.firstname().gen());
+        author.setSurname(JRand.lastname().gen());
         news.setAuthor(author);
 
-        for(int i = 0; i < new Random().nextInt(3); i++) {
+        for (int i = 0; i < new Random().nextInt(3); i++) {
             Tag tag = new Tag();
-            tag.setName(faker.book().genre());
+            tag.setName(JRand.word().gen());
             news.addTag(tag);
         }
 
-        news.setTitle(faker.book().title());
-        news.setShortText(faker.regexify("[\\w]{10,100}"));
-        news.setFullText(faker.regexify("[\\w]{10,2000}"));
+        news.setTitle(JRand.sentence().gen());
+        news.setShortText(JRand.paragraph().gen());
+        news.setFullText(JRand.paragraph().gen());
         return news;
     }
-
 }

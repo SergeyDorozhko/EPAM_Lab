@@ -2,7 +2,7 @@ package com.epam.jsonGenerator.dao.impl;
 
 import com.epam.jsonGenerator.dao.NewsJsonDao;
 import com.epam.jsonGenerator.dao.bean.News;
-import com.github.javafaker.Faker;
+import me.xdrop.jrand.JRand;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONArray;
@@ -31,27 +31,16 @@ public class NewsJsonDaoImpl implements NewsJsonDao {
         JSONArray jsonNews = new JSONArray();
         news.forEach(news1 -> jsonNews.add(jsonNewsCreator(news1)));
         //Write JSON file
-
-        Faker faker = new Faker();
         String fileName =
                 new StringBuilder()
                         .append(filePath)
                         .append(File.separator)
-                        .append(faker.regexify("[a-z1-9]{1,10}"))
+                        .append(JRand.string().range(1,5).gen())
                         .append("-")
-                        .append(faker.regexify("[a-z1-9]{1,10}"))
+                        .append(JRand.string().range(1,5).gen())
                         .append(".json")
                         .toString();
-
-        try (FileWriter file = new FileWriter(fileName)) {
-            file.write(jsonNews.toJSONString());
-            file.flush();
-        } catch (IOException e) {
-            logger.error(String.format("CREATE NEW FILE: \n%s20 FILE : %s \n%20s %s", "", fileName, "", e.getMessage()));
-            return false;
-        }
-        logger.info(String.format("SUCCESS \n%20s CREATE NEW FILE: %s", "", fileName));
-        return true;
+        return writeToFile(jsonNews, fileName);
     }
 
     private JSONObject jsonNewsCreator(News news) {
@@ -80,5 +69,18 @@ public class NewsJsonDaoImpl implements NewsJsonDao {
         jNewsObject.put(NEWS, jNews);
 
         return jNewsObject;
+    }
+
+    private boolean writeToFile(JSONArray jsonNews, String fileName) {
+
+        try (FileWriter file = new FileWriter(fileName)) {
+            file.write(jsonNews.toJSONString());
+            file.flush();
+        } catch (IOException e) {
+            logger.error(String.format("CREATE NEW FILE: \n%s20 FILE : %s \n%20s %s", "", fileName, "", e.getMessage()));
+            return false;
+        }
+        logger.info(String.format("SUCCESS \n%20s CREATE NEW FILE: %s", "", fileName));
+        return true;
     }
 }
