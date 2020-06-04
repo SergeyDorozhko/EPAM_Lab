@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Properties>
+        <Property name="patternfull">
+            %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{5} - %msg%n
+        </Property>
+    </Properties>
+
+    <Appenders>
+<!--        <File name="TxtFile" fileName="d:/java/darozhkainlab/JsonNewsFiles/logs/text.log" bufferedIO="true">-->
+<!--            <PatternLayout pattern="${patternfull}"/>-->
+<!--        </File>-->
+<!--        <RollingFile name="RF" filename="d:/java/darozhkainlab/JsonNewsFiles/logs/createJSON.log" immediateFlush="false" filePattern="d:/java/darozhkainlab/JsonNewsFiles/logs/createJSON-%d{yyyyMMdd-HHmmss}-%i.log">-->
+        <RollingFile name="RF" filename="${bundle:app:rootCatalog}/logs/last/createJSON.log" immediateFlush="false" filePattern="${bundle:app:rootCatalog}/logs/%d{yyyy-MM-dd}/createJSON-%d{HHmmss}-%i.log">
+
+        <PatternLayout pattern="${patternfull}" />
+            <Policies>
+                <OnStartupTriggeringPolicy />
+            </Policies>
+            <DefaultRolloverStrategy max="5"/>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <!-- Root Logger -->
+        <Root level="all">
+            <AppenderRef ref="RF"/>
+        </Root>
+    </Loggers>
+
+
+</Configuration>
