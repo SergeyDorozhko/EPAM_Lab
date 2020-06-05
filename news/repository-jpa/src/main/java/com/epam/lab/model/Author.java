@@ -52,4 +52,12 @@ public class Author extends Bean implements Serializable {
     public int hashCode() {
         return Objects.hash(super.hashCode(), name, surname);
     }
+
+    @Override
+    public String toString() {
+        return "Author{" +
+                "name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                '}';
+    }
 }

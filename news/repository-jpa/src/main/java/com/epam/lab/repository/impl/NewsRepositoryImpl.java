@@ -134,4 +134,6 @@ public class NewsRepositoryImpl implements NewsRepository {
             throw new NewsNotFoundException();
         }
     }
+
+
 }

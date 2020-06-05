@@ -25,6 +25,7 @@ public class RepositoryConfig {
     private static final String HIBERNATE_SHOW_SQL = "hibernate.show_sql";
     private static final String HIBERNATE_FORMAT_SQL = "hibernate.format_sql";
     private static final String PACKAGES_TO_SCAN = "com.epam.lab";
+    private static final String HIBERNATE_JDBC_BATCH_SIZE = "hibernate.jdbc.batch_size";
 
     @Bean
     public DataSource dataSource() {
@@ -41,7 +42,7 @@ public class RepositoryConfig {
         properties.put(HIBERNATE_DIALECT, environment.getRequiredProperty(HIBERNATE_DIALECT));
         properties.put(HIBERNATE_SHOW_SQL, environment.getRequiredProperty(HIBERNATE_SHOW_SQL));
         properties.put(HIBERNATE_FORMAT_SQL, environment.getRequiredProperty(HIBERNATE_FORMAT_SQL));
-
+        properties.put(HIBERNATE_JDBC_BATCH_SIZE, environment.getRequiredProperty(HIBERNATE_JDBC_BATCH_SIZE));
         factoryBean.setPackagesToScan(PACKAGES_TO_SCAN);
 
         factoryBean.setJpaProperties(properties);

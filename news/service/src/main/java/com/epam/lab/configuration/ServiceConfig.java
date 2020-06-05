@@ -1,5 +1,6 @@
 package com.epam.lab.configuration;
 
+import com.epam.lab.service.impl.DbFromFilesInitializerImpl;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;

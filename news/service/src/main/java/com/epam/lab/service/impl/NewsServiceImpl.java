@@ -306,4 +306,12 @@ public class NewsServiceImpl implements NewsService {
         }
         return newsDTO;
     }
+
+    @Override
+    @Transactional
+    public void batchCreate(List<News> news) {
+        for (News currNews: news) {
+            create(mapper.toDTO(currNews));
+        }
+    }
 }
