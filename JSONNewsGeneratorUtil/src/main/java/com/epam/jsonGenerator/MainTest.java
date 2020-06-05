@@ -18,9 +18,10 @@ public class MainTest {
 
 
         ServiceFactory.getInstance().getCatalogService().dropAll(path);
+
         ServiceFactory.getInstance().getCatalogService().createCatalogs(subfoldersCount, path);
 
-        ServiceFactory.getInstance().getNewsService().generator(path);
+        ServiceFactory.getInstance().getNewsService().generatorFile(path);
         System.out.println("FINISH in : " + ((double)(new Date().getTime() - now)) / 1000d + "s.");
     }
 

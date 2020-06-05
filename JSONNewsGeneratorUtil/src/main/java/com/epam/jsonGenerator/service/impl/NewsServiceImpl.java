@@ -8,6 +8,7 @@ import com.epam.jsonGenerator.service.NewsService;
 import me.xdrop.jrand.JRand;
 
 import java.io.File;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -29,7 +30,7 @@ public class NewsServiceImpl implements NewsService {
 
 
     @Override
-    public void generator(String basePath) {
+    public void generatorFile(String basePath) {
 
         System.out.println("start");
         File folder = new File(basePath);
@@ -66,7 +67,6 @@ public class NewsServiceImpl implements NewsService {
                 if (subfolder.isDirectory() && !subfolder.getName().equals("logs") && !subfolder.getName().equals("error")) {
                     System.out.println(subfolder.getPath());
                     generateTasks(subfolder, tasks);
-                    tasks.add(createTimerTask(subfolder));
                 }
             }
         }
@@ -76,7 +76,9 @@ public class NewsServiceImpl implements NewsService {
         return new TimerTask() {
             @Override
             public void run() {
+                System.out.println("START" + Thread.currentThread().getName() + " -------------- " + LocalDateTime.now());
                 generateNews(folder);
+                System.out.println("FINISH --------- " + Thread.currentThread().getName() + " ---------------- " + LocalDateTime.now());
             }
         };
     }
@@ -87,8 +89,8 @@ public class NewsServiceImpl implements NewsService {
         int countFiles = filesCount;
         while (countFiles > 0) {
             countFiles--;
-            int numberOfNews = new Random().nextInt(20) + 3;
             List<News> news = new ArrayList<>();
+            int numberOfNews = new Random().nextInt(20) + 3;
             for (int i = 0; i < numberOfNews; i++) {
                 news.add(createOneNewsWithRandomValues());
             }
@@ -101,19 +103,19 @@ public class NewsServiceImpl implements NewsService {
 
         News news = new News();
         Author author = new Author();
-        author.setName(JRand.firstname().gen());
-        author.setSurname(JRand.lastname().gen());
+        author.setName(JRand.string().range(1,30).gen());
+        author.setSurname(JRand.string().range(1,30).gen());
         news.setAuthor(author);
 
         for (int i = 0; i < new Random().nextInt(3); i++) {
             Tag tag = new Tag();
-            tag.setName(JRand.word().gen());
+            tag.setName(JRand.string().range(2,30).gen());
             news.addTag(tag);
         }
 
-        news.setTitle(JRand.sentence().gen());
-        news.setShortText(JRand.paragraph().gen());
-        news.setFullText(JRand.paragraph().gen());
+        news.setTitle(JRand.string().range(5,30).gen());
+        news.setShortText(JRand.string().range(10,100).gen());
+        news.setFullText(JRand.string().range(100,2000).gen());
         return news;
     }
 }

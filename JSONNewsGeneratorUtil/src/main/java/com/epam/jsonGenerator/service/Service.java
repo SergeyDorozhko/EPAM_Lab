@@ -2,5 +2,5 @@ package com.epam.jsonGenerator.service;
 
 public interface Service {
 
-    void generator(String basePath);
+    void generatorFile(String basePath);
 }

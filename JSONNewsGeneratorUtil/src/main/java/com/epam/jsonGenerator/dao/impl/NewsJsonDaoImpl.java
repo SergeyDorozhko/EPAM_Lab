@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -35,6 +36,8 @@ public class NewsJsonDaoImpl implements NewsJsonDao {
                 new StringBuilder()
                         .append(filePath)
                         .append(File.separator)
+                        .append(JRand.string().range(1,5).gen())
+                        .append("-")
                         .append(JRand.string().range(1,5).gen())
                         .append("-")
                         .append(JRand.string().range(1,5).gen())
@@ -72,8 +75,7 @@ public class NewsJsonDaoImpl implements NewsJsonDao {
     }
 
     private boolean writeToFile(JSONArray jsonNews, String fileName) {
-
-        try (FileWriter file = new FileWriter(fileName)) {
+        try (BufferedWriter file = new BufferedWriter(new FileWriter(fileName))) {
             file.write(jsonNews.toJSONString());
             file.flush();
         } catch (IOException e) {

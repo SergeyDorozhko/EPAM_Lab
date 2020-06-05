@@ -1,8 +1,6 @@
 package com.epam.jsonGenerator.service.impl;
 
 import com.epam.jsonGenerator.dao.FactoryDao;
-import com.epam.jsonGenerator.dao.FolderDao;
-import com.epam.jsonGenerator.dao.impl.FolderDaoImpl;
 import com.epam.jsonGenerator.service.CatalogService;
 
 public class CatalogServiceImpl implements CatalogService {

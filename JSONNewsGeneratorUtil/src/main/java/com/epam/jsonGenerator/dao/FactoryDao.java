@@ -3,7 +3,7 @@ package com.epam.jsonGenerator.dao;
 import com.epam.jsonGenerator.dao.impl.FolderDaoImpl;
 import com.epam.jsonGenerator.dao.impl.NewsJsonDaoImpl;
 
-public class FactoryDao {
+public final class FactoryDao {
     private final static FactoryDao instance = new FactoryDao();
 
     private FolderDao folderDao = new FolderDaoImpl();
