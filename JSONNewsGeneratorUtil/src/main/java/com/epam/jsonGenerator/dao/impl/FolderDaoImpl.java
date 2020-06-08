@@ -12,6 +12,8 @@ import java.util.Random;
 
 public class FolderDaoImpl implements FolderDao {
 
+    private static final String LOGS_FOLDER = "logs";
+    private static final String ERROR_FOLDER = "error";
     private Logger logger = LogManager.getLogger(getClass().getSimpleName());
 
     @Override
@@ -28,7 +30,7 @@ public class FolderDaoImpl implements FolderDao {
             for (int i = 0; i < depth; i++) {
                 int layerNumber = i + 1;
                 int sequenceNumber = 0;
-                folderName = folderName + "\\" + layerNumber + "st" + "LayerSubFolder" + sequenceNumber;
+                folderName = folderName + File.separator + layerNumber + "st" + "LayerSubFolder" + sequenceNumber;
                 while (paths.contains(folderName)) {
                     sequenceNumber++;
                     folderName = folderName.substring(0, folderName.length() - 1) + sequenceNumber;
@@ -45,7 +47,7 @@ public class FolderDaoImpl implements FolderDao {
     public void clearBaseDirectory(String basePath) {
         File file = new File(basePath);
         for (File removeFile : file.listFiles()) {
-            if (!removeFile.getName().equals("logs") && !removeFile.getName().equals("error")) {
+            if (!removeFile.getName().equals(LOGS_FOLDER) && !removeFile.getName().equals(ERROR_FOLDER)) {
                 if (!removeFile.isFile() && removeFile.list().length != 0) {
                     clearBaseDirectory(removeFile.getPath());
                 }

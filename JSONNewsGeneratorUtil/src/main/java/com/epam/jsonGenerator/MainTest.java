@@ -7,14 +7,16 @@ import java.util.ResourceBundle;
 
 public class MainTest {
 
+    private static final String PROPERTY_FILE = "app";
+    private static final String ROOT_CATALOG = "rootCatalog";
+    private static final String SUBFOLDERS_COUNT = "subfoldersCount";
+    private static final String FILES_COUNT = "filesCount";
+
     public static void main(String[] args) {
-        long now = new Date().getTime();
-        ResourceBundle rb = ResourceBundle.getBundle("app");
-        String path = rb.getString("rootCatalog");
-        int subfoldersCount = Integer.valueOf(rb.getString("subfoldersCount"));
-        long taskTime = Long.valueOf(rb.getString("testTime"));
-        int filesCount = Integer.valueOf(rb.getString("filesCount"));
-        double periodTime = Double.valueOf(rb.getString("periodTime")) * 1000;
+        ResourceBundle rb = ResourceBundle.getBundle(PROPERTY_FILE);
+        String path = rb.getString(ROOT_CATALOG);
+        int subfoldersCount = Integer.valueOf(rb.getString(SUBFOLDERS_COUNT));
+        int filesCount = Integer.valueOf(rb.getString(FILES_COUNT));
 
 
         ServiceFactory.getInstance().getCatalogService().dropAll(path);
@@ -22,7 +24,6 @@ public class MainTest {
         ServiceFactory.getInstance().getCatalogService().createCatalogs(subfoldersCount, path);
 
         ServiceFactory.getInstance().getNewsService().generatorFile(path);
-        System.out.println("FINISH in : " + ((double)(new Date().getTime() - now)) / 1000d + "s.");
     }
 
 

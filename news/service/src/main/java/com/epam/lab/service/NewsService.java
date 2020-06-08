@@ -10,5 +10,5 @@ import java.util.List;
 public interface NewsService extends Service<NewsDTO> {
     long countAllNews();
     AllNewsByQuery findAllNewsByQuery(SearchCriteriaDTO searchCriteriaDTO);
-    void batchCreate(List<News> news);
+    void batchCreate(List<NewsDTO> news);
 }

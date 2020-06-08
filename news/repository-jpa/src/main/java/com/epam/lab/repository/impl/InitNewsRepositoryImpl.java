@@ -42,7 +42,7 @@ public class InitNewsRepositoryImpl implements InitNewsRepository {
         String time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmm"));
         File errorFolder
                 = new File(pathTo
-                + "error"
+                + ERROR_FOLDER
                 + File.separator
                 + time + File.separator);
         errorFolder.mkdirs();
@@ -80,12 +80,8 @@ public class InitNewsRepositoryImpl implements InitNewsRepository {
         List<News> newsFromFile = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
-            //Read JSON file
             Object obj = jsonParser.parse(reader);
-
             JSONArray news = (JSONArray) obj;
-
-            //Iterate over employee array
             news.forEach(currNews -> {
                 newsFromFile.add(parseNewsObject((JSONObject) currNews));
             });
